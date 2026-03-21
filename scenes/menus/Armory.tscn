@@ -1,0 +1,184 @@
+[gd_scene load_steps=2 format=3 uid="uid://cg2fjtwacwrk1"]
+
+[ext_resource type="Script" path="res://scenes/menus/armory.gd" id="1_0xe7l"]
+
+[node name="Armory" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_0xe7l")
+
+[node name="NavBarMargin" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_top = 46
+
+[node name="HBoxContainer" type="HBoxContainer" parent="NavBarMargin"]
+layout_mode = 2
+
+[node name="LeftPanel" type="PanelContainer" parent="NavBarMargin/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="NavBarMargin/HBoxContainer/LeftPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="NavBarMargin/HBoxContainer/LeftPanel/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Label" type="Label" parent="NavBarMargin/HBoxContainer/LeftPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Equipment"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="NavBarMargin/HBoxContainer/LeftPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="SlotsVBox" type="VBoxContainer" parent="NavBarMargin/HBoxContainer/LeftPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="WeaponSlot" type="PanelContainer" parent="NavBarMargin/HBoxContainer/LeftPanel/MarginContainer/VBoxContainer/SlotsVBox"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="ArmorSlot" type="PanelContainer" parent="NavBarMargin/HBoxContainer/LeftPanel/MarginContainer/VBoxContainer/SlotsVBox"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Artifact1Slot" type="PanelContainer" parent="NavBarMargin/HBoxContainer/LeftPanel/MarginContainer/VBoxContainer/SlotsVBox"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Artifact2Slot" type="PanelContainer" parent="NavBarMargin/HBoxContainer/LeftPanel/MarginContainer/VBoxContainer/SlotsVBox"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Artifact3Slot" type="PanelContainer" parent="NavBarMargin/HBoxContainer/LeftPanel/MarginContainer/VBoxContainer/SlotsVBox"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="RightPanel" type="PanelContainer" parent="NavBarMargin/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 4.0
+
+[node name="MarginContainer" type="MarginContainer" parent="NavBarMargin/HBoxContainer/RightPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="NavBarMargin/HBoxContainer/RightPanel/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Label" type="Label" parent="NavBarMargin/HBoxContainer/RightPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Inventory"
+
+[node name="HSeparator" type="HSeparator" parent="NavBarMargin/HBoxContainer/RightPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="DetailPanel" type="PanelContainer" parent="NavBarMargin/HBoxContainer/RightPanel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 160)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="NavBarMargin/HBoxContainer/RightPanel/MarginContainer/VBoxContainer/DetailPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 16
+
+[node name="HBoxContainer" type="HBoxContainer" parent="NavBarMargin/HBoxContainer/RightPanel/MarginContainer/VBoxContainer/DetailPanel/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 32
+
+[node name="ItemIcon" type="ColorRect" parent="NavBarMargin/HBoxContainer/RightPanel/MarginContainer/VBoxContainer/DetailPanel/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(120, 120)
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="InfoVBox" type="VBoxContainer" parent="NavBarMargin/HBoxContainer/RightPanel/MarginContainer/VBoxContainer/DetailPanel/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="TitleRow" type="HBoxContainer" parent="NavBarMargin/HBoxContainer/RightPanel/MarginContainer/VBoxContainer/DetailPanel/MarginContainer/HBoxContainer/InfoVBox"]
+layout_mode = 2
+
+[node name="ItemNameLabel" type="Label" parent="NavBarMargin/HBoxContainer/RightPanel/MarginContainer/VBoxContainer/DetailPanel/MarginContainer/HBoxContainer/InfoVBox/TitleRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 20
+text = "Item Name"
+
+[node name="ItemGradeLabel" type="Label" parent="NavBarMargin/HBoxContainer/RightPanel/MarginContainer/VBoxContainer/DetailPanel/MarginContainer/HBoxContainer/InfoVBox/TitleRow"]
+layout_mode = 2
+text = "Epic"
+horizontal_alignment = 2
+
+[node name="ItemDescLabel" type="Label" parent="NavBarMargin/HBoxContainer/RightPanel/MarginContainer/VBoxContainer/DetailPanel/MarginContainer/HBoxContainer/InfoVBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 12
+text = "Quite long text describing item and its function"
+autowrap_mode = 3
+
+[node name="HSeparator" type="HSeparator" parent="NavBarMargin/HBoxContainer/RightPanel/MarginContainer/VBoxContainer/DetailPanel/MarginContainer/HBoxContainer/InfoVBox"]
+layout_mode = 2
+
+[node name="ActionsRow" type="HBoxContainer" parent="NavBarMargin/HBoxContainer/RightPanel/MarginContainer/VBoxContainer/DetailPanel/MarginContainer/HBoxContainer/InfoVBox"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="EquipBtn" type="Button" parent="NavBarMargin/HBoxContainer/RightPanel/MarginContainer/VBoxContainer/DetailPanel/MarginContainer/HBoxContainer/InfoVBox/ActionsRow"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Equip"
+
+[node name="SellBtn" type="Button" parent="NavBarMargin/HBoxContainer/RightPanel/MarginContainer/VBoxContainer/DetailPanel/MarginContainer/HBoxContainer/InfoVBox/ActionsRow"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Sell"
+
+[node name="DismantleBtn" type="Button" parent="NavBarMargin/HBoxContainer/RightPanel/MarginContainer/VBoxContainer/DetailPanel/MarginContainer/HBoxContainer/InfoVBox/ActionsRow"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Dismantle"
+
+[node name="HSeparator2" type="HSeparator" parent="NavBarMargin/HBoxContainer/RightPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="InventoryScroll" type="ScrollContainer" parent="NavBarMargin/HBoxContainer/RightPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="InventoryFlow" type="FlowContainer" parent="NavBarMargin/HBoxContainer/RightPanel/MarginContainer/VBoxContainer/InventoryScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3

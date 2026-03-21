@@ -1,0 +1,111 @@
+[gd_scene load_steps=2 format=3 uid="uid://byxj6uoigny4d"]
+
+[ext_resource type="Script" path="res://scenes/menus/campaign.gd" id="1_qy2ix"]
+
+[node name="Campaign" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_qy2ix")
+
+[node name="NavBarMargin" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_top = 46
+
+[node name="HBox" type="HBoxContainer" parent="NavBarMargin"]
+layout_mode = 2
+
+[node name="LeftPanel" type="PanelContainer" parent="NavBarMargin/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Margin" type="MarginContainer" parent="NavBarMargin/HBox/LeftPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 24
+
+[node name="VBox" type="VBoxContainer" parent="NavBarMargin/HBox/LeftPanel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Label" type="Label" parent="NavBarMargin/HBox/LeftPanel/Margin/VBox"]
+visible = false
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Difficulty"
+
+[node name="EasyBtn" type="Button" parent="NavBarMargin/HBox/LeftPanel/Margin/VBox"]
+layout_mode = 2
+text = "Easy"
+
+[node name="NormalBtn" type="Button" parent="NavBarMargin/HBox/LeftPanel/Margin/VBox"]
+layout_mode = 2
+text = "Normal"
+
+[node name="HardBtn" type="Button" parent="NavBarMargin/HBox/LeftPanel/Margin/VBox"]
+layout_mode = 2
+text = "Hard"
+
+[node name="Spacer" type="Control" parent="NavBarMargin/HBox/LeftPanel/Margin/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="HSeparator" type="HSeparator" parent="NavBarMargin/HBox/LeftPanel/Margin/VBox"]
+layout_mode = 2
+
+[node name="BeginRunBtn" type="Button" parent="NavBarMargin/HBox/LeftPanel/Margin/VBox"]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Begin Campaign"
+
+[node name="RightPanel" type="PanelContainer" parent="NavBarMargin/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+
+[node name="Margin" type="MarginContainer" parent="NavBarMargin/HBox/RightPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 24
+
+[node name="VBox" type="VBoxContainer" parent="NavBarMargin/HBox/RightPanel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="Loadout" type="Label" parent="NavBarMargin/HBox/RightPanel/Margin/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Current Loadout"
+
+[node name="HSeparator" type="HSeparator" parent="NavBarMargin/HBox/RightPanel/Margin/VBox"]
+layout_mode = 2
+
+[node name="Equipment" type="Label" parent="NavBarMargin/HBox/RightPanel/Margin/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Equipment"
+
+[node name="EquipmentRow" type="HBoxContainer" parent="NavBarMargin/HBox/RightPanel/Margin/VBox"]
+layout_mode = 2
+
+[node name="Army" type="Label" parent="NavBarMargin/HBox/RightPanel/Margin/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Active Army"
+
+[node name="ArmyGrid" type="GridContainer" parent="NavBarMargin/HBox/RightPanel/Margin/VBox"]
+layout_mode = 2
+columns = 10

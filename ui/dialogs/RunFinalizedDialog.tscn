@@ -1,0 +1,101 @@
+[gd_scene load_steps=3 format=3 uid="uid://c2lhu5uba1mxn"]
+
+[ext_resource type="Script" path="res://ui/dialogs/run_finalized_dialog.gd" id="1_3n4u5"]
+[ext_resource type="Texture2D" uid="uid://bhb2ni7uhjci6" path="res://assets/images/gold.png" id="2_r2mi3"]
+
+[node name="RunFinalizedDialog" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_3n4u5")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.113725, 0.192157, 0.270588, 0.662745)
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(600, 360)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -240.0
+offset_top = -180.0
+offset_right = 240.0
+offset_bottom = 180.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 32
+
+[node name="VBox" type="VBoxContainer" parent="PanelContainer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 32
+
+[node name="TitleRow" type="VBoxContainer" parent="PanelContainer/MarginContainer/VBox"]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="PanelContainer/MarginContainer/VBox/TitleRow"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "End of Campaign"
+horizontal_alignment = 1
+
+[node name="StagesLabel" type="Label" parent="PanelContainer/MarginContainer/VBox/TitleRow"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "15 stages completed"
+horizontal_alignment = 1
+
+[node name="GoldRow" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="IconSizeBox" type="Control" parent="PanelContainer/MarginContainer/VBox/GoldRow"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+
+[node name="GoldRect" type="TextureRect" parent="PanelContainer/MarginContainer/VBox/GoldRow/IconSizeBox"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_r2mi3")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="GoldLabel" type="Label" parent="PanelContainer/MarginContainer/VBox/GoldRow"]
+layout_mode = 2
+text = "4632 Gold ollected"
+horizontal_alignment = 1
+
+[node name="MaterialsRow" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="ConfirmButton" type="Button" parent="PanelContainer/MarginContainer/VBox"]
+custom_minimum_size = Vector2(200, 48)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 20
+text = "Return to Camp"

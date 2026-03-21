@@ -1,0 +1,44 @@
+[gd_scene load_steps=2 format=3 uid="uid://bl3qbxsors345"]
+
+[ext_resource type="Script" path="res://scenes/ui/powerup_dialog.gd" id="1_283xs"]
+
+[node name="PowerupDialog" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_283xs")
+
+[node name="DimRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.152941, 0.270588, 0.34902, 0.501961)
+
+[node name="Panel" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
+layout_mode = 2
+
+[node name="TitleContainer" type="Label" parent="Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="CardContainer" type="HBoxContainer" parent="Panel/VBoxContainer"]
+layout_mode = 2

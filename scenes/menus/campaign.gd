@@ -1,0 +1,176 @@
+extends Control
+
+const SCENE_BATTLE := "res://scenes/battle/Battle.tscn"
+const DIFFICULTY_EASY   := "easy"
+const DIFFICULTY_NORMAL := "normal"
+const DIFFICULTY_HARD   := "hard"
+
+const UNIT_COLORS := {
+	"warrior": Color(0.55, 0.35, 0.20),
+	"ranger":  Color(0.25, 0.55, 0.35),
+}
+const UNIT_EMPTY_COLOR   := Color(0.12, 0.12, 0.16)
+const EQUIP_FILLED_COLOR := Color(0.30, 0.45, 0.60)
+const EQUIP_EMPTY_COLOR  := Color(0.12, 0.12, 0.16)
+
+const SLOT_KEYS := ["weapon", "armor", "artifact_1", "artifact_2", "artifact_3"]
+const GRADE_NAMES := {
+	1: "Common",
+	2: "Uncommon",
+	3: "Rare",
+	4: "Epic",
+	5: "Legendary",
+}
+
+var _selected_difficulty: String = DIFFICULTY_EASY
+
+@onready var _easy_btn: Button       = $NavBarMargin/HBox/LeftPanel/Margin/VBox/EasyBtn
+@onready var _normal_btn: Button     = $NavBarMargin/HBox/LeftPanel/Margin/VBox/NormalBtn
+@onready var _hard_btn: Button       = $NavBarMargin/HBox/LeftPanel/Margin/VBox/HardBtn
+@onready var _begin_btn: Button      = $NavBarMargin/HBox/LeftPanel/Margin/VBox/BeginRunBtn
+@onready var _equip_row: HBoxContainer  = $NavBarMargin/HBox/RightPanel/Margin/VBox/EquipmentRow
+@onready var _army_grid: GridContainer = $NavBarMargin/HBox/RightPanel/Margin/VBox/ArmyGrid
+
+
+func _ready() -> void:
+	_easy_btn.pressed.connect(_on_difficulty_selected.bind(DIFFICULTY_EASY))
+	_normal_btn.pressed.connect(_on_difficulty_selected.bind(DIFFICULTY_NORMAL))
+	_hard_btn.pressed.connect(_on_difficulty_selected.bind(DIFFICULTY_HARD))
+	_begin_btn.pressed.connect(_on_begin_run)
+	_update_difficulty_highlight()
+	_build_equipment_slots()
+	_refresh_loadout()
+
+
+func _on_difficulty_selected(difficulty: String) -> void:
+	_selected_difficulty = difficulty
+	_update_difficulty_highlight()
+
+
+func _update_difficulty_highlight() -> void:
+	for pair in [[DIFFICULTY_EASY, _easy_btn], [DIFFICULTY_NORMAL, _normal_btn], [DIFFICULTY_HARD, _hard_btn]]:
+		var btn: Button = pair[1]
+		if pair[0] == _selected_difficulty:
+			btn.flat = false
+			btn.add_theme_color_override("font_color", Color(1.0, 0.85, 0.3))
+		else:
+			btn.flat = true
+			btn.remove_theme_color_override("font_color")
+
+
+func _build_equipment_slots() -> void:
+	var slot_labels := ["Weapon", "Armor", "Artifact", "Artifact", "Artifact"]
+	for slot_name in slot_labels:
+		var col := VBoxContainer.new()
+		col.add_theme_constant_override("separation", 4)
+		var square := ColorRect.new()
+		square.custom_minimum_size = Vector2(64, 64)
+		square.color = EQUIP_EMPTY_COLOR
+		col.add_child(square)
+		var lbl := Label.new()
+		lbl.text = slot_name
+		lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		lbl.add_theme_font_size_override("font_size", 10)
+		col.add_child(lbl)
+		_equip_row.add_child(col)
+
+
+func _refresh_loadout() -> void:
+	var save := SaveManager.current_save
+	if save == null:
+		return
+	_refresh_equipment(save)
+	_refresh_army(save)
+
+
+func _refresh_equipment(save: SaveData) -> void:
+	var equipped: Dictionary = {}
+	for equipment in save.equipment_inv:
+		var s: String = equipment.get("equipped_slot", "")
+		if s != "":
+			equipped[s] = equipment
+	var cols := _equip_row.get_children()
+	for i in range(min(cols.size(), SLOT_KEYS.size())):
+		var square: ColorRect = cols[i].get_child(0)
+		if equipped.has(SLOT_KEYS[i]):
+			var item: Dictionary = equipped[SLOT_KEYS[i]]
+			var def: Dictionary  = GameData.get_equipment(item.get("id", ""))
+			var grade: int       = item.get("grade", 1)
+			square.color        = EQUIP_FILLED_COLOR
+			square.tooltip_text = "%s %s" % [GRADE_NAMES.get(grade, ""), def.get("name", item.get("id", ""))]
+		else:
+			square.color        = EQUIP_EMPTY_COLOR
+			square.tooltip_text = ""
+
+
+func _refresh_army(save: SaveData) -> void:
+	for child in _army_grid.get_children():
+		child.queue_free()
+	
+	var groups: Dictionary = {}
+	for ud in save.army_active:
+		var t: String = ud.get("unit_type", "unknown")
+		var l: int    = ud.get("level", 1)
+		var key := "%s_%d" % [t, l]
+		if not groups.has(key):
+			groups[key] = { "type": t, "level": l, "count": 0 }
+		groups[key].count += 1
+	
+	var sorted_keys := groups.keys()
+	sorted_keys.sort()
+	for key in sorted_keys:
+		var g: Dictionary = groups[key]
+		_army_grid.add_child(_make_unit_box(g.type, g.level, g.count))
+
+
+func _make_unit_box(unit_type: String, level: int, count: int) -> Control:
+	var container := Control.new()
+	container.custom_minimum_size = Vector2(52, 52)
+	container.tooltip_text = "%s  Lv.%d  ×%d" % [unit_type.capitalize(), level, count]
+	
+	var bg := ColorRect.new()
+	bg.set_anchors_and_offsets_preset(PRESET_FULL_RECT)
+	bg.color = UNIT_COLORS.get(unit_type, Color(0.3, 0.3, 0.3))
+	container.add_child(bg)
+	
+	var level_lbl := Label.new()
+	level_lbl.text = "Lv.%d" % level
+	level_lbl.add_theme_font_size_override("font_size", 10)
+	level_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	level_lbl.set_anchors_and_offsets_preset(PRESET_BOTTOM_WIDE)
+	level_lbl.offset_top = -18.0
+	container.add_child(level_lbl)
+	
+	var badge_panel := PanelContainer.new()
+	badge_panel.custom_minimum_size = Vector2(20, 20)
+	badge_panel.set_anchors_and_offsets_preset(PRESET_TOP_RIGHT)
+	badge_panel.offset_left   = -24.0
+	badge_panel.offset_bottom =  24.0
+	container.add_child(badge_panel)
+	
+	var badge_lbl := Label.new()
+	badge_lbl.text = str(count)
+	badge_lbl.add_theme_font_size_override("font_size", 10)
+	badge_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	badge_lbl.vertical_alignment   = VERTICAL_ALIGNMENT_CENTER
+	badge_panel.add_child(badge_lbl)
+	
+	return container
+
+
+func _on_begin_run() -> void:
+	var save := SaveManager.get_current()
+	if save.army_active.is_empty():
+		_show_error("Your warband is empty! Add units in the Garrison first.")
+		return
+	RunState.init_from_save(save, _selected_difficulty)
+	SceneManager.go_to(SCENE_BATTLE)
+
+
+func _show_error(msg: String) -> void:
+	var dialog := AcceptDialog.new()
+	dialog.dialog_text = msg
+	add_child(dialog)
+	dialog.popup_centered()
+	dialog.confirmed.connect(dialog.queue_free)
+

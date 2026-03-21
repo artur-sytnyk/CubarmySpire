@@ -1,0 +1,153 @@
+[gd_scene load_steps=2 format=3 uid="uid://bug6rns6bv40h"]
+
+[ext_resource type="Script" path="res://scenes/menus/garrison.gd" id="1_iblgf"]
+
+[node name="Garrison" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_iblgf")
+
+[node name="NavBarMargin" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_top = 46
+
+[node name="HBoxContainer" type="HBoxContainer" parent="NavBarMargin"]
+layout_mode = 2
+
+[node name="WarbandPanel" type="PanelContainer" parent="NavBarMargin/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="NavBarMargin/HBoxContainer/WarbandPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="NavBarMargin/HBoxContainer/WarbandPanel/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Label" type="Label" parent="NavBarMargin/HBoxContainer/WarbandPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Warband"
+
+[node name="HSeparator" type="HSeparator" parent="NavBarMargin/HBoxContainer/WarbandPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="LimitsRow" type="HBoxContainer" parent="NavBarMargin/HBoxContainer/WarbandPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="VanguardLabel" type="Label" parent="NavBarMargin/HBoxContainer/WarbandPanel/MarginContainer/VBoxContainer/LimitsRow"]
+layout_mode = 2
+tooltip_text = "Amount of units that fight simultaneously on the battlefield"
+theme_override_font_sizes/font_size = 12
+text = "Vanguard size: 10"
+
+[node name="Spacer" type="Control" parent="NavBarMargin/HBoxContainer/WarbandPanel/MarginContainer/VBoxContainer/LimitsRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ReservesLabel" type="Label" parent="NavBarMargin/HBoxContainer/WarbandPanel/MarginContainer/VBoxContainer/LimitsRow"]
+layout_mode = 2
+tooltip_text = "Total units brought into the campaign"
+theme_override_font_sizes/font_size = 12
+text = "Warband size: 10 / 20"
+
+[node name="HSeparator2" type="HSeparator" parent="NavBarMargin/HBoxContainer/WarbandPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="WarbandFlow" type="FlowContainer" parent="NavBarMargin/HBoxContainer/WarbandPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="NavBarMargin/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_right = 8
+
+[node name="MidColumn" type="VBoxContainer" parent="NavBarMargin/HBoxContainer/MarginContainer"]
+custom_minimum_size = Vector2(84, 0)
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Spacer" type="Control" parent="NavBarMargin/HBoxContainer/MarginContainer/MidColumn"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="MoveLabel" type="Label" parent="NavBarMargin/HBoxContainer/MarginContainer/MidColumn"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Move all"
+horizontal_alignment = 1
+
+[node name="MoveButtonsRow" type="HBoxContainer" parent="NavBarMargin/HBoxContainer/MarginContainer/MidColumn"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="ToWarbandBtn" type="Button" parent="NavBarMargin/HBoxContainer/MarginContainer/MidColumn/MoveButtonsRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 22
+text = "<"
+
+[node name="ToGarrisonBtn" type="Button" parent="NavBarMargin/HBoxContainer/MarginContainer/MidColumn/MoveButtonsRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 22
+text = ">"
+
+[node name="Spacer2" type="Control" parent="NavBarMargin/HBoxContainer/MarginContainer/MidColumn"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 2.0
+
+[node name="GarrisonPanel" type="PanelContainer" parent="NavBarMargin/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="NavBarMargin/HBoxContainer/GarrisonPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="NavBarMargin/HBoxContainer/GarrisonPanel/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Label" type="Label" parent="NavBarMargin/HBoxContainer/GarrisonPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Garrison"
+
+[node name="HSeparator" type="HSeparator" parent="NavBarMargin/HBoxContainer/GarrisonPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="GarrisonCountLabel" type="Label" parent="NavBarMargin/HBoxContainer/GarrisonPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Garrisoned units: 3 / 200"
+
+[node name="HSeparator2" type="HSeparator" parent="NavBarMargin/HBoxContainer/GarrisonPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="GarrisonFlow" type="FlowContainer" parent="NavBarMargin/HBoxContainer/GarrisonPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3

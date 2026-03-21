@@ -1,0 +1,106 @@
+[
+  {
+	"id": "leadership",
+	"name": "Leadership",
+	"min_grade": 2,
+	"category": "one_time_event",
+	"event": "increase_active_limit",
+	"value": 1,
+	"description": "Increases the number of units that can be active in battle at once.",
+	"tradeoff": ""
+  },
+  {
+	"id": "supply_chain",
+	"name": "Supply Chain",
+	"min_grade": 2,
+	"category": "one_time_event",
+	"event": "increase_max_limit",
+	"value": 1,
+	"description": "Increases the total number of units that army can have.",
+	"tradeoff": ""
+  },
+  {
+	"id": "reinforcements",
+	"name": "Reinforcements",
+	"min_grade": 2,
+	"category": "one_time_event",
+	"event": "add_temp_unit",
+	"value": 1,
+	"description": "Adds a temporary unit at the level of your lowest unit. Lasts until run ends.",
+	"tradeoff": ""
+  },
+  {
+	"id": "army_training",
+	"name": "Army Training",
+	"min_grade": 2,
+	"category": "one_time_event",
+	"event": "level_up_unit",
+	"value": 1,
+	"description": "Adds level to your lowest level unit. Lasts until run ends.",
+	"tradeoff": ""
+  },
+  {
+	"id": "strength",
+	"name": "Strength",
+	"min_grade": 1,
+	"category": "stat_multiplier",
+	"stat": "atk_damage",
+	"value_per_grade": 0.10,
+	"description": "All units deal more damage.",
+	"tradeoff": ""
+  },
+  {
+	"id": "vitality",
+	"name": "Vitality",
+	"min_grade": 1,
+	"category": "stat_multiplier",
+	"stat": "hp_max",
+	"value_per_grade": 0.10,
+	"description": "All units gain more max HP.",
+	"tradeoff": ""
+  },
+  {
+	"id": "reach",
+	"name": "Reach",
+	"min_grade": 1,
+	"category": "stat_multiplier",
+	"stat": "atk_range",
+	"value_per_grade": 0.10,
+	"description": "All units gain increased attack range.",
+	"tradeoff": ""
+  },
+  {
+	"id": "forced_march",
+	"name": "Forced March",
+	"min_grade": 1,
+	"category": "stat_multiplier",
+	"stat": "speed",
+	"value_per_grade": 0.05,
+	"description": "All units move faster.",
+	"tradeoff": ""
+  },
+  {
+	"id": "ricochet",
+	"name": "Ricochet",
+	"min_grade": 2,
+	"category": "behavior_flag",
+	"flag": "ricochet",
+	"filter": "ranger",
+	"base_value": 0.30,
+	"value_per_grade": 0.15,
+	"description": "Ranger arrows ricochet to the nearest enemy on hit.",
+	"tradeoff": ""
+  },
+  {
+	"id": "flurry",
+	"name": "Flurry",
+	"min_grade": 2,
+	"category": "behavior_flag",
+	"flag": "flurry",
+	"filter": "warrior",
+	"base_value": 0.20,
+	"value_per_grade": 0.20,
+	"description": "Warriors have a chance to strike twice. Stacks — overflow chance grants additional hits.",
+	"tradeoff": ""
+  }
+]

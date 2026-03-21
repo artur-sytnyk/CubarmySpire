@@ -1,0 +1,145 @@
+[gd_scene load_steps=2 format=3 uid="uid://bgk1mfpfjko5u"]
+
+[ext_resource type="Script" path="res://scenes/menus/market.gd" id="1_vfddh"]
+
+[node name="Market" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_vfddh")
+
+[node name="NavBarMargin" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_top = 46
+
+[node name="VBoxContainer" type="VBoxContainer" parent="NavBarMargin"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="NavBarMargin/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="LeftPanel" type="PanelContainer" parent="NavBarMargin/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="NavBarMargin/VBoxContainer/HBoxContainer/LeftPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="NavBarMargin/VBoxContainer/HBoxContainer/LeftPanel/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Label" type="Label" parent="NavBarMargin/VBoxContainer/HBoxContainer/LeftPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Market"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="NavBarMargin/VBoxContainer/HBoxContainer/LeftPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="RecruitBtn" type="Button" parent="NavBarMargin/VBoxContainer/HBoxContainer/LeftPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Recruit units"
+
+[node name="EquipBtn" type="Button" parent="NavBarMargin/VBoxContainer/HBoxContainer/LeftPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Equipment shop"
+
+[node name="AlchemyBtn" type="Button" parent="NavBarMargin/VBoxContainer/HBoxContainer/LeftPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Alchemy crafting"
+
+[node name="RightPanel" type="PanelContainer" parent="NavBarMargin/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 4.0
+
+[node name="MarginContainer" type="MarginContainer" parent="NavBarMargin/VBoxContainer/HBoxContainer/RightPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="NavBarMargin/VBoxContainer/HBoxContainer/RightPanel/MarginContainer"]
+layout_mode = 2
+
+[node name="RecruitPane" type="VBoxContainer" parent="NavBarMargin/VBoxContainer/HBoxContainer/RightPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="LevelRow" type="HBoxContainer" parent="NavBarMargin/VBoxContainer/HBoxContainer/RightPanel/MarginContainer/VBoxContainer/RecruitPane"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="NavBarMargin/VBoxContainer/HBoxContainer/RightPanel/MarginContainer/VBoxContainer/RecruitPane/LevelRow"]
+layout_mode = 2
+text = "Buy at level"
+
+[node name="UnitLevelInput" type="SpinBox" parent="NavBarMargin/VBoxContainer/HBoxContainer/RightPanel/MarginContainer/VBoxContainer/RecruitPane/LevelRow"]
+layout_mode = 2
+alignment = 1
+update_on_text_changed = true
+
+[node name="EquipPane" type="VBoxContainer" parent="NavBarMargin/VBoxContainer/HBoxContainer/RightPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="AlchemyPane" type="VBoxContainer" parent="NavBarMargin/VBoxContainer/HBoxContainer/RightPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="BottomBar" type="PanelContainer" parent="NavBarMargin/VBoxContainer"]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="NavBarMargin/VBoxContainer/BottomBar"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 8
+
+[node name="HBoxContainer" type="HBoxContainer" parent="NavBarMargin/VBoxContainer/BottomBar/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="GoldVBox" type="VBoxContainer" parent="NavBarMargin/VBoxContainer/BottomBar/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="NavBarMargin/VBoxContainer/BottomBar/MarginContainer/HBoxContainer/GoldVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Gold"
+horizontal_alignment = 1
+
+[node name="GoldLabel" type="Label" parent="NavBarMargin/VBoxContainer/BottomBar/MarginContainer/HBoxContainer/GoldVBox"]
+layout_mode = 2
+text = "623"
+horizontal_alignment = 1
+
+[node name="VSeparator" type="VSeparator" parent="NavBarMargin/VBoxContainer/BottomBar/MarginContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="NavBarMargin/VBoxContainer/BottomBar/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_font_sizes/font_size = 12
+text = "Materials"
+horizontal_alignment = 1
+
+[node name="MaterialsRow" type="HBoxContainer" parent="NavBarMargin/VBoxContainer/BottomBar/MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 32

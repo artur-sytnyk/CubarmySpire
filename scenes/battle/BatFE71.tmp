@@ -1,0 +1,58 @@
+[gd_scene load_steps=7 format=3 uid="uid://gj8rxvqy23t2"]
+
+[ext_resource type="Script" path="res://scenes/battle/battle_scene.gd" id="1_6aqjr"]
+[ext_resource type="Script" path="res://scripts/army.gd" id="1_x5j8b"]
+[ext_resource type="Script" path="res://scripts/army_manager.gd" id="2_mqbul"]
+[ext_resource type="Script" path="res://scenes/battle/arena_region.gd" id="4_40q6c"]
+[ext_resource type="Script" path="res://scenes/battle/camera_controller.gd" id="4_xqvxf"]
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_w1awx"]
+vertices = PackedVector2Array(992, 155, 992, 857, 853, 996, 151, 996, 12, 857, 12, 155, 151, 16, 853, 16)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3, 4, 5, 6, 7)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(2, 861, 147, 1006, 857, 1006, 1002, 861, 1002, 151, 857, 6, 147, 6, 2, 151)])
+source_geometry_group_name = &"navigation_polygon_source_group"
+
+[node name="BattleScene" type="Node2D"]
+script = ExtResource("1_6aqjr")
+
+[node name="ArmyManager" type="Node" parent="."]
+script = ExtResource("2_mqbul")
+
+[node name="PlayerArmy" type="Node" parent="ArmyManager"]
+script = ExtResource("1_x5j8b")
+
+[node name="EnemyArmy" type="Node" parent="ArmyManager"]
+script = ExtResource("1_x5j8b")
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="HUD" type="Control" parent="UI"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="PauseButton" type="Button" parent="UI"]
+offset_right = 55.0
+offset_bottom = 31.0
+text = "Pause"
+
+[node name="Arena" type="Node2D" parent="."]
+
+[node name="NavigationRegion2D" type="NavigationRegion2D" parent="Arena"]
+position = Vector2(-2, -6)
+navigation_polygon = SubResource("NavigationPolygon_w1awx")
+script = ExtResource("4_40q6c")
+
+[node name="PlayerSpawnPoint" type="Marker2D" parent="Arena"]
+position = Vector2(220, 511)
+
+[node name="EnemySpawnPoint" type="Marker2D" parent="Arena"]
+position = Vector2(778, 518)
+
+[node name="Camera2D" type="Camera2D" parent="Arena"]
+script = ExtResource("4_xqvxf")

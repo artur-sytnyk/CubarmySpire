@@ -1,0 +1,56 @@
+[gd_scene load_steps=8 format=3 uid="uid://kut2k3q85hgk"]
+
+[ext_resource type="Script" path="res://objects/unit/unit_base.gd" id="1_wex1t"]
+[ext_resource type="Texture2D" uid="uid://br76bqfaek68v" path="res://assets/images/unit_sprite.png" id="2_3u2um"]
+[ext_resource type="PackedScene" uid="uid://bv8a417r1x7re" path="res://ui/components/HealthBar.tscn" id="3_4eqg7"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rh2ye"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_3ajt4"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_h3387"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_hy77q"]
+
+[node name="Unit" type="CharacterBody2D"]
+z_index = 2
+z_as_relative = false
+input_pickable = true
+script = ExtResource("1_wex1t")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.4, 0.4)
+texture = ExtResource("2_3u2um")
+hframes = 7
+vframes = 2
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_rh2ye")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+path_desired_distance = 4.0
+target_desired_distance = 4.0
+
+[node name="DetectionArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea"]
+shape = SubResource("CircleShape2D_3ajt4")
+debug_color = Color(0, 0.545098, 0.94902, 0.0392157)
+
+[node name="AttackRangeArea" type="Area2D" parent="."]
+self_modulate = Color(1, 0, 0, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackRangeArea"]
+shape = SubResource("CircleShape2D_h3387")
+debug_color = Color(1, 0.00392157, 0.0588235, 0.0784314)
+
+[node name="KiteArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="KiteArea"]
+shape = SubResource("CircleShape2D_hy77q")
+debug_color = Color(0, 0.65098, 0.129412, 0.0784314)
+
+[node name="HealthBar" parent="." instance=ExtResource("3_4eqg7")]
+position = Vector2(-10, -11)

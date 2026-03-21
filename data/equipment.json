@@ -1,0 +1,191 @@
+[
+	{
+		"id": "claymore",
+		"name": "Claymore",
+		"slot": "weapon",
+		"category": "stat_multiplier",
+		"stat": "atk_damage",
+		"filter": "",
+		"base_value": 0.05,
+		"min_grade": 2,
+		"description": "A massive two-handed blade that inspires all warriors to strike harder."
+	},
+	{
+		"id": "spear",
+		"name": "Spear",
+		"slot": "weapon",
+		"category": "stat_multiplier",
+		"stat": "atk_range",
+		"filter": "warrior",
+		"base_value": 0.08,
+		"min_grade": 1,
+		"description": "Extended reach for your warriors. Keep enemies at the tip."
+	},
+	{
+		"id": "sword",
+		"name": "Sword",
+		"slot": "weapon",
+		"category": "stat_multiplier",
+		"stat": "atk_damage",
+		"filter": "warrior",
+		"base_value": 0.08,
+		"min_grade": 1,
+		"description": "A reliable blade that turns warriors into a cutting edge."
+	},
+	{
+		"id": "shortbow",
+		"name": "Shortbow",
+		"slot": "weapon",
+		"category": "stat_multiplier",
+		"stat": "atk_damage",
+		"filter": "ranger",
+		"base_value": 0.08,
+		"min_grade": 1,
+		"description": "A light bow that lets rangers loose arrows with greater force."
+	},
+	{
+		"id": "longbow",
+		"name": "Longbow",
+		"slot": "weapon",
+		"category": "stat_multiplier",
+		"stat": "atk_range",
+		"filter": "ranger",
+		"base_value": 0.08,
+		"min_grade": 1,
+		"description": "Rangers with a longbow can strike from distances that feel unfair."
+	},
+	{
+		"id": "heavy_armor",
+		"name": "Heavy Armor",
+		"slot": "armor",
+		"category": "stat_multiplier",
+		"stat": "hp_max",
+		"filter": "",
+		"base_value": 0.08,
+		"min_grade": 1,
+		"description": "Thick plate that soaks punishment. Slows nothing, stops everything."
+	},
+	{
+		"id": "medium_armor",
+		"name": "Medium Armor",
+		"slot": "armor",
+		"category": "stat_multiplier",
+		"stat": "atk_range",
+		"filter": "",
+		"base_value": 0.05,
+		"min_grade": 1,
+		"description": "Flexible protection that keeps your troops responsive on the field."
+	},
+	{
+		"id": "light_armor",
+		"name": "Light Armor",
+		"slot": "armor",
+		"category": "stat_multiplier",
+		"stat": "speed",
+		"filter": "",
+		"base_value": 0.06,
+		"min_grade": 1,
+		"description": "Barely there. Your troops move like they are wearing nothing at all."
+	},
+	{
+		"id": "ember_eye",
+		"name": "Ember Eye",
+		"slot": "artifact",
+		"category": "stat_multiplier",
+		"stat": "atk_range",
+		"filter": "",
+		"base_value": 0.05,
+		"min_grade": 1,
+		"description": "A smoldering gem that sharpens the gaze of every unit in your warband."
+	},
+	{
+		"id": "corrupted_clover",
+		"name": "Corrupted Clover",
+		"slot": "artifact",
+		"category": "loot_multiplier",
+		"stat": "material_forage_multiplier",
+		"filter": "",
+		"base_value": 0.10,
+		"min_grade": 2,
+		"description": "Lucky, in a wrong kind of way. Wrings more materials out of fallen enemies."
+	},
+	{
+		"id": "healing_herbs",
+		"name": "Healing Herbs",
+		"slot": "artifact",
+		"category": "stat_multiplier",
+		"stat": "hp_max",
+		"filter": "",
+		"base_value": 0.05,
+		"min_grade": 1,
+		"description": "A bundle of bitter roots. Your troops start each battle a little sturdier."
+	},
+	{
+		"id": "cats_paw",
+		"name": "Cat's Paw",
+		"slot": "artifact",
+		"category": "stat_multiplier",
+		"stat": "speed",
+		"filter": "",
+		"base_value": 0.05,
+		"min_grade": 1,
+		"description": "Light-footed grace, bottled. Your whole warband moves with predatory ease. Made through alchemy, no cats were injured."
+	},
+	{
+		"id": "frozen_meat",
+		"name": "Frozen Meat",
+		"slot": "artifact",
+		"category": "stat_multiplier",
+		"stat": "atk_damage",
+		"filter": "",
+		"base_value": 0.06,
+		"min_grade": 1,
+		"description": "Pre-battle rations of questionable origin. Hits harder on a full stomach."
+	},
+	{
+		"id": "golden_egg",
+		"name": "Golden Egg",
+		"slot": "artifact",
+		"category": "loot_multiplier",
+		"stat": "gold_multiplier",
+		"filter": "",
+		"base_value": 0.12,
+		"min_grade": 3,
+		"description": "Does not hatch. Does make enemies drop more gold when they die."
+	},
+	{
+		"id": "prismatic_shrooms",
+		"name": "Prismatic Shrooms",
+		"slot": "artifact",
+		"category": "per_stage_event",
+		"stat": "random_base_stat",
+		"filter": "",
+		"base_value": 0.08,
+		"min_grade": 3,
+		"description": "Iridescent fungi that shift color with each spawn. Each unit that takes the field has a random stat boosted."
+	},
+	{
+		"id": "command_banner",
+		"name": "Command Banner",
+		"slot": "artifact",
+		"category": "one_time_event",
+		"flag": "leadership",
+		"filter": "",
+		"base_value": 1.0,
+		"value_per_level": 0.10,
+		"min_grade": 1,
+		"description": "A rallying standard. For every full stack of morale, one more fighter joins the front line."
+	},
+	{
+		"id": "marching_pack",
+		"name": "Marching Pack",
+		"slot": "artifact",
+		"category": "one_time_event",
+		"flag": "increase_max_limit",
+		"filter": "",
+		"base_value": 2.0,
+		"value_per_level": 0.15,
+		"min_grade": 1,
+		"description": "Extra supplies mean room for more soldiers. Expands your warband capacity."
+	}
+]

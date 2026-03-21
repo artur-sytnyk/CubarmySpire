@@ -1,0 +1,114 @@
+[gd_scene load_steps=6 format=3 uid="uid://byb0ktv2dvebp"]
+
+[ext_resource type="Script" path="res://ui/root_scene.gd" id="1_cuvcg"]
+[ext_resource type="PackedScene" uid="uid://b8630mgnw2aon" path="res://ui/dialogs/SettingsOverlay.tscn" id="2_m7heq"]
+[ext_resource type="Script" path="res://ui/navbar.gd" id="2_os5tf"]
+
+[sub_resource type="Animation" id="Animation_nt51e"]
+length = 0.001
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ywqyn"]
+_data = {
+"RESET": SubResource("Animation_nt51e")
+}
+
+[node name="Root" type="Node"]
+script = ExtResource("1_cuvcg")
+
+[node name="GlobalBackground" type="ColorRect" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -5000.0
+offset_top = -5000.0
+offset_right = 5000.0
+offset_bottom = 5000.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+color = Color(0.215686, 0.215686, 0.270588, 1)
+
+[node name="SceneContainer" type="Node" parent="."]
+
+[node name="TransitionLayer" type="CanvasLayer" parent="."]
+layer = 5
+
+[node name="ColorRect" type="ColorRect" parent="TransitionLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.156863, 0.270588, 0.411765, 1)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="TransitionLayer/ColorRect"]
+libraries = {
+"": SubResource("AnimationLibrary_ywqyn")
+}
+
+[node name="NavBar" type="CanvasLayer" parent="."]
+layer = 8
+script = ExtResource("2_os5tf")
+
+[node name="PanelContainer" type="PanelContainer" parent="NavBar"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 8.0
+grow_horizontal = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="NavBar/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 48
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="NavBar/PanelContainer/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_constants/separation = 8
+
+[node name="CampaignBtn" type="Button" parent="NavBar/PanelContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+theme_override_font_sizes/font_size = 24
+text = "Campaign"
+
+[node name="ArmoryBtn" type="Button" parent="NavBar/PanelContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+theme_override_font_sizes/font_size = 24
+text = "Armory"
+
+[node name="GarrisonBtn" type="Button" parent="NavBar/PanelContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+theme_override_font_sizes/font_size = 24
+text = "Garrison"
+
+[node name="MarketBtn" type="Button" parent="NavBar/PanelContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+theme_override_font_sizes/font_size = 24
+text = "Markets"
+
+[node name="Spacer" type="Control" parent="NavBar/PanelContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="SettingsBtn" type="Button" parent="NavBar/PanelContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+mouse_default_cursor_shape = 2
+theme_override_constants/icon_max_width = 30
+flat = true
+icon_alignment = 1
+
+[node name="SettingsOverlay" parent="." instance=ExtResource("2_m7heq")]
+layer = 10

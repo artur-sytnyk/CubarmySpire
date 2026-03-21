@@ -1,0 +1,117 @@
+[gd_scene load_steps=3 format=3 uid="uid://b8630mgnw2aon"]
+
+[ext_resource type="Script" path="res://ui/dialogs/settings_overlay.gd" id="1_c1kgh"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5ugug"]
+bg_color = Color(0.129412, 0.2, 0.262745, 1)
+
+[node name="SettingsOverlay" type="CanvasLayer"]
+script = ExtResource("1_c1kgh")
+
+[node name="DimRect" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.784314, 0.901961, 1, 0.501961)
+
+[node name="Panel" type="Panel" parent="DimRect"]
+custom_minimum_size = Vector2(300, 420)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -210.0
+offset_top = -160.0
+offset_right = 210.0
+offset_bottom = 160.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_5ugug")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="DimRect/Panel"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -58.5
+offset_top = -135.0
+offset_right = 58.5
+offset_bottom = 135.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+
+[node name="Label" type="Label" parent="DimRect/Panel/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 32
+text = "Game Settings"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="DimRect/Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="SfxRow" type="HBoxContainer" parent="DimRect/Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DimRect/Panel/VBoxContainer/SfxRow"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Sound Effects"
+
+[node name="SfxSlider" type="HSlider" parent="DimRect/Panel/VBoxContainer/SfxRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+max_value = 1.0
+step = 0.1
+
+[node name="MusicRow" type="HBoxContainer" parent="DimRect/Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DimRect/Panel/VBoxContainer/MusicRow"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Music"
+
+[node name="MusicSlider" type="HSlider" parent="DimRect/Panel/VBoxContainer/MusicRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+max_value = 1.0
+step = 0.1
+
+[node name="HSeparator2" type="HSeparator" parent="DimRect/Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="ResetBtn" type="Button" parent="DimRect/Panel/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.27451, 0.211765, 1)
+text = "Reset Save"
+
+[node name="QuitBtn" type="Button" parent="DimRect/Panel/VBoxContainer"]
+layout_mode = 2
+text = "Quit Game"
+
+[node name="HSeparator3" type="HSeparator" parent="DimRect/Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="CloseBtn" type="Button" parent="DimRect/Panel/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 8
+theme_override_font_sizes/font_size = 20
+text = "Close"
+
+[node name="ConfirmDialog" type="ConfirmationDialog" parent="."]
+initial_position = 1
+size = Vector2i(300, 120)
+ok_button_text = "Okay"

@@ -68,6 +68,10 @@ text = "Warband size: 10 / 20"
 [node name="HSeparator2" type="HSeparator" parent="NavBarMargin/HBoxContainer/WarbandPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
+[node name="Spacer" type="Control" parent="NavBarMargin/HBoxContainer/WarbandPanel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+
 [node name="WarbandFlow" type="FlowContainer" parent="NavBarMargin/HBoxContainer/WarbandPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
@@ -146,6 +150,10 @@ theme_override_font_sizes/font_size = 12
 text = "Garrisoned units: 3 / 200"
 
 [node name="HSeparator2" type="HSeparator" parent="NavBarMargin/HBoxContainer/GarrisonPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Spacer" type="Control" parent="NavBarMargin/HBoxContainer/GarrisonPanel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
 
 [node name="GarrisonFlow" type="FlowContainer" parent="NavBarMargin/HBoxContainer/GarrisonPanel/MarginContainer/VBoxContainer"]

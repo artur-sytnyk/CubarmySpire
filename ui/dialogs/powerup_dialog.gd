@@ -22,7 +22,6 @@ func _ready() -> void:
 	card_container.size_flags_stretch_ratio = 4.0
 	
 	var style := StyleBoxFlat.new()
-	style.bg_color = Color("#1e1e2e")
 	style.corner_radius_top_left     = 12
 	style.corner_radius_top_right    = 12
 	style.corner_radius_bottom_left  = 12

@@ -123,37 +123,51 @@ func _refresh_army(save: SaveData) -> void:
 		_army_grid.add_child(_make_unit_box(g.type, g.level, g.count))
 
 
-func _make_unit_box(unit_type: String, level: int, count: int) -> Control:
+func _make_unit_box(unitType: String, level: int, count: int) -> Control:
 	var container := Control.new()
-	container.custom_minimum_size = Vector2(52, 52)
-	container.tooltip_text = "%s  Lv.%d  ×%d" % [unit_type.capitalize(), level, count]
+	container.custom_minimum_size = Vector2(80, 80)
+	container.tooltip_text = "%s  Lv.%d  ×%d" % [unitType.capitalize(), level, count]
 	
-	var bg := ColorRect.new()
-	bg.set_anchors_and_offsets_preset(PRESET_FULL_RECT)
-	bg.color = UNIT_COLORS.get(unit_type, Color(0.3, 0.3, 0.3))
-	container.add_child(bg)
+	var backgroundTexture := AtlasTexture.new()
+	backgroundTexture.atlas = preload("res://assets/images/unit_sprite.png")
+	backgroundTexture.region = Rect2(0, 0, 64, 64)
 	
-	var level_lbl := Label.new()
-	level_lbl.text = "Lv.%d" % level
-	level_lbl.add_theme_font_size_override("font_size", 10)
-	level_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	level_lbl.set_anchors_and_offsets_preset(PRESET_BOTTOM_WIDE)
-	level_lbl.offset_top = -18.0
-	container.add_child(level_lbl)
+	var background := TextureRect.new()
+	background.texture = backgroundTexture
+	background.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	background.stretch_mode = TextureRect.STRETCH_SCALE
+	background.set_anchors_and_offsets_preset(PRESET_FULL_RECT)
+	container.add_child(background)
 	
-	var badge_panel := PanelContainer.new()
-	badge_panel.custom_minimum_size = Vector2(20, 20)
-	badge_panel.set_anchors_and_offsets_preset(PRESET_TOP_RIGHT)
-	badge_panel.offset_left   = -24.0
-	badge_panel.offset_bottom =  24.0
-	container.add_child(badge_panel)
+	var weaponIcon := TextureRect.new()
+	weaponIcon.custom_minimum_size = Vector2(32, 32)
+	weaponIcon.size = Vector2(32, 32)
+	weaponIcon.pivot_offset = weaponIcon.size / 2.0
+	weaponIcon.set_anchors_and_offsets_preset(PRESET_CENTER)
+	match unitType:
+		"warrior":
+			weaponIcon.texture = IconDatabase.getWeaponIconById("sword")
+			weaponIcon.rotation_degrees = -90
+		"ranger":
+			weaponIcon.texture = IconDatabase.getWeaponIconById("bow")
+	weaponIcon.position = Vector2(-4, -4)
+	container.add_child(weaponIcon)
+	
+	var levelLabel := Label.new()
+	levelLabel.text = "Lv.%d" % level
+	levelLabel.add_theme_font_size_override("font_size", 16)
+	levelLabel.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	levelLabel.set_anchors_and_offsets_preset(PRESET_BOTTOM_WIDE)
+	levelLabel.offset_top = -8.0
+	container.add_child(levelLabel)
 	
 	var badge_lbl := Label.new()
-	badge_lbl.text = str(count)
-	badge_lbl.add_theme_font_size_override("font_size", 10)
+	badge_lbl.text = "[%d]" % count
+	badge_lbl.add_theme_font_size_override("font_size", 16)
 	badge_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	badge_lbl.vertical_alignment   = VERTICAL_ALIGNMENT_CENTER
-	badge_panel.add_child(badge_lbl)
+	badge_lbl.set_anchors_and_offsets_preset(PRESET_TOP_WIDE)
+	badge_lbl.offset_top = -18.0
+	container.add_child(badge_lbl)
 	
 	return container
 

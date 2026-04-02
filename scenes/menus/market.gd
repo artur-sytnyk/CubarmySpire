@@ -88,11 +88,32 @@ func _make_unit_row(unit_type: String, level: int) -> Control:
 	hbox.add_theme_constant_override("separation", 14)
 	margin.add_child(hbox)
 
-	var icon := ColorRect.new()
-	icon.custom_minimum_size = Vector2(48, 48)
-	icon.color = Color(0.55, 0.35, 0.20) if unit_type == "warrior" else Color(0.25, 0.55, 0.35)
-	hbox.add_child(icon)
-
+	var unitTexture := AtlasTexture.new()
+	unitTexture.atlas = preload("res://assets/images/unit_sprite.png")
+	unitTexture.region = Rect2(0, 0, 64, 64)
+	var unitIcon := TextureRect.new()
+	unitIcon.texture = unitTexture
+	unitIcon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	unitIcon.stretch_mode = TextureRect.STRETCH_SCALE
+	unitIcon.set_anchors_and_offsets_preset(PRESET_FULL_RECT)
+	unitIcon.custom_minimum_size = Vector2(64, 64)
+	
+	var weaponIcon := TextureRect.new()
+	weaponIcon.custom_minimum_size = Vector2(32, 32)
+	weaponIcon.size = Vector2(32, 32)
+	weaponIcon.pivot_offset = weaponIcon.size / 2.0
+	weaponIcon.set_anchors_and_offsets_preset(PRESET_CENTER)
+	match unit_type:
+		"warrior":
+			weaponIcon.texture = IconDatabase.getWeaponIconById("sword")
+			weaponIcon.rotation_degrees = -90
+		"ranger":
+			weaponIcon.texture = IconDatabase.getWeaponIconById("bow")
+	weaponIcon.position = Vector2(-8, -8)
+	
+	unitIcon.add_child(weaponIcon)
+	hbox.add_child(unitIcon)
+	
 	var info := VBoxContainer.new()
 	info.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	info.add_theme_constant_override("separation", 3)

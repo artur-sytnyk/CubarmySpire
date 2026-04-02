@@ -66,14 +66,14 @@ func set_current(save_data: SaveData) -> void:
 
 
 func save_current() -> void:
-	print("curr save slot: ", current_save.slot)
-	print("curr save gold: ", current_save.gold)
-	print("curr save materials_inv: ", current_save.materials_inv)
-	print("curr save equipment_inv: ", current_save.equipment_inv)
-	print("curr save army_active: ", current_save.army_active)
-	print("curr save army_barracks: ", current_save.army_barracks)
-	print("curr save shop_equipment: ", current_save.shop_equipment)
-	print("curr save max_stage_reached: ", current_save.max_stage_reached)
+	#print("curr save slot: ", current_save.slot)
+	#print("curr save gold: ", current_save.gold)
+	#print("curr save materials_inv: ", current_save.materials_inv)
+	#print("curr save equipment_inv: ", current_save.equipment_inv)
+	#print("curr save army_active: ", current_save.army_active)
+	#print("curr save army_barracks: ", current_save.army_barracks)
+	#print("curr save shop_equipment: ", current_save.shop_equipment)
+	#print("curr save max_stage_reached: ", current_save.max_stage_reached)
 	if current_save:
 		write_slot(current_save)
 

@@ -100,6 +100,7 @@ text = "Equipment"
 
 [node name="EquipmentRow" type="HBoxContainer" parent="NavBarMargin/HBox/RightPanel/Margin/VBox"]
 layout_mode = 2
+theme_override_constants/separation = 24
 
 [node name="Army" type="Label" parent="NavBarMargin/HBox/RightPanel/Margin/VBox"]
 layout_mode = 2
@@ -108,4 +109,6 @@ text = "Active Army"
 
 [node name="ArmyGrid" type="GridContainer" parent="NavBarMargin/HBox/RightPanel/Margin/VBox"]
 layout_mode = 2
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
 columns = 10

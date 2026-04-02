@@ -36,39 +36,15 @@ func show_results(data: Dictionary) -> void:
 
 
 func _populate_materials(materials: Dictionary) -> void:
-	for child in _materials_row.get_children():
-		child.queue_free()
-	
-	if materials.is_empty():
-		return
-	
-	var tiers: Array = materials.keys()
-	tiers.sort()
-	
-	for tier: int in tiers:
-		var count: int = materials[tier]
-		if count <= 0:
+	for tier: int in range(1, 6):
+		var row: VBoxContainer = _materials_row.get_node_or_null("MaterialT" + str(tier))
+		if row == null:
 			continue
-		_materials_row.add_child(_make_material_box(tier, count))
-
-
-func _make_material_box(tier: int, count: int) -> Control:
-	var vbox := VBoxContainer.new()
-	vbox.custom_minimum_size = Vector2(MATERIAL_BOX_SIZE, MATERIAL_BOX_SIZE + 22)
-	vbox.alignment = BoxContainer.ALIGNMENT_CENTER
-
-	var texture_rect := TextureRect.new()
-	texture_rect.texture = load("res://assets/images/material-1.png")
-	texture_rect.custom_minimum_size = Vector2(MATERIAL_BOX_SIZE, MATERIAL_BOX_SIZE)
-	texture_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	texture_rect.modulate = GameData.get_grade_color(tier)
-
-	var amount_label := Label.new()
-	amount_label.text = str(count)
-	amount_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	amount_label.add_theme_font_size_override("font_size", 14)
-
-	vbox.add_child(texture_rect)
-	vbox.add_child(amount_label)
-	return vbox
+		var count: int = materials.get(tier, 0)
+		if count <= 0:
+			row.visible = false
+			continue
+		row.visible = true
+		row.get_node("IconSizeBox/Icon").modulate = GameData.get_grade_color(tier)
+		row.get_node("Amount").text = str(count)
 

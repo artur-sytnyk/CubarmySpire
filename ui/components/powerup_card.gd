@@ -3,13 +3,6 @@ extends PanelContainer
 
 signal card_chosen(powerup: Dictionary, grade: int)
 
-const GRADE_COLORS: Array = [
-	Color("#9e9e9e"),
-	Color("#4caf50"),
-	Color("#2196f3"),
-	Color("#9c27b0"),
-]
-
 const ICON_PLACEHOLDER = preload("res://assets/images/material-1.png")
 
 @onready var icon_rect:  TextureRect = $VBox/IconRect
@@ -41,9 +34,9 @@ func setup(pu: Dictionary, grade: int) -> void:
 
 
 func _apply_style(hovered: bool) -> void:
-	var color := _grade_color(_grade)
+	var color := GameData.get_grade_color(_grade)
 	var style := StyleBoxFlat.new()
-	style.bg_color     = Color("#2a2a3e") if hovered else Color("#1e1e2e")
+	style.bg_color     = Color("#2a2a3e80") if hovered else Color("#1e1e2e80")
 	style.border_width_left   = 2
 	style.border_width_right  = 2
 	style.border_width_top    = 2
@@ -53,7 +46,7 @@ func _apply_style(hovered: bool) -> void:
 	style.corner_radius_bottom_right = 8
 	style.corner_radius_top_left     = 8
 	style.corner_radius_top_right    = 8
-	style.shadow_color = Color(color.r, color.g, color.b, 0.6 if hovered else 0.3)
+	style.shadow_color = Color(color.r, color.g, color.b, 0.4 if hovered else 0.2)
 	style.shadow_size  = 16 if hovered else 8
 	style.content_margin_left   = 8
 	style.content_margin_right  = 8
@@ -61,8 +54,6 @@ func _apply_style(hovered: bool) -> void:
 	style.content_margin_bottom = 8
 	add_theme_stylebox_override("panel", style)
 
-func _grade_color(grade: int) -> Color:
-	return GRADE_COLORS[clampi(grade - 1, 0, GRADE_COLORS.size() - 1)]
 
 func _gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton \

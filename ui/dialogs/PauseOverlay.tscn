@@ -1,6 +1,11 @@
-[gd_scene load_steps=2 format=3 uid="uid://l6ohkh1jvm2s"]
+[gd_scene load_steps=6 format=3 uid="uid://l6ohkh1jvm2s"]
 
 [ext_resource type="Script" path="res://ui/dialogs/pause_overlay.gd" id="1_d5qla"]
+[ext_resource type="StyleBox" uid="uid://otorqavmjdsr" path="res://ui/styles/btn_normal.tres" id="2_g7njs"]
+[ext_resource type="StyleBox" uid="uid://bpgl4yyg6x5dk" path="res://ui/styles/btn_hover.tres" id="3_27cfi"]
+[ext_resource type="StyleBox" uid="uid://bf4w0kmaihp72" path="res://ui/styles/btn_pressed.tres" id="4_4fmyo"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_iscoj"]
 
 [node name="PauseOverlay" type="CanvasLayer"]
 process_mode = 3
@@ -14,7 +19,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-color = Color(0.113725, 0.192157, 0.270588, 0.662745)
+color = Color(0.137255, 0.254902, 0.27451, 0.752941)
 
 [node name="VBox" type="VBoxContainer" parent="DimRect"]
 custom_minimum_size = Vector2(200, 0)
@@ -30,7 +35,7 @@ offset_right = 79.0
 offset_bottom = 57.5
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 16
+theme_override_constants/separation = 24
 alignment = 1
 
 [node name="TitleLabel" type="Label" parent="DimRect/VBox"]
@@ -40,11 +45,37 @@ text = "Paused"
 horizontal_alignment = 1
 
 [node name="ResumeBtn" type="Button" parent="DimRect/VBox"]
-custom_minimum_size = Vector2(0, 48)
+custom_minimum_size = Vector2(240, 60)
 layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_colors/font_pressed_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_colors/font_hover_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_colors/font_focus_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_colors/font_disabled_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = ExtResource("2_g7njs")
+theme_override_styles/hover = ExtResource("3_27cfi")
+theme_override_styles/pressed = ExtResource("4_4fmyo")
+theme_override_styles/disabled = ExtResource("4_4fmyo")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_iscoj")
 text = "Continue campaign"
 
 [node name="AbandonBtn" type="Button" parent="DimRect/VBox"]
-custom_minimum_size = Vector2(0, 48)
+custom_minimum_size = Vector2(240, 60)
 layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_colors/font_pressed_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_colors/font_hover_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_colors/font_focus_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_colors/font_disabled_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = ExtResource("2_g7njs")
+theme_override_styles/hover = ExtResource("3_27cfi")
+theme_override_styles/pressed = ExtResource("4_4fmyo")
+theme_override_styles/disabled = ExtResource("4_4fmyo")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_iscoj")
 text = "Abandon campaign"

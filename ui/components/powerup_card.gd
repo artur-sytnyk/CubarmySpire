@@ -5,9 +5,10 @@ signal card_chosen(powerup: Dictionary, grade: int)
 
 const ICON_PLACEHOLDER = preload("res://assets/images/material-1.png")
 
-@onready var icon_rect:  TextureRect = $VBox/IconRect
-@onready var name_label: Label = $VBox/BottomMargin/BottomVBox/NameLabel
-@onready var desc_label: Label = $VBox/BottomMargin/BottomVBox/DescLabel
+@onready var icon_rect:  TextureRect = $MarginContainer/VBox/IconSizeBox/IconRect
+@onready var name_label: Label = $MarginContainer/VBox/BottomMargin/BottomVBox/NameLabel
+@onready var count_label: Label = $MarginContainer/VBox/BottomMargin/BottomVBox/CountLabel
+@onready var desc_label: Label = $MarginContainer/VBox/BottomMargin/BottomVBox/DescLabel
 
 var _powerup: Dictionary
 var _grade: int
@@ -20,13 +21,15 @@ func setup(pu: Dictionary, grade: int) -> void:
 	
 	var relative_grade: int = grade - pu.get("min_grade", 1) + 1
 	name_label.text = "%s  +%d" % [pu["name"], relative_grade]
-	name_label.add_theme_font_size_override("font_size", 26)
-	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	
+	var powerupId: String = pu.get("id", "")
+	var current_count: int = 0
+	if RunState.active_powerups.has(powerupId):
+		current_count = RunState.active_powerups.get(powerupId, 0)
+	count_label.text = "Currently: %s" % current_count
 	
 	desc_label.text = pu["description"]
-	desc_label.add_theme_font_size_override("font_size", 16)
 	desc_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	desc_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	
 	_apply_style(false)
 	mouse_entered.connect(func(): _apply_style(true))
@@ -36,22 +39,18 @@ func setup(pu: Dictionary, grade: int) -> void:
 func _apply_style(hovered: bool) -> void:
 	var color := GameData.get_grade_color(_grade)
 	var style := StyleBoxFlat.new()
-	style.bg_color     = Color("#2a2a3e80") if hovered else Color("#1e1e2e80")
+	style.bg_color     = Color("#234146c0")
 	style.border_width_left   = 2
 	style.border_width_right  = 2
 	style.border_width_top    = 2
 	style.border_width_bottom = 2
 	style.border_color = color
-	style.corner_radius_bottom_left  = 8
-	style.corner_radius_bottom_right = 8
-	style.corner_radius_top_left     = 8
-	style.corner_radius_top_right    = 8
+	style.corner_radius_bottom_left  = 16
+	style.corner_radius_bottom_right = 16
+	style.corner_radius_top_left     = 16
+	style.corner_radius_top_right    = 16
 	style.shadow_color = Color(color.r, color.g, color.b, 0.4 if hovered else 0.2)
-	style.shadow_size  = 16 if hovered else 8
-	style.content_margin_left   = 8
-	style.content_margin_right  = 8
-	style.content_margin_top    = 8
-	style.content_margin_bottom = 8
+	style.shadow_size  = 12 if hovered else 8
 	add_theme_stylebox_override("panel", style)
 
 

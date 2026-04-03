@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cqc7mgf6ejpk1"
-path="res://.godot/imported/cog-border.png-da42be2eb4cbd6dc5bdf97b9cd6c71ba.ctex"
+uid="uid://b6baf0eu2jkvo"
+path="res://.godot/imported/previous-button.png-e4ff6ae0b2733abfcdc2d36f2f87537a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/images/cog-border.png"
-dest_files=["res://.godot/imported/cog-border.png-da42be2eb4cbd6dc5bdf97b9cd6c71ba.ctex"]
+source_file="res://assets/images/previous-button.png"
+dest_files=["res://.godot/imported/previous-button.png-e4ff6ae0b2733abfcdc2d36f2f87537a.ctex"]
 
 [params]
 

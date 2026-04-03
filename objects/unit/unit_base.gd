@@ -10,6 +10,7 @@ extends CharacterBody2D
 @onready var kite_area := $KiteArea
 @onready var health_bar := $HealthBar
 @onready var collision_body := $CollisionShape2D
+@onready var level_lbl :Label = $LevelLabel
 
 # Signals
 signal died(unit: Unit)
@@ -97,6 +98,7 @@ func apply_stats(stats: Dictionary) -> void:
 	_update_sprite_row()
 	unit_type = stats.get("unit_type", "")
 	level = stats.get("level", 1)
+	level_lbl.text = str(level)
 	hp_max = stats.get("hp_max", 20)
 	hp_current = hp_max
 	health_bar.update(hp_current, hp_max)

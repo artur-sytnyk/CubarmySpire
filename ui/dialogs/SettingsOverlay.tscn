@@ -1,9 +1,45 @@
-[gd_scene load_steps=3 format=3 uid="uid://b8630mgnw2aon"]
+[gd_scene load_steps=12 format=3 uid="uid://b8630mgnw2aon"]
 
 [ext_resource type="Script" path="res://ui/dialogs/settings_overlay.gd" id="1_c1kgh"]
+[ext_resource type="StyleBox" uid="uid://dqrbn6psw1s6p" path="res://ui/styles/separator.tres" id="2_0bm7h"]
+[ext_resource type="StyleBox" uid="uid://otorqavmjdsr" path="res://ui/styles/btn_normal.tres" id="2_xpyiq"]
+[ext_resource type="StyleBox" uid="uid://bpgl4yyg6x5dk" path="res://ui/styles/btn_hover.tres" id="3_navwu"]
+[ext_resource type="StyleBox" uid="uid://bf4w0kmaihp72" path="res://ui/styles/btn_pressed.tres" id="4_gbeyo"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5ugug"]
-bg_color = Color(0.129412, 0.2, 0.262745, 1)
+bg_color = Color(0.156863, 0.282353, 0.301961, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_color = Color(0, 0, 0, 0.12549)
+shadow_size = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g17wi"]
+draw_center = false
+border_width_top = 3
+border_width_bottom = 2
+border_color = Color(0.113725, 0.188235, 0.2, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6e3ye"]
+bg_color = Color(0.372549, 0.752941, 0.705882, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.537255, 0.941176, 0.890196, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5uaph"]
+bg_color = Color(0.454902, 0.847059, 0.8, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.537255, 0.941176, 0.890196, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_x76na"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ojo7d"]
 
 [node name="SettingsOverlay" type="CanvasLayer"]
 script = ExtResource("1_c1kgh")
@@ -14,26 +50,26 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.784314, 0.901961, 1, 0.501961)
+color = Color(0.137255, 0.254902, 0.27451, 0.501961)
 
 [node name="Panel" type="Panel" parent="DimRect"]
-custom_minimum_size = Vector2(300, 420)
+custom_minimum_size = Vector2(400, 480)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -210.0
-offset_top = -160.0
-offset_right = 210.0
-offset_bottom = 160.0
+offset_left = -240.0
+offset_top = -240.0
+offset_right = 240.0
+offset_bottom = 240.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_5ugug")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="DimRect/Panel"]
-custom_minimum_size = Vector2(300, 0)
+custom_minimum_size = Vector2(360, 0)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -57,6 +93,7 @@ horizontal_alignment = 1
 
 [node name="HSeparator" type="HSeparator" parent="DimRect/Panel/VBoxContainer"]
 layout_mode = 2
+theme_override_styles/separator = ExtResource("2_0bm7h")
 
 [node name="SfxRow" type="HBoxContainer" parent="DimRect/Panel/VBoxContainer"]
 layout_mode = 2
@@ -71,6 +108,11 @@ text = "Sound Effects"
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
+mouse_default_cursor_shape = 2
+theme_override_constants/grabber_offset = 0
+theme_override_styles/slider = SubResource("StyleBoxFlat_g17wi")
+theme_override_styles/grabber_area = SubResource("StyleBoxFlat_6e3ye")
+theme_override_styles/grabber_area_highlight = SubResource("StyleBoxFlat_5uaph")
 max_value = 1.0
 step = 0.1
 
@@ -87,28 +129,73 @@ text = "Music"
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
+mouse_default_cursor_shape = 2
+theme_override_constants/grabber_offset = 0
+theme_override_styles/slider = SubResource("StyleBoxFlat_g17wi")
+theme_override_styles/grabber_area = SubResource("StyleBoxFlat_6e3ye")
+theme_override_styles/grabber_area_highlight = SubResource("StyleBoxFlat_5uaph")
 max_value = 1.0
 step = 0.1
 
 [node name="HSeparator2" type="HSeparator" parent="DimRect/Panel/VBoxContainer"]
 layout_mode = 2
+theme_override_styles/separator = ExtResource("2_0bm7h")
 
 [node name="ResetBtn" type="Button" parent="DimRect/Panel/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.27451, 0.211765, 1)
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.580392, 0.188235, 0.188235, 1)
+theme_override_colors/font_pressed_color = Color(0.580392, 0.188235, 0.188235, 1)
+theme_override_colors/font_hover_color = Color(0.580392, 0.188235, 0.188235, 1)
+theme_override_colors/font_focus_color = Color(0.580392, 0.188235, 0.188235, 1)
+theme_override_colors/font_disabled_color = Color(0.580392, 0.188235, 0.188235, 1)
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = ExtResource("2_xpyiq")
+theme_override_styles/hover = ExtResource("3_navwu")
+theme_override_styles/pressed = ExtResource("4_gbeyo")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_x76na")
 text = "Reset Save"
+icon_alignment = 2
+expand_icon = true
 
 [node name="QuitBtn" type="Button" parent="DimRect/Panel/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_colors/font_pressed_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_colors/font_hover_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_colors/font_focus_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_colors/font_disabled_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = ExtResource("2_xpyiq")
+theme_override_styles/hover = ExtResource("3_navwu")
+theme_override_styles/pressed = ExtResource("4_gbeyo")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ojo7d")
 text = "Quit Game"
+icon_alignment = 2
+expand_icon = true
 
 [node name="HSeparator3" type="HSeparator" parent="DimRect/Panel/VBoxContainer"]
 layout_mode = 2
+theme_override_styles/separator = ExtResource("2_0bm7h")
 
 [node name="CloseBtn" type="Button" parent="DimRect/Panel/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 size_flags_vertical = 8
-theme_override_font_sizes/font_size = 20
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_colors/font_pressed_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_colors/font_hover_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_colors/font_focus_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_colors/font_disabled_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = ExtResource("2_xpyiq")
+theme_override_styles/hover = ExtResource("3_navwu")
+theme_override_styles/pressed = ExtResource("4_gbeyo")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ojo7d")
 text = "Close"
 
 [node name="ConfirmDialog" type="ConfirmationDialog" parent="."]

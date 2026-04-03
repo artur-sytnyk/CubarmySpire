@@ -39,6 +39,8 @@ func _connect_signals() -> void:
 # --- Battle outcomes ---
 
 func _on_battle_won() -> void:
+	pause_button.disabled = true
+	_abandon_btn.disabled = true
 	_collect_loot()
 	_show_powerup_dialog()
 

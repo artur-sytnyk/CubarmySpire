@@ -1,6 +1,15 @@
-[gd_scene load_steps=2 format=3 uid="uid://bug6rns6bv40h"]
+[gd_scene load_steps=10 format=3 uid="uid://bug6rns6bv40h"]
 
 [ext_resource type="Script" path="res://scenes/menus/garrison.gd" id="1_iblgf"]
+[ext_resource type="StyleBox" uid="uid://c7yrhugtsp115" path="res://ui/styles/panel_bg.tres" id="2_8qnqe"]
+[ext_resource type="StyleBox" uid="uid://dqrbn6psw1s6p" path="res://ui/styles/separator.tres" id="2_ocpc1"]
+[ext_resource type="StyleBox" uid="uid://otorqavmjdsr" path="res://ui/styles/btn_normal.tres" id="3_lwm3c"]
+[ext_resource type="StyleBox" uid="uid://bpgl4yyg6x5dk" path="res://ui/styles/btn_hover.tres" id="4_l3fah"]
+[ext_resource type="StyleBox" uid="uid://bf4w0kmaihp72" path="res://ui/styles/btn_pressed.tres" id="5_md6xs"]
+[ext_resource type="Texture2D" uid="uid://bsbdxnl0i7kx0" path="res://assets/images/next-button.png" id="6_iuxef"]
+[ext_resource type="Texture2D" uid="uid://b6baf0eu2jkvo" path="res://assets/images/previous-button.png" id="8_ubrjc"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rof0m"]
 
 [node name="Garrison" type="Control"]
 layout_mode = 3
@@ -18,7 +27,10 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_top = 46
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 68
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
 
 [node name="HBoxContainer" type="HBoxContainer" parent="NavBarMargin"]
 layout_mode = 2
@@ -26,6 +38,7 @@ layout_mode = 2
 [node name="WarbandPanel" type="PanelContainer" parent="NavBarMargin/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_styles/panel = ExtResource("2_8qnqe")
 
 [node name="MarginContainer" type="MarginContainer" parent="NavBarMargin/HBoxContainer/WarbandPanel"]
 layout_mode = 2
@@ -38,13 +51,43 @@ theme_override_constants/margin_bottom = 16
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="Label" type="Label" parent="NavBarMargin/HBoxContainer/WarbandPanel/MarginContainer/VBoxContainer"]
+[node name="TitleRow" type="HBoxContainer" parent="NavBarMargin/HBoxContainer/WarbandPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
+
+[node name="Label" type="Label" parent="NavBarMargin/HBoxContainer/WarbandPanel/MarginContainer/VBoxContainer/TitleRow"]
+layout_mode = 2
+size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 24
 text = "Warband"
+horizontal_alignment = 1
+
+[node name="ToGarrisonBtn" type="Button" parent="NavBarMargin/HBoxContainer/WarbandPanel/MarginContainer/VBoxContainer/TitleRow"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+tooltip_text = "Move all units to Garrison"
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_colors/font_pressed_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_colors/font_hover_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_colors/font_focus_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_colors/icon_normal_color = Color(0.537255, 0.941176, 0.890196, 1)
+theme_override_colors/icon_pressed_color = Color(0.313726, 0.72549, 0.678431, 1)
+theme_override_colors/icon_hover_color = Color(0.454902, 0.847059, 0.8, 1)
+theme_override_colors/icon_focus_color = Color(0.537255, 0.941176, 0.890196, 1)
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = ExtResource("3_lwm3c")
+theme_override_styles/hover = ExtResource("4_l3fah")
+theme_override_styles/pressed = ExtResource("5_md6xs")
+theme_override_styles/disabled = ExtResource("5_md6xs")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_rof0m")
+icon = ExtResource("6_iuxef")
+flat = true
+icon_alignment = 1
+expand_icon = true
 
 [node name="HSeparator" type="HSeparator" parent="NavBarMargin/HBoxContainer/WarbandPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_styles/separator = ExtResource("2_ocpc1")
 
 [node name="LimitsRow" type="HBoxContainer" parent="NavBarMargin/HBoxContainer/WarbandPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -52,6 +95,8 @@ layout_mode = 2
 [node name="VanguardLabel" type="Label" parent="NavBarMargin/HBoxContainer/WarbandPanel/MarginContainer/VBoxContainer/LimitsRow"]
 layout_mode = 2
 tooltip_text = "Amount of units that fight simultaneously on the battlefield"
+mouse_filter = 0
+mouse_default_cursor_shape = 2
 theme_override_font_sizes/font_size = 12
 text = "Vanguard size: 10"
 
@@ -62,11 +107,14 @@ size_flags_horizontal = 3
 [node name="ReservesLabel" type="Label" parent="NavBarMargin/HBoxContainer/WarbandPanel/MarginContainer/VBoxContainer/LimitsRow"]
 layout_mode = 2
 tooltip_text = "Total units brought into the campaign"
+mouse_filter = 0
+mouse_default_cursor_shape = 2
 theme_override_font_sizes/font_size = 12
 text = "Warband size: 10 / 20"
 
 [node name="HSeparator2" type="HSeparator" parent="NavBarMargin/HBoxContainer/WarbandPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_styles/separator = ExtResource("2_ocpc1")
 
 [node name="Spacer" type="Control" parent="NavBarMargin/HBoxContainer/WarbandPanel/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 16)
@@ -78,52 +126,13 @@ size_flags_vertical = 3
 
 [node name="MarginContainer" type="MarginContainer" parent="NavBarMargin/HBoxContainer"]
 layout_mode = 2
-theme_override_constants/margin_left = 8
-theme_override_constants/margin_right = 8
-
-[node name="MidColumn" type="VBoxContainer" parent="NavBarMargin/HBoxContainer/MarginContainer"]
-custom_minimum_size = Vector2(84, 0)
-layout_mode = 2
-theme_override_constants/separation = 16
-
-[node name="Spacer" type="Control" parent="NavBarMargin/HBoxContainer/MarginContainer/MidColumn"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="MoveLabel" type="Label" parent="NavBarMargin/HBoxContainer/MarginContainer/MidColumn"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 20
-text = "Move all"
-horizontal_alignment = 1
-
-[node name="MoveButtonsRow" type="HBoxContainer" parent="NavBarMargin/HBoxContainer/MarginContainer/MidColumn"]
-custom_minimum_size = Vector2(0, 48)
-layout_mode = 2
-theme_override_constants/separation = 8
-alignment = 1
-
-[node name="ToWarbandBtn" type="Button" parent="NavBarMargin/HBoxContainer/MarginContainer/MidColumn/MoveButtonsRow"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 22
-text = "<"
-
-[node name="ToGarrisonBtn" type="Button" parent="NavBarMargin/HBoxContainer/MarginContainer/MidColumn/MoveButtonsRow"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 22
-text = ">"
-
-[node name="Spacer2" type="Control" parent="NavBarMargin/HBoxContainer/MarginContainer/MidColumn"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-size_flags_stretch_ratio = 2.0
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_right = 16
 
 [node name="GarrisonPanel" type="PanelContainer" parent="NavBarMargin/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_styles/panel = ExtResource("2_8qnqe")
 
 [node name="MarginContainer" type="MarginContainer" parent="NavBarMargin/HBoxContainer/GarrisonPanel"]
 layout_mode = 2
@@ -136,13 +145,43 @@ theme_override_constants/margin_bottom = 16
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="Label" type="Label" parent="NavBarMargin/HBoxContainer/GarrisonPanel/MarginContainer/VBoxContainer"]
+[node name="TitleRow" type="HBoxContainer" parent="NavBarMargin/HBoxContainer/GarrisonPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
+
+[node name="ToWarbandBtn" type="Button" parent="NavBarMargin/HBoxContainer/GarrisonPanel/MarginContainer/VBoxContainer/TitleRow"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+tooltip_text = "Move all units to Warband, untill size is filled."
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_colors/font_pressed_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_colors/font_hover_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_colors/font_focus_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_colors/icon_normal_color = Color(0.537255, 0.941176, 0.890196, 1)
+theme_override_colors/icon_pressed_color = Color(0.313726, 0.72549, 0.678431, 1)
+theme_override_colors/icon_hover_color = Color(0.454902, 0.847059, 0.8, 1)
+theme_override_colors/icon_focus_color = Color(0.537255, 0.941176, 0.890196, 1)
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = ExtResource("3_lwm3c")
+theme_override_styles/hover = ExtResource("4_l3fah")
+theme_override_styles/pressed = ExtResource("5_md6xs")
+theme_override_styles/disabled = ExtResource("5_md6xs")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_rof0m")
+icon = ExtResource("8_ubrjc")
+flat = true
+icon_alignment = 1
+expand_icon = true
+
+[node name="Label" type="Label" parent="NavBarMargin/HBoxContainer/GarrisonPanel/MarginContainer/VBoxContainer/TitleRow"]
+layout_mode = 2
+size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 24
 text = "Garrison"
+horizontal_alignment = 1
 
 [node name="HSeparator" type="HSeparator" parent="NavBarMargin/HBoxContainer/GarrisonPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_styles/separator = ExtResource("2_ocpc1")
 
 [node name="GarrisonCountLabel" type="Label" parent="NavBarMargin/HBoxContainer/GarrisonPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -151,6 +190,7 @@ text = "Garrisoned units: 3 / 200"
 
 [node name="HSeparator2" type="HSeparator" parent="NavBarMargin/HBoxContainer/GarrisonPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_styles/separator = ExtResource("2_ocpc1")
 
 [node name="Spacer" type="Control" parent="NavBarMargin/HBoxContainer/GarrisonPanel/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 16)

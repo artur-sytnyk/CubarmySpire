@@ -13,6 +13,7 @@ static func calculate_player(unit_def: Dictionary, active_powerups: Dictionary) 
 	_apply_equipment(base, unit_def)
 	_apply_stat_multipliers(base, unit_def, active_powerups)
 	_apply_behavior_flags(base, unit_def, active_powerups)
+	base["level"] = unit_def.get("level", 1)
 	return base
 
 static func calculate_enemy(unit_def: Dictionary, stage: int) -> Dictionary:
@@ -23,6 +24,7 @@ static func calculate_enemy(unit_def: Dictionary, stage: int) -> Dictionary:
 	base["hp_max"]     = int(base["hp_max"]     * stage_scale * stage_bonus)
 	base["atk_damage"] = int(base["atk_damage"] * stage_scale * stage_bonus)
 	base["speed"]      = int(base["speed"]       * stage_scale * stage_bonus)
+	base["level"] = unit_def.get("level", 1)
 	return base
 
 # ── Base stats ─────────────────────────────────────────────────────────────

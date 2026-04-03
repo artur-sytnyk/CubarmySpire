@@ -12,7 +12,8 @@ anchor_bottom = 1.0
 offset_top = -3.0
 offset_right = 20.0
 grow_vertical = 0
-color = Color(0.388235, 0.388235, 0.388235, 1)
+color = Color(0.113725, 0.188235, 0.2, 1)
+metadata/_edit_use_anchors_ = true
 
 [node name="CurrentHpBar" type="ColorRect" parent="."]
 anchors_preset = 2
@@ -23,4 +24,5 @@ offset_right = 10.0
 grow_vertical = 0
 size_flags_horizontal = 4
 size_flags_vertical = 4
-color = Color(0.588235, 1, 0.662745, 1)
+color = Color(0.662745, 1, 0.662745, 1)
+metadata/_edit_use_anchors_ = true

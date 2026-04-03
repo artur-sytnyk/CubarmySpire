@@ -25,9 +25,6 @@ func _ready() -> void:
 	_recruit_btn.pressed.connect(func(): _switch_pane("recruit"))
 	_equip_btn.pressed.connect(func():   _switch_pane("equip"))
 	_alchemy_btn.pressed.connect(func(): _switch_pane("alchemy"))
-	_unit_level_input.min_value = 1
-	_unit_level_input.max_value = 99
-	_unit_level_input.value = 1
 	_unit_level_input.value_changed.connect(_on_unit_level_changed)
 	_build_recruit_pane()
 	_build_equip_pane()
@@ -48,12 +45,10 @@ func _switch_pane(pane: String) -> void:
 func _update_nav_highlight() -> void:
 	for pair in [["recruit", _recruit_btn], ["equip", _equip_btn], ["alchemy", _alchemy_btn]]:
 		var btn: Button = pair[1]
-		if pair[0] == _active_pane:
-			btn.flat = false
-			btn.add_theme_color_override("font_color", Color(1.0, 0.85, 0.3))
-		else:
-			btn.flat = true
-			btn.remove_theme_color_override("font_color")
+		var is_active: bool = pair[0] == _active_pane
+		btn.toggle_mode = true
+		btn.button_pressed = is_active
+		btn.disabled = is_active
 
 # ── Recruit pane ───────────────────────────────────────────────────────────
 
@@ -145,7 +140,7 @@ func _make_unit_row(unit_type: String, level: int) -> Control:
 	var cost_lbl := Label.new()
 	cost_lbl.text = "%dg" % cost
 	cost_lbl.add_theme_font_size_override("font_size", 14)
-	cost_lbl.add_theme_color_override("font_color", Color(0.73, 0.46, 0.09))
+	cost_lbl.add_theme_color_override("font_color", GameData.COLOR_GOLD)
 	cost_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	buy_col.add_child(cost_lbl)
 
@@ -345,7 +340,7 @@ func _show_equip_detail(item: Dictionary) -> void:
 	var cost_lbl := Label.new()
 	cost_lbl.text = "%dg" % cost
 	cost_lbl.add_theme_font_size_override("font_size", 16)
-	cost_lbl.add_theme_color_override("font_color", Color(0.73, 0.46, 0.09))
+	cost_lbl.add_theme_color_override("font_color", GameData.COLOR_GOLD)
 	buy_col.add_child(cost_lbl)
 
 	var buy_btn := Button.new()
@@ -652,7 +647,7 @@ func _make_material_item(grade: int, count: int) -> Control:
 	# Left — icon only
 	var icon := TextureRect.new()
 	icon.texture = load("res://assets/images/material-1.png")
-	icon.custom_minimum_size = Vector2(50, 50)
+	icon.custom_minimum_size = Vector2(48, 48)
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	icon.modulate = GameData.get_grade_color(grade)

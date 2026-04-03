@@ -48,14 +48,17 @@ func _on_difficulty_selected(difficulty: String) -> void:
 
 
 func _update_difficulty_highlight() -> void:
-	for pair in [[DIFFICULTY_EASY, _easy_btn], [DIFFICULTY_NORMAL, _normal_btn], [DIFFICULTY_HARD, _hard_btn]]:
+	for pair in [
+		[DIFFICULTY_EASY, _easy_btn],
+		[DIFFICULTY_NORMAL, _normal_btn],
+		[DIFFICULTY_HARD, _hard_btn]
+	]:
+		var difficulty: String = pair[0]
 		var btn: Button = pair[1]
-		if pair[0] == _selected_difficulty:
-			btn.flat = false
-			btn.add_theme_color_override("font_color", Color(1.0, 0.85, 0.3))
-		else:
-			btn.flat = true
-			btn.remove_theme_color_override("font_color")
+		var is_active: bool = difficulty == _selected_difficulty
+		btn.toggle_mode = true
+		btn.button_pressed = is_active
+		btn.disabled = is_active
 
 
 func _build_equipment_slots() -> void:
@@ -126,7 +129,7 @@ func _refresh_army(save: SaveData) -> void:
 func _make_unit_box(unitType: String, level: int, count: int) -> Control:
 	var container := Control.new()
 	container.custom_minimum_size = Vector2(80, 80)
-	container.tooltip_text = "%s  Lv.%d  ×%d" % [unitType.capitalize(), level, count]
+	container.tooltip_text = "%s  lv %d  ×%d" % [unitType.capitalize(), level, count]
 	
 	var backgroundTexture := AtlasTexture.new()
 	backgroundTexture.atlas = preload("res://assets/images/unit_sprite.png")
@@ -154,7 +157,7 @@ func _make_unit_box(unitType: String, level: int, count: int) -> Control:
 	container.add_child(weaponIcon)
 	
 	var levelLabel := Label.new()
-	levelLabel.text = "Lv.%d" % level
+	levelLabel.text = "lv %d" % level
 	levelLabel.add_theme_font_size_override("font_size", 16)
 	levelLabel.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	levelLabel.set_anchors_and_offsets_preset(PRESET_BOTTOM_WIDE)

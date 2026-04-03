@@ -80,8 +80,8 @@ func _refresh_slots(save: SaveData) -> void:
 		var key: String = SLOT_KEYS[i]
 		if equipped.has(key):
 			var item: Dictionary = equipped[key]
-			var def: Dictionary  = GameData.get_equipment(item.get("id", ""))
-			var grade: int       = item.get("grade", 1)
+			var def: Dictionary = GameData.get_equipment(item.get("id", ""))
+			var grade: int = item.get("grade", 1)
 
 			var name_lbl := Label.new()
 			name_lbl.text = _display_name(def, grade)
@@ -93,8 +93,17 @@ func _refresh_slots(save: SaveData) -> void:
 
 			var btn := Button.new()
 			btn.flat = true
+			btn.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+			btn.focus_mode = Control.FOCUS_NONE
+			btn.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
 			btn.set_anchors_and_offsets_preset(PRESET_FULL_RECT)
 			btn.pressed.connect(_on_slot_clicked.bind(item))
+			btn.mouse_entered.connect(func():
+				panel.self_modulate.a = 0.6
+			)
+			btn.mouse_exited.connect(func():
+				panel.self_modulate = Color(1, 1, 1, 1)
+			)
 			panel.add_child(btn)
 		else:
 			var empty_lbl := Label.new()
@@ -229,6 +238,7 @@ func _make_item_box(stack: Dictionary) -> Control:
 
 func _show_detail(stack: Dictionary) -> void:
 	var def: Dictionary  = GameData.get_equipment(stack.get("id", ""))
+	var slot: String       = def.get("slot", "artifact")
 	var grade: int       = stack.get("grade", 1)
 	var level: int       = stack.get("level", 1)
 	var is_equipped: bool = stack.get("equipped_slot", "") != ""
@@ -239,12 +249,11 @@ func _show_detail(stack: Dictionary) -> void:
 	_item_name_label.text = _display_name(def, grade)
 	_item_name_label.add_theme_color_override("font_color", grade_color)
 
-	_item_grade_label.text = "%s  •  Level %d  •  +%.1f%% %s" % [
-		GRADE_NAMES.get(grade, "?"), level, effect_pct, def.get("stat", ""),
-	]
+	_item_grade_label.text = "%s  •  Lv %d  •  %s" % [slot, level, GRADE_NAMES.get(grade, "?")]
 	_item_grade_label.add_theme_color_override("font_color", grade_color.darkened(0.15))
 
 	_item_desc_label.text = def.get("description", "No description.")
+	_item_desc_label.text += " +%.1f%% %s" % [effect_pct, def.get("stat", "")]
 
 	_equip_btn.text    = "Unequip" if is_equipped else "Equip"
 	_equip_btn.visible = true

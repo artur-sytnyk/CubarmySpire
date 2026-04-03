@@ -18,40 +18,34 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.113725, 0.192157, 0.270588, 0.376471)
+color = Color(0.137255, 0.254902, 0.27451, 0.627451)
 
-[node name="Panel" type="PanelContainer" parent="."]
-self_modulate = Color(0.117647, 0.117647, 0.180392, 0.501961)
+[node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -20.0
-offset_right = 20.0
-offset_bottom = 20.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-
-[node name="MarginContainer" type="MarginContainer" parent="Panel"]
-layout_mode = 2
 theme_override_constants/margin_left = 48
 theme_override_constants/margin_top = 24
 theme_override_constants/margin_right = 48
 theme_override_constants/margin_bottom = 48
 
-[node name="VBox" type="VBoxContainer" parent="Panel/MarginContainer"]
-layout_mode = 2
-theme_override_constants/separation = 24
-
-[node name="TitleLabel" type="Label" parent="Panel/MarginContainer/VBox"]
+[node name="VBox" type="VBoxContainer" parent="MarginContainer"]
+custom_minimum_size = Vector2(720, 400)
 layout_mode = 2
 size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 32
+
+[node name="TitleLabel" type="Label" parent="MarginContainer/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Floor cleared  -  Select a powerup"
 horizontal_alignment = 1
 
-[node name="CardContainer" type="HBoxContainer" parent="Panel/MarginContainer/VBox"]
+[node name="CardContainer" type="HBoxContainer" parent="MarginContainer/VBox"]
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_constants/separation = 48
+theme_override_constants/separation = 32

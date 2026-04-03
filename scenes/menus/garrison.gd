@@ -12,8 +12,8 @@ const RESERVES_LIMIT := 20
 @onready var _vanguard_label: Label       = $NavBarMargin/HBoxContainer/WarbandPanel/MarginContainer/VBoxContainer/LimitsRow/VanguardLabel
 @onready var _reserves_label: Label       = $NavBarMargin/HBoxContainer/WarbandPanel/MarginContainer/VBoxContainer/LimitsRow/ReservesLabel
 @onready var _warband_flow: FlowContainer = $NavBarMargin/HBoxContainer/WarbandPanel/MarginContainer/VBoxContainer/WarbandFlow
-@onready var _to_warband_btn: Button      = $NavBarMargin/HBoxContainer/MarginContainer/MidColumn/MoveButtonsRow/ToWarbandBtn
-@onready var _to_garrison_btn: Button     = $NavBarMargin/HBoxContainer/MarginContainer/MidColumn/MoveButtonsRow/ToGarrisonBtn
+@onready var _to_warband_btn: Button      = $NavBarMargin/HBoxContainer/GarrisonPanel/MarginContainer/VBoxContainer/TitleRow/ToWarbandBtn
+@onready var _to_garrison_btn: Button     = $NavBarMargin/HBoxContainer/WarbandPanel/MarginContainer/VBoxContainer/TitleRow/ToGarrisonBtn
 @onready var _garrison_count_label: Label  = $NavBarMargin/HBoxContainer/GarrisonPanel/MarginContainer/VBoxContainer/GarrisonCountLabel
 @onready var _garrison_flow: FlowContainer = $NavBarMargin/HBoxContainer/GarrisonPanel/MarginContainer/VBoxContainer/GarrisonFlow
 
@@ -100,7 +100,7 @@ func _group_units(unit_list: Array) -> Dictionary:
 func _make_unit_box(key: String, unit_type: String, level: int, count: int, source: String) -> Control:
 	var container := Control.new()
 	container.custom_minimum_size = BOX_SIZE
-	container.tooltip_text = "%s  Lv.%d  ×%d" % [unit_type.capitalize(), level, count]
+	container.tooltip_text = "%s  lv %d  ×%d" % [unit_type.capitalize(), level, count]
 	
 	var backgroundTexture := AtlasTexture.new()
 	backgroundTexture.atlas = preload("res://assets/images/unit_sprite.png")
@@ -121,7 +121,7 @@ func _make_unit_box(key: String, unit_type: String, level: int, count: int, sour
 	container.add_child(badge_lbl)
 	
 	var level_lbl := Label.new()
-	level_lbl.text = "Lv. %d" % level
+	level_lbl.text = "lv %d" % level
 	level_lbl.add_theme_font_size_override("font_size", 16)
 	level_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	level_lbl.set_anchors_and_offsets_preset(PRESET_BOTTOM_WIDE)

@@ -1,6 +1,14 @@
-[gd_scene load_steps=2 format=3 uid="uid://cg2fjtwacwrk1"]
+[gd_scene load_steps=9 format=3 uid="uid://cg2fjtwacwrk1"]
 
 [ext_resource type="Script" path="res://scenes/menus/armory.gd" id="1_0xe7l"]
+[ext_resource type="StyleBox" uid="uid://c7yrhugtsp115" path="res://ui/styles/panel_bg.tres" id="2_3grjq"]
+[ext_resource type="StyleBox" uid="uid://dy82hd864qo42" path="res://ui/styles/panel_float.tres" id="3_2vgrd"]
+[ext_resource type="StyleBox" uid="uid://dqrbn6psw1s6p" path="res://ui/styles/separator.tres" id="4_t2klq"]
+[ext_resource type="StyleBox" uid="uid://otorqavmjdsr" path="res://ui/styles/btn_normal.tres" id="5_xe3r2"]
+[ext_resource type="StyleBox" uid="uid://bpgl4yyg6x5dk" path="res://ui/styles/btn_hover.tres" id="6_fiipk"]
+[ext_resource type="StyleBox" uid="uid://bf4w0kmaihp72" path="res://ui/styles/btn_pressed.tres" id="7_s0cwp"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_12kx8"]
 
 [node name="Armory" type="Control"]
 layout_mode = 3
@@ -9,6 +17,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 script = ExtResource("1_0xe7l")
 
 [node name="NavBarMargin" type="MarginContainer" parent="."]
@@ -18,14 +28,19 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_top = 46
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 68
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
 
 [node name="HBoxContainer" type="HBoxContainer" parent="NavBarMargin"]
 layout_mode = 2
+theme_override_constants/separation = 8
 
 [node name="LeftPanel" type="PanelContainer" parent="NavBarMargin/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_styles/panel = ExtResource("2_3grjq")
 
 [node name="MarginContainer" type="MarginContainer" parent="NavBarMargin/HBoxContainer/LeftPanel"]
 layout_mode = 2
@@ -46,40 +61,47 @@ horizontal_alignment = 1
 
 [node name="HSeparator" type="HSeparator" parent="NavBarMargin/HBoxContainer/LeftPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_styles/separator = ExtResource("4_t2klq")
 
 [node name="SlotsVBox" type="VBoxContainer" parent="NavBarMargin/HBoxContainer/LeftPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
-theme_override_constants/separation = 24
+theme_override_constants/separation = 20
 
 [node name="WeaponSlot" type="PanelContainer" parent="NavBarMargin/HBoxContainer/LeftPanel/MarginContainer/VBoxContainer/SlotsVBox"]
-custom_minimum_size = Vector2(80, 80)
+custom_minimum_size = Vector2(120, 80)
 layout_mode = 2
 size_flags_horizontal = 4
+theme_override_styles/panel = ExtResource("3_2vgrd")
 
 [node name="ArmorSlot" type="PanelContainer" parent="NavBarMargin/HBoxContainer/LeftPanel/MarginContainer/VBoxContainer/SlotsVBox"]
-custom_minimum_size = Vector2(80, 80)
+custom_minimum_size = Vector2(120, 80)
 layout_mode = 2
 size_flags_horizontal = 4
+theme_override_styles/panel = ExtResource("3_2vgrd")
 
 [node name="Artifact1Slot" type="PanelContainer" parent="NavBarMargin/HBoxContainer/LeftPanel/MarginContainer/VBoxContainer/SlotsVBox"]
-custom_minimum_size = Vector2(80, 80)
+custom_minimum_size = Vector2(120, 80)
 layout_mode = 2
 size_flags_horizontal = 4
+theme_override_styles/panel = ExtResource("3_2vgrd")
 
 [node name="Artifact2Slot" type="PanelContainer" parent="NavBarMargin/HBoxContainer/LeftPanel/MarginContainer/VBoxContainer/SlotsVBox"]
-custom_minimum_size = Vector2(80, 80)
+custom_minimum_size = Vector2(120, 80)
 layout_mode = 2
 size_flags_horizontal = 4
+theme_override_styles/panel = ExtResource("3_2vgrd")
 
 [node name="Artifact3Slot" type="PanelContainer" parent="NavBarMargin/HBoxContainer/LeftPanel/MarginContainer/VBoxContainer/SlotsVBox"]
-custom_minimum_size = Vector2(80, 80)
+custom_minimum_size = Vector2(120, 80)
 layout_mode = 2
 size_flags_horizontal = 4
+theme_override_styles/panel = ExtResource("3_2vgrd")
 
 [node name="RightPanel" type="PanelContainer" parent="NavBarMargin/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 4.0
+theme_override_styles/panel = ExtResource("2_3grjq")
 
 [node name="MarginContainer" type="MarginContainer" parent="NavBarMargin/HBoxContainer/RightPanel"]
 layout_mode = 2
@@ -99,10 +121,12 @@ text = "Inventory"
 
 [node name="HSeparator" type="HSeparator" parent="NavBarMargin/HBoxContainer/RightPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_styles/separator = ExtResource("4_t2klq")
 
 [node name="DetailPanel" type="PanelContainer" parent="NavBarMargin/HBoxContainer/RightPanel/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 160)
 layout_mode = 2
+theme_override_styles/panel = ExtResource("3_2vgrd")
 
 [node name="MarginContainer" type="MarginContainer" parent="NavBarMargin/HBoxContainer/RightPanel/MarginContainer/VBoxContainer/DetailPanel"]
 layout_mode = 2
@@ -119,6 +143,7 @@ theme_override_constants/separation = 32
 custom_minimum_size = Vector2(120, 120)
 layout_mode = 2
 size_flags_vertical = 4
+color = Color(0.113725, 0.188235, 0.2, 1)
 
 [node name="InfoVBox" type="VBoxContainer" parent="NavBarMargin/HBoxContainer/RightPanel/MarginContainer/VBoxContainer/DetailPanel/MarginContainer/HBoxContainer"]
 layout_mode = 2
@@ -146,33 +171,54 @@ theme_override_font_sizes/font_size = 12
 text = "Quite long text describing item and its function"
 autowrap_mode = 3
 
-[node name="HSeparator" type="HSeparator" parent="NavBarMargin/HBoxContainer/RightPanel/MarginContainer/VBoxContainer/DetailPanel/MarginContainer/HBoxContainer/InfoVBox"]
-layout_mode = 2
-
 [node name="ActionsRow" type="HBoxContainer" parent="NavBarMargin/HBoxContainer/RightPanel/MarginContainer/VBoxContainer/DetailPanel/MarginContainer/HBoxContainer/InfoVBox"]
 layout_mode = 2
 theme_override_constants/separation = 16
 
 [node name="EquipBtn" type="Button" parent="NavBarMargin/HBoxContainer/RightPanel/MarginContainer/VBoxContainer/DetailPanel/MarginContainer/HBoxContainer/InfoVBox/ActionsRow"]
-custom_minimum_size = Vector2(100, 0)
+custom_minimum_size = Vector2(100, 24)
 layout_mode = 2
+theme_override_colors/font_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_colors/font_pressed_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_colors/font_hover_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_colors/font_focus_color = Color(0.113725, 0.188235, 0.2, 1)
 theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = ExtResource("5_xe3r2")
+theme_override_styles/hover = ExtResource("6_fiipk")
+theme_override_styles/pressed = ExtResource("7_s0cwp")
+theme_override_styles/disabled = ExtResource("7_s0cwp")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_12kx8")
 text = "Equip"
 
 [node name="SellBtn" type="Button" parent="NavBarMargin/HBoxContainer/RightPanel/MarginContainer/VBoxContainer/DetailPanel/MarginContainer/HBoxContainer/InfoVBox/ActionsRow"]
-custom_minimum_size = Vector2(100, 0)
+custom_minimum_size = Vector2(100, 24)
 layout_mode = 2
+theme_override_colors/font_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_colors/font_pressed_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_colors/font_hover_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_colors/font_focus_color = Color(0.113725, 0.188235, 0.2, 1)
 theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = ExtResource("5_xe3r2")
+theme_override_styles/hover = ExtResource("6_fiipk")
+theme_override_styles/pressed = ExtResource("7_s0cwp")
+theme_override_styles/disabled = ExtResource("7_s0cwp")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_12kx8")
 text = "Sell"
 
 [node name="DismantleBtn" type="Button" parent="NavBarMargin/HBoxContainer/RightPanel/MarginContainer/VBoxContainer/DetailPanel/MarginContainer/HBoxContainer/InfoVBox/ActionsRow"]
-custom_minimum_size = Vector2(100, 0)
+custom_minimum_size = Vector2(100, 24)
 layout_mode = 2
+theme_override_colors/font_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_colors/font_pressed_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_colors/font_hover_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_colors/font_focus_color = Color(0.113725, 0.188235, 0.2, 1)
 theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = ExtResource("5_xe3r2")
+theme_override_styles/hover = ExtResource("6_fiipk")
+theme_override_styles/pressed = ExtResource("7_s0cwp")
+theme_override_styles/disabled = ExtResource("7_s0cwp")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_12kx8")
 text = "Dismantle"
-
-[node name="HSeparator2" type="HSeparator" parent="NavBarMargin/HBoxContainer/RightPanel/MarginContainer/VBoxContainer"]
-layout_mode = 2
 
 [node name="InventoryScroll" type="ScrollContainer" parent="NavBarMargin/HBoxContainer/RightPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -182,3 +228,5 @@ size_flags_vertical = 3
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8

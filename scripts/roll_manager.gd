@@ -109,7 +109,7 @@ func roll_materials_loot(stage: int, unit_level: int, unit_type: String) -> Dict
 	return result
 
 
-func roll_gold_loot(stage: int, unit_level: int, unit_type: String) -> int:
+func roll_gold_loot(stage: int, unit_level: int, _unit_type: String) -> int:
 	var rolls_float: float = stage * 0.5
 	var guaranteed: int = int(rolls_float)
 	var bonus_chance: float = rolls_float - guaranteed

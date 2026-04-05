@@ -1,11 +1,11 @@
 extends Camera2D
 
 # Arena bounds — change these when arena size changes
-var arena_size: Vector2 = Vector2(1000.0, 1000.0)
+var arena_size: Vector2 = Vector2(1800.0, 1100.0)
 var arena_origin: Vector2 = Vector2.ZERO
 
 # Pan speed in pixels per second
-const PAN_SPEED: float = 600.0
+const PAN_SPEED: float = 800.0
 
 # Zoom settings
 const ZOOM_MIN: float = 0.5
@@ -18,7 +18,8 @@ var _viewport_size: Vector2
 func _ready() -> void:
 	anchor_mode = Camera2D.ANCHOR_MODE_DRAG_CENTER
 	_viewport_size = get_viewport_rect().size
-	position = arena_origin + arena_size / 2.0
+	arena_origin = _viewport_size * 0.75
+	position = arena_origin + arena_size  * 0.4 + Vector2(150.0, 0.0)
 	get_viewport().size_changed.connect(_on_viewport_size_changed)
 	_clamp_position()
 

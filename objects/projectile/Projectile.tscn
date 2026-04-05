@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://cyf8a4lauory"]
+
+[ext_resource type="Script" path="res://objects/projectile/projectile.gd" id="1_4q71o"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_h8fo7"]
+radius = 4.0
+
+[node name="Projectile" type="Area2D"]
+z_index = 3
+script = ExtResource("1_4q71o")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_h8fo7")

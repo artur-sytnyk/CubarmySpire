@@ -17,9 +17,9 @@ signal died(unit: Unit)
 
 # Unit specific constants
 const RETARGET_INTERVAL: float = 0.5     # interval to check for new targets
-const SEPARATION_RADIUS: float = 30.0    # distance within which allies push each other
+const SEPARATION_RADIUS: float = 45.0    # distance within which allies push each other
 const SEPARATION_STRENGTH: float = 1.0   # blend weight of separation vs movement
-const TARGET_OFFSET_RADIUS: float = 20.0 # max radius of random offset around target position
+const TARGET_OFFSET_RADIUS: float = 40.0 # max radius of random offset around target position
 
 # Stats
 var unit_type: String
@@ -48,6 +48,9 @@ var _enemies_in_kite_range: Array[Unit] = []
 var _target_offset: Vector2 = Vector2.ZERO
 var _last_target: Unit = null
 
+var _projectile_layer: Node2D = null
+var _projectile_scene: PackedScene = preload("res://objects/projectile/Projectile.tscn")
+
 # Unit States
 enum State {
 	IDLE,
@@ -68,7 +71,7 @@ const FRAME_CAST_B  := 4  # attack release
 const FRAME_HIT_A   := 5  # hit flash a
 const FRAME_HIT_B   := 6  # hit flash b
 
-# Animation timers
+# Sprite animations
 const IDLE_SWAP_INTERVAL: float  = 0.6   # idle blink rate
 const WALK_SWAP_INTERVAL: float  = 0.15  # walk cycle rate
 const HIT_FRAME_DURATION: float  = 0.1   # each hit frame duration
@@ -79,17 +82,17 @@ var _anim_phase: bool = false        # toggles between frame pairs
 var _hit_timer: float = 0.0          # counts down hit animation
 var _hit_phase: int = 0              # 0 = not hitting, 1 = hit_a, 2 = hit_b
 
-# Sprite-only scale tweens — target sprite.scale, never self.scale
-# so physics body shape is completely unaffected.
+# Tween animations
 var _sprite_tween: Tween = null
-# Neutral scale captured from the Sprite2D node at _ready().
-# All tween targets are expressed as multipliers of this value so the
-# animations are correct regardless of the scale set in the scene.
 var _sprite_base_scale: Vector2 = Vector2.ONE
-# Tracks which attack animation phase has already fired this cast cycle so
-# tween triggers run once per phase, not once per frame.
-# 0 = idle/cooldown, 1 = windup (CAST_A), 2 = release (CAST_B)
 var _cast_phase: int = 0
+
+
+# Behavior flags cached values
+var _ricochet_count: int = 0
+var _ricochet_damage_ratio: float = 0.0
+var _flurry_guaranteed: int = 0
+var _flurry_bonus_chance: float = 0.0
 
 
 # --- Stats & Setup ---
@@ -110,24 +113,35 @@ func apply_stats(stats: Dictionary) -> void:
 	is_ranged = stats.get("is_ranged", false)
 	speed = stats.get("speed", 50.0)
 	detection_range = stats.get("detection_range", 1500.0)
+	_update_behavioral_flags(stats.get("behavior_flags", {}))
 	_update_collision_radii()
+
+
+func _update_behavioral_flags(flags: Dictionary) -> void:
+	if flags.has("ricochet"):
+		_ricochet_count        = 1
+		_ricochet_damage_ratio = flags["ricochet"]
+	if flags.has("flurry"):
+		var flurry_val: float  = flags["flurry"]
+		_flurry_guaranteed     = int(flurry_val)
+		_flurry_bonus_chance   = fmod(flurry_val, 1.0)
 
 
 func _update_collision_radii() -> void:
 	var attack_shape := attack_range_area.get_node("CollisionShape2D")
 	var new_atk := CircleShape2D.new()
 	new_atk.radius = atk_range
-	attack_shape.shape = new_atk
+	attack_shape.set_deferred("shape", new_atk)
 
 	var kite_shape := kite_area.get_node("CollisionShape2D")
 	var new_kite := CircleShape2D.new()
 	new_kite.radius = kite_range
-	kite_shape.shape = new_kite
+	kite_shape.set_deferred("shape", new_kite)
 
 	var detection_shape := detection_area.get_node("CollisionShape2D")
 	var new_det := CircleShape2D.new()
 	new_det.radius = detection_range
-	detection_shape.shape = new_det
+	detection_shape.set_deferred("shape", new_det)
 
 
 func _update_sprite_row() -> void:
@@ -285,6 +299,7 @@ func _ready() -> void:
 	# Capture before any tween or reset can touch sprite.scale.
 	_sprite_base_scale = sprite.scale
 	add_to_group("units")
+	_projectile_layer = get_tree().get_first_node_in_group("projectile_layer")
 	detection_area.body_entered.connect(_on_detection_entered)
 	detection_area.body_exited.connect(_on_detection_exited)
 	attack_range_area.body_entered.connect(_on_attack_range_entered)
@@ -388,7 +403,34 @@ func _deal_damage() -> void:
 		return
 	if not _enemies_in_attack_range.has(target):
 		return
+	
+	if unit_type == "ranger":
+		_shoot_projectile()
+		return
+	
 	target.take_damage(atk_damage)
+	
+	# Flurry: 
+	for _i: int in _flurry_guaranteed:
+		target.take_damage(atk_damage)
+	if _flurry_bonus_chance > 0.0 and randf() < _flurry_bonus_chance:
+		target.take_damage(atk_damage)
+
+
+func _shoot_projectile() -> void:
+	if _projectile_layer == null:
+		push_warning("unit_base: projectile_layer group node not found.")
+		return
+	
+	var projectile: Projectile = _projectile_scene.instantiate()
+	_projectile_layer.add_child(projectile)
+	projectile.setup(
+			self,
+			target,
+			atk_damage,
+			_ricochet_count,
+			_ricochet_damage_ratio
+	)
 
 
 func take_damage(amount: int) -> void:
@@ -581,7 +623,7 @@ func play_spawn_anim() -> void:
 # --- Victory animation ---
 
 func play_victory_anim() -> void:
-	collision_body.disabled = true
+	collision_body.set_deferred("disabled", true)
 	var base_pos := position
 	var delay := randf_range(1.0, 3.0)
 	var tween := create_tween().set_loops()

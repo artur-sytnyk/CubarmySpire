@@ -28,11 +28,12 @@ const SPAWN_RADIUS: float = 50.0
 const SPAWN_STAGGER_DELAY: float = 0.2
 
 
-func setup(p_faction: int, p_spawn_point: Marker2D, p_unit_scene: PackedScene, p_arena: Node2D) -> void:
+func setup(p_faction: int, p_spawn_point: Marker2D, p_unit_scene: PackedScene, p_arena: Node2D, p_unit_defs: Array = []) -> void:
 	faction = p_faction
 	spawn_point = p_spawn_point
 	unit_scene = p_unit_scene
 	arena = p_arena
+	unit_defs = p_unit_defs
 
 
 # --- Core rebuild ---
@@ -70,7 +71,8 @@ func _spawn_unit(unit_def: Dictionary) -> void:
 		stats = BattleStatsCalculator.calculate_player(unit_def, active_powerups)
 	else:
 		stats = BattleStatsCalculator.calculate_enemy(unit_def, RunState.stage)
-	arena.add_child(unit)
+	arena.call_deferred("add_child", unit)
+	await unit.ready
 	unit.apply_stats(stats)
 	unit.global_position = _get_spawn_position()
 	unit.died.connect(_on_unit_died)

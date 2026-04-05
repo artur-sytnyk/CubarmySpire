@@ -149,10 +149,10 @@ func _make_unit_box(unitType: String, level: int, count: int) -> Control:
 	weaponIcon.set_anchors_and_offsets_preset(PRESET_CENTER)
 	match unitType:
 		"warrior":
-			weaponIcon.texture = IconDatabase.getWeaponIconById("sword")
+			weaponIcon.texture = IconDatabase.get_icon("sword")
 			weaponIcon.rotation_degrees = -90
 		"ranger":
-			weaponIcon.texture = IconDatabase.getWeaponIconById("bow")
+			weaponIcon.texture = IconDatabase.get_icon("bow")
 	weaponIcon.position = Vector2(-4, -4)
 	container.add_child(weaponIcon)
 	

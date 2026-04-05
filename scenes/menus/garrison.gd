@@ -68,10 +68,8 @@ func _update_limit_labels(save: SaveData) -> void:
 	var vanguard_limit: int    = _get_effective_vanguard_limit()
 	var reserves_limit: int    = _get_effective_reserves_limit()
 	var vanguard: int          = mini(total, vanguard_limit)
-	_vanguard_label.text       = "Vanguard size: %d" % vanguard_limit
-	_vanguard_label.tooltip_text = "Units that fight simultaneously on the battlefield"
+	_vanguard_label.text       = "Vanguard size: %d / %d"  % [vanguard, vanguard_limit]
 	_reserves_label.text       = "Warband size:  %d / %d" % [total, reserves_limit]
-	_reserves_label.tooltip_text = "Total units brought into the run"
 
 
 # ── Build unit boxes ───────────────────────────────────────────────────────
@@ -135,10 +133,10 @@ func _make_unit_box(key: String, unit_type: String, level: int, count: int, sour
 	weaponIcon.set_anchors_and_offsets_preset(PRESET_CENTER)
 	match unit_type:
 		"warrior":
-			weaponIcon.texture = IconDatabase.getWeaponIconById("sword")
+			weaponIcon.texture = IconDatabase.get_icon("sword")
 			weaponIcon.rotation_degrees = -90
 		"ranger":
-			weaponIcon.texture = IconDatabase.getWeaponIconById("bow")
+			weaponIcon.texture = IconDatabase.get_icon("bow")
 	weaponIcon.position = Vector2(-4, -4)
 	container.add_child(weaponIcon)
 	

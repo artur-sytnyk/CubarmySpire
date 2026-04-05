@@ -75,6 +75,7 @@ func finalize_run() -> void:
 	
 	run_finalized.emit({
 		"stage":  stage,
+		"difficulty":  difficulty,
 		"is_record": is_new_max_stage,
 		"gold":   gold_collected,
 		"materials":   materials_collected,

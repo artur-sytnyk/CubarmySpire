@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://bv8a417r1x7re" path="res://ui/components/HealthBar.tscn" id="3_4eqg7"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rh2ye"]
+size = Vector2(35, 35)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_3ajt4"]
 
@@ -19,7 +20,7 @@ input_pickable = true
 script = ExtResource("1_wex1t")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-scale = Vector2(0.4, 0.4)
+scale = Vector2(0.6, 0.6)
 texture = ExtResource("2_3u2um")
 hframes = 7
 vframes = 2
@@ -27,6 +28,7 @@ vframes = 2
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+scale = Vector2(0.8, 0.8)
 shape = SubResource("RectangleShape2D_rh2ye")
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
@@ -53,7 +55,7 @@ shape = SubResource("CircleShape2D_hy77q")
 debug_color = Color(0, 0.65098, 0.129412, 0.0784314)
 
 [node name="HealthBar" parent="." instance=ExtResource("3_4eqg7")]
-position = Vector2(-10, -12)
+position = Vector2(-14, -18)
 
 [node name="LevelLabel" type="Label" parent="."]
 anchors_preset = 7
@@ -62,8 +64,9 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -3.0
+offset_top = 3.0
 offset_right = 3.0
-offset_bottom = 12.0
+offset_bottom = 15.0
 grow_horizontal = 2
 grow_vertical = 0
 size_flags_vertical = 1

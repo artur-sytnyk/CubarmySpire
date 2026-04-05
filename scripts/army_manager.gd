@@ -30,11 +30,10 @@ const ACTIVE_GROWTH_HARD: int = 3
 
 
 func setup(player_spawn: Marker2D, enemy_spawn: Marker2D, unit_scene: PackedScene) -> void:
-	player_army.setup(Faction.PLAYER, player_spawn, unit_scene, arena)
+	player_army.setup(Faction.PLAYER, player_spawn, unit_scene, arena, RunState.unit_defs.duplicate())
 	enemy_army.setup(Faction.ENEMY, enemy_spawn, unit_scene, arena)
 	_apply_powerup_events()
 	_apply_equipment_events()
-	player_army.unit_defs = RunState.unit_defs.duplicate()
 	enemy_army.all_dead.connect(_on_enemy_all_dead)
 	player_army.all_dead.connect(_on_player_all_dead)
 

@@ -100,10 +100,10 @@ func _make_unit_row(unit_type: String, level: int) -> Control:
 	weaponIcon.set_anchors_and_offsets_preset(PRESET_CENTER)
 	match unit_type:
 		"warrior":
-			weaponIcon.texture = IconDatabase.getWeaponIconById("sword")
+			weaponIcon.texture = IconDatabase.get_icon("sword")
 			weaponIcon.rotation_degrees = -90
 		"ranger":
-			weaponIcon.texture = IconDatabase.getWeaponIconById("bow")
+			weaponIcon.texture = IconDatabase.get_icon("bow")
 	weaponIcon.position = Vector2(-8, -8)
 	
 	unitIcon.add_child(weaponIcon)
@@ -678,7 +678,18 @@ func _make_material_item(grade: int, count: int) -> Control:
 	var sell_btn := Button.new()
 	sell_btn.text = "Sell"
 	sell_btn.custom_minimum_size = Vector2(48, 0)
-	sell_btn.add_theme_font_size_override("font_size", 12)
+	sell_btn.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	sell_btn.tooltip_text = "Hold [SHIFT] to sell x10, [CTRL] for x100"
+	var empty_style := StyleBoxEmpty.new()
+	var font_color := Color("#1D3033")
+	sell_btn.add_theme_color_override("font_color", font_color)
+	sell_btn.add_theme_color_override("font_hover_color", font_color)
+	sell_btn.add_theme_color_override("font_pressed_color", font_color)
+	sell_btn.add_theme_color_override("font_focus_color", font_color)
+	sell_btn.add_theme_stylebox_override("normal", load("res://ui/styles/btn_normal.tres"))
+	sell_btn.add_theme_stylebox_override("hover", load("res://ui/styles/btn_hover.tres"))
+	sell_btn.add_theme_stylebox_override("pressed", load("res://ui/styles/btn_pressed.tres"))
+	sell_btn.add_theme_stylebox_override("focus", empty_style)
 	sell_btn.pressed.connect(_on_sell_materials.bind(grade))
 	bottom_row.add_child(sell_btn)
 	
@@ -688,7 +699,8 @@ func _make_material_item(grade: int, count: int) -> Control:
 func _on_sell_materials(grade: int) -> void:
 	var save: SaveData = SaveManager.get_current()
 	var shift_held: bool = Input.is_key_pressed(KEY_SHIFT)
-	var amount: int      = 10 if shift_held else 1
+	var ctrl_held: bool = Input.is_key_pressed(KEY_CTRL)
+	var amount: int      = 100 if ctrl_held else 10 if shift_held else 1
 	var count: int       = save.materials_inv.get(grade, 0)
 	var to_sell: int     = mini(count, amount)
 	if to_sell <= 0:

@@ -21,12 +21,13 @@ func _ready() -> void:
 
 func show_results(data: Dictionary) -> void:
 	var stage: int = data.get("stage", 0)
+	var difficulty: String = data.get("difficulty", "easy")
 	var is_record: bool = data.get("is_record", false)
 	var gold: int = data.get("gold", 0)
 	var materials: Dictionary = data.get("materials", {})
 	
 	if is_record:
-		_stages_label.text = "You have cleared %d stages - new highest!" % stage
+		_stages_label.text = "You have cleared %d stages - new highest for %s difficulty!" % [stage, difficulty]
 	else:
 		_stages_label.text = "You have cleared %d stages" % stage
 	_gold_label.text = "%d gold collected" % gold

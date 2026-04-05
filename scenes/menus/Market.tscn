@@ -150,7 +150,7 @@ text = "Buy at level"
 [node name="UnitLevelInput" type="SpinBox" parent="NavBarMargin/VBoxContainer/HBoxContainer/RightPanel/MarginContainer/VBoxContainer/RecruitPane/LevelRow"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
-mouse_default_cursor_shape = 1
+mouse_default_cursor_shape = 2
 min_value = 1.0
 max_value = 99.0
 value = 1.0

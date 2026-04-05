@@ -23,7 +23,6 @@ static func calculate_enemy(unit_def: Dictionary, stage: int) -> Dictionary:
 	var stage_bonus: float = pow(1.1, stage / 3)
 	base["hp_max"]     = int(base["hp_max"]     * stage_scale * stage_bonus)
 	base["atk_damage"] = int(base["atk_damage"] * stage_scale * stage_bonus)
-	base["speed"]      = int(base["speed"]       * stage_scale * stage_bonus)
 	base["level"] = unit_def.get("level", 1)
 	return base
 
@@ -31,19 +30,28 @@ static func calculate_enemy(unit_def: Dictionary, stage: int) -> Dictionary:
 
 static func _get_base_stats(unit_def: Dictionary) -> Dictionary:
 	var unit_type: String = unit_def.get("unit_type", "")
-	var level: int        = unit_def.get("level", 1)
 	var template: Dictionary = GameData.units.get(unit_type, {})
 	var base: Dictionary = template.get("base_stats", {}).duplicate()
-	var level_mult: float = 1.0 + (level - 1) * 0.1
-	
-	base["unit_type"] = unit_def.get("unit_type", "")
-	base["hp_max"]     = int(base.get("hp_max",     0.0) * level_mult)
-	base["atk_damage"] = int(base.get("atk_damage", 0.0) * level_mult)
-	base["speed"]      = base.get("speed", 0.0) * level_mult
+	base["unit_type"] = unit_type
 	base["behavior_flags"] = {}
 	return base
 
-# ── Equipment ──────────────────────────────────────────────────────────────
+
+static func get_scaled_stats(base_stats: Dictionary, level: int) -> Dictionary:
+	var scaled: Dictionary = base_stats.duplicate()
+	if level > 1:
+		var hp_mult: float  = pow(GameData.LEVEL_SCALE_HP, level - 1)
+		var atk_mult: float  = pow(GameData.LEVEL_SCALE_ATK, level - 1)
+		var speed_bonus: int = GameData.LEVEL_SCALE_SPEED * level
+		var range_bonus: int = GameData.LEVEL_SCALE_RANGE * level
+		scaled["hp_max"]     = int(scaled["hp_max"]     * hp_mult)
+		scaled["atk_damage"] = int(scaled["atk_damage"] * atk_mult)
+		scaled["speed"]      = int(scaled["speed"]      + speed_bonus)
+		scaled["atk_range"]  = int(scaled["atk_range"]  + range_bonus)
+	return scaled
+
+
+# Equipment
 
 static func _apply_equipment(base: Dictionary, unit_def: Dictionary) -> void:
 	var unit_type: String = unit_def.get("unit_type", "")
@@ -89,7 +97,8 @@ static func _apply_equipment(base: Dictionary, unit_def: Dictionary) -> void:
 			else:
 				base[stat] = val * (1.0 + stat_bonuses[stat])
 
-# ── Powerup stat multipliers ───────────────────────────────────────────────
+
+# Powerup stat multipliers
 
 static func _apply_stat_multipliers(base: Dictionary, unit_def: Dictionary, active_powerups: Dictionary) -> void:
 	for pu_id in active_powerups:
@@ -109,7 +118,8 @@ static func _apply_stat_multipliers(base: Dictionary, unit_def: Dictionary, acti
 			else:
 				base[stat] = val * (1.0 + value)
 
-# ── Behavior flags ─────────────────────────────────────────────────────────
+
+# Behavior flags
 
 static func _apply_behavior_flags(base: Dictionary, unit_def: Dictionary, active_powerups: Dictionary) -> void:
 	var flags: Dictionary = base["behavior_flags"]
@@ -123,18 +133,4 @@ static func _apply_behavior_flags(base: Dictionary, unit_def: Dictionary, active
 		var grade: int   = active_powerups[pu_id]
 		var flag: String = pu.get("flag", "")
 		flags[flag] = pu.get("base_value", 0.0) + pu.get("value_per_grade", 0.0) * grade
-
-
-static func get_scaled_stats(base_stats: Dictionary, level: int) -> Dictionary:
-	var scaled: Dictionary = base_stats.duplicate()
-	if level > 1:
-		var hp_mult: float  = pow(GameData.LEVEL_SCALE_HP, level - 1)
-		var atk_mult: float  = pow(GameData.LEVEL_SCALE_ATK, level - 1)
-		var speed_bonus: int = GameData.LEVEL_SCALE_SPEED * level
-		var range_bonus: int = GameData.LEVEL_SCALE_RANGE * level
-		scaled["hp_max"]     = int(scaled["hp_max"]     * hp_mult)
-		scaled["atk_damage"] = int(scaled["atk_damage"] * atk_mult)
-		scaled["speed"]      = int(scaled["speed"]      + speed_bonus)
-		scaled["atk_range"]  = int(scaled["atk_range"]  + range_bonus)
-	return scaled
 

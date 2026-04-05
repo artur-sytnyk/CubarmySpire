@@ -4,7 +4,7 @@ extends Node2D
 @onready var background: ColorRect = $MaxHpBar
 @onready var fill: ColorRect = $CurrentHpBar
 
-const FULL_WIDTH: float = 20.0
+const FULL_WIDTH: float = 28.0
 const HEIGHT: float = 3.0
 #const OFFSET: Vector2 = Vector2(-16.0, -24.0)
 

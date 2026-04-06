@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://kut2k3q85hgk"]
+[gd_scene load_steps=9 format=3 uid="uid://kut2k3q85hgk"]
 
 [ext_resource type="Script" path="res://objects/unit/unit_base.gd" id="1_wex1t"]
 [ext_resource type="Texture2D" uid="uid://br76bqfaek68v" path="res://assets/images/unit_sprite.png" id="2_3u2um"]
-[ext_resource type="PackedScene" uid="uid://bv8a417r1x7re" path="res://ui/components/HealthBar.tscn" id="3_4eqg7"]
+[ext_resource type="PackedScene" uid="uid://b1d024llevahg" path="res://objects/unit/WeaponSprite.tscn" id="3_5qb1o"]
+[ext_resource type="PackedScene" uid="uid://bv8a417r1x7re" path="res://objects/unit/HealthBar.tscn" id="4_qiwmb"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rh2ye"]
 size = Vector2(35, 35)
@@ -24,6 +25,8 @@ scale = Vector2(0.6, 0.6)
 texture = ExtResource("2_3u2um")
 hframes = 7
 vframes = 2
+
+[node name="WeaponSprite" parent="." instance=ExtResource("3_5qb1o")]
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 
@@ -54,7 +57,7 @@ debug_color = Color(1, 0.00392157, 0.0588235, 0.0784314)
 shape = SubResource("CircleShape2D_hy77q")
 debug_color = Color(0, 0.65098, 0.129412, 0.0784314)
 
-[node name="HealthBar" parent="." instance=ExtResource("3_4eqg7")]
+[node name="HealthBar" parent="." instance=ExtResource("4_qiwmb")]
 position = Vector2(-14, -18)
 
 [node name="LevelLabel" type="Label" parent="."]

@@ -3,7 +3,7 @@
 		"base_stats": {
 			"hp_max": 45.0,
 			"atk_damage": 12.0,
-			"atk_cast_time": 0.2,
+			"atk_cast_time": 0.3,
 			"atk_cooldown": 2.0,
 			"atk_range": 20.0,
 			"speed": 60.0,
@@ -24,7 +24,7 @@
 			"hp_max": 30.0,
 			"atk_damage": 15.0,
 			"atk_cast_time": 0.5,
-			"atk_cooldown": 3.0,
+			"atk_cooldown": 3.5,
 			"atk_range": 300.0,
 			"speed": 40.0,
 			"detection_range": 1200.0,

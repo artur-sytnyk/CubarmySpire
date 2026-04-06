@@ -14,7 +14,7 @@ var _cache: Dictionary = {}
 
 
 func _ready() -> void:
-	_texture = load("res://assets/images/weapons_sprite.png")
+	_texture = load("res://assets/images/weapons_sprite_clean.png")
 
 
 func get_icon(id: String) -> AtlasTexture:

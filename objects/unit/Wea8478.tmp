@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://b1d024llevahg"]
+
+[ext_resource type="Script" path="res://objects/unit/weapon_sprite.gd" id="1_si77e"]
+
+[node name="WeaponSprite" type="Node2D"]
+script = ExtResource("1_si77e")
+
+[node name="WeaponIcon" type="Sprite2D" parent="."]
+z_index = 1

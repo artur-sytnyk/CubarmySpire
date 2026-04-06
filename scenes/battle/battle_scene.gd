@@ -103,18 +103,32 @@ func _spawn_loot_drops(materials: Dictionary, gold: int, world_position: Vector2
 	
 	if _loot_objects.size() >= GameData.LOOT_CAP:
 		return
-	for i: int in items.size():
-		var angle: float = (TAU / items.size()) * i
-		var offset: Vector2 = Vector2(cos(angle), sin(angle)) * GameData.LOOT_SCATTER_RADIUS
-		_spawn_single_loot(items[i], world_position + offset)
+	
+	for item in items:
+		var angle: float = randf() * TAU
+		var radius: float = randf_range(GameData.LOOT_SCATTER_RADIUS * 0.3, GameData.LOOT_SCATTER_RADIUS)
+		var offset: Vector2 = Vector2(cos(angle), sin(angle)) * radius
+		_spawn_single_loot(item, world_position, world_position + offset)
 
 
-func _spawn_single_loot(item: Dictionary, spawn_position: Vector2) -> void:
+func _spawn_single_loot(item: Dictionary, from_position: Vector2, to_position: Vector2) -> void:
 	var obj: LootDrop = loot_scene.instantiate()
 	if not obj:
 		return
 	$Arena/LootLayer.add_child(obj)
 	obj.setup(item)
-	obj.global_position = spawn_position
+	obj.global_position = from_position
+	obj.scale = Vector2.ZERO
 	_loot_objects.append(obj)
+
+	var rand_rot: float = randf_range(-400.0, 400.0)
+	var tween: Tween = obj.create_tween()
+	tween.tween_property(
+		obj,
+		"global_position",
+		to_position,
+		randf_range(0.15, 0.30)
+	).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tween.parallel().tween_property(obj, "scale", Vector2(0.5, 0.5), 0.3).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.parallel().tween_property(obj, "rotation_degrees", rand_rot, 0.30).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 

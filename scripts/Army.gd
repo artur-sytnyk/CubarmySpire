@@ -105,8 +105,6 @@ func _on_unit_died(unit: Unit) -> void:
 		pending_gold += gold_drop
 		loot_dropped.emit(material_drop, gold_drop, unit.global_position)
 	
-	unit.queue_free()
-	
 	if alive_units.is_empty() and reserve_queue.is_empty():
 		all_dead.emit()
 	elif not reserve_queue.is_empty() and active_count < active_limit:

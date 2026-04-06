@@ -3,6 +3,7 @@ extends CharacterBody2D
 
 # Internal refs
 @onready var sprite := $Sprite2D
+@onready var weapon_sprite := $WeaponSprite
 @onready var anim := $AnimationPlayer
 @onready var nav_agent := $NavigationAgent2D
 @onready var detection_area := $DetectionArea
@@ -115,6 +116,7 @@ func apply_stats(stats: Dictionary) -> void:
 	detection_range = stats.get("detection_range", 1500.0)
 	_update_behavioral_flags(stats.get("behavior_flags", {}))
 	_update_collision_radii()
+	weapon_sprite.setup(unit_type)
 
 
 func _update_behavioral_flags(flags: Dictionary) -> void:
@@ -257,11 +259,11 @@ func _anim_attack(delta: float) -> void:
 		_cast_phase = 0
 		_anim_idle(delta)
 		return
-
 	if _cast_timer < atk_cast_time * 0.5:
 		_set_frame(FRAME_CAST_A)
 		# Fire windup tween only on the first frame of this phase.
 		if _cast_phase != 1:
+			weapon_sprite.play_attack()
 			_cast_phase = 1
 			_play_attack_windup_sprite()
 	else:
@@ -311,7 +313,7 @@ func _ready() -> void:
 # --- Area callbacks ---
 
 func _on_detection_entered(body: Node2D) -> void:
-	if body is Unit and body.faction != faction:
+	if body is Unit and body.faction != faction and body.current_state != Unit.State.DEAD:
 		_enemies_in_detection.append(body)
 		body.died.connect(_on_enemy_died)
 		if current_state == State.IDLE:
@@ -372,6 +374,8 @@ func _pick_target() -> void:
 	var closest: Unit = null
 	var closest_dist := INF
 	for enemy in _enemies_in_detection:
+		if enemy.current_state == Unit.State.DEAD:
+			continue
 		var d := global_position.distance_to(enemy.global_position)
 		if d < closest_dist:
 			closest_dist = d
@@ -397,6 +401,20 @@ func _tick_retarget(delta: float) -> void:
 
 
 # --- Combat ---
+
+func _attack(delta: float) -> void:
+	if _cooldown_timer > 0.0:
+		return
+	_cast_timer += delta
+	if _cast_timer >= atk_cast_time:
+		_cast_timer = 0.0
+		_cast_phase = 0
+		_set_frame(FRAME_BASE)
+		_cooldown_timer = atk_cooldown
+		_deal_damage()
+		if _enemies_in_attack_range.is_empty():
+			_change_state(State.SEEKING)
+
 
 func _deal_damage() -> void:
 	if target == null or not is_instance_valid(target):
@@ -449,6 +467,7 @@ func _die() -> void:
 	died.emit(self)
 	set_physics_process(false)
 	set_process(false)
+	_play_death_anim()
 
 
 # --- Separation steering ---
@@ -500,6 +519,9 @@ func _move_toward_target() -> void:
 # --- Physics loop ---
 
 func _physics_process(delta: float) -> void:
+	var target_pos: Vector2 = target.global_position if target != null and is_instance_valid(target) else Vector2.ZERO
+	weapon_sprite.update_weapon(velocity.x, target_pos)
+	
 	if _cooldown_timer > 0.0:
 		_cooldown_timer -= delta
 	match current_state:
@@ -564,17 +586,9 @@ func _state_attacking(delta: float) -> void:
 	else:
 		velocity = Vector2.ZERO
 	move_and_slide()
-	if _cooldown_timer > 0.0:
-		return
-	_cast_timer += delta
-	if _cast_timer >= atk_cast_time:
-		_cast_timer = 0.0
-		_cast_phase = 0
-		_set_frame(FRAME_BASE)
-		_cooldown_timer = atk_cooldown
-		_deal_damage()
-		if _enemies_in_attack_range.is_empty():
-			_change_state(State.SEEKING)
+	
+	_attack(delta)
+
 
 
 func _state_kiting(delta: float) -> void:
@@ -591,17 +605,8 @@ func _state_kiting(delta: float) -> void:
 	var away_dest: Vector2 = global_position + away * 100.0
 	_move_toward_position(away_dest)
 	
-	if _cooldown_timer > 0.0:
-		return
-	_cast_timer += delta
-	if _cast_timer >= atk_cast_time:
-		_cast_timer = 0.0
-		_cast_phase = 0
-		_set_frame(FRAME_BASE)
-		_cooldown_timer = atk_cooldown
-		_deal_damage()
-		if _enemies_in_attack_range.is_empty():
-			_change_state(State.SEEKING)
+	_attack(delta)
+
 
 
 func _state_knockback(_delta: float) -> void:
@@ -635,3 +640,40 @@ func play_victory_anim() -> void:
 	tween.tween_interval(0.1)
 	tween.tween_property(self, "position", base_pos, 0.2).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
 	tween.tween_property(self, "scale", Vector2.ONE, 0.1).set_trans(Tween.TRANS_BOUNCE)
+
+
+func _play_death_anim() -> void:
+	weapon_sprite.play_death()
+	if _sprite_tween:
+		_sprite_tween.kill()
+	_sprite_tween = create_tween()
+	
+	# Skew to simulate falling backward (isometric feel).
+	_sprite_tween.tween_property(
+		sprite, "skew",
+		1.1,
+		0.8
+	).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	
+	# Fade out while skewed.
+	_sprite_tween.parallel().tween_property(
+		sprite, "modulate:a",
+		0.0,
+		0.8
+	).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+	
+	# Also fade health bar and level label.
+	_sprite_tween.parallel().tween_property(
+		health_bar, "modulate:a",
+		0.0,
+		0.2
+	).set_trans(Tween.TRANS_SINE)
+	
+	_sprite_tween.parallel().tween_property(
+		level_lbl, "modulate:a",
+		0.0,
+		0.2
+	).set_trans(Tween.TRANS_SINE)
+	
+	get_tree().create_timer(0.8).timeout.connect(queue_free)
+

@@ -30,7 +30,7 @@ const LOOT_BOB_HEIGHT: float = 4.0
 const LOOT_BOB_DURATION: float = 1.2
 const LOOT_COLLECT_RISE: float = 80.0
 const LOOT_COLLECT_DURATION: float = 0.6
-const LOOT_SCATTER_RADIUS: float = 30.0
+const LOOT_SCATTER_RADIUS: float = 50.0
 const LOOT_CAP: int = 120
 
 func _ready() -> void:

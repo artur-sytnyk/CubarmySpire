@@ -18,7 +18,7 @@ signal died(unit: Unit)
 
 # Unit specific constants
 const RETARGET_INTERVAL: float = 0.5     # interval to check for new targets
-const SEPARATION_RADIUS: float = 45.0    # distance within which allies push each other
+const SEPARATION_RADIUS: float = 36.0    # distance within which allies push each other
 const SEPARATION_STRENGTH: float = 1.0   # blend weight of separation vs movement
 const TARGET_OFFSET_RADIUS: float = 40.0 # max radius of random offset around target position
 
@@ -95,6 +95,18 @@ var _ricochet_damage_ratio: float = 0.0
 var _flurry_guaranteed: int = 0
 var _flurry_bonus_chance: float = 0.0
 
+# Shadows
+const SHADOW_OFFSET:  float = 14.0
+const SHADOW_WIDTH:   float = 16.0
+const SHADOW_HEIGHT:  float = 12.0
+const SHADOW_SKEW_X:  float = 16.0
+const SHADOW_ALPHA:   float = 0.4
+const SHADOW_INNER_WIDTH: float = 12.0
+const SHADOW_INNER_ALPHA: float = 0.25
+
+var _shadow: Polygon2D
+var _shadow_inner: Polygon2D
+
 
 # --- Stats & Setup ---
 
@@ -169,22 +181,39 @@ func _play_attack_windup_sprite() -> void:
 		_sprite_base_scale * Vector2(0.72, 1.22),
 		atk_cast_time * 0.5
 	)
+	var tween: Tween = create_tween().set_parallel(true)
+	tween.tween_property(_shadow, "scale:x", 0.85, atk_cast_time * 0.5)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tween.tween_property(_shadow_inner, "scale:x", 0.85, atk_cast_time * 0.5)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 
 
 # Explosive expansion on damage deal, then spring back to neutral.
 func _play_attack_release_sprite() -> void:
 	if _sprite_tween:
 		_sprite_tween.kill()
+	
+	var tween: Tween = create_tween().set_parallel(true)
+	tween.tween_property(_shadow, "scale:x", 1.45, atk_cast_time * 0.1)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tween.tween_property(_shadow_inner, "scale:x", 1.45, atk_cast_time * 0.1)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tween.chain()
+	tween.tween_property(_shadow, "scale:x", 1.0, atk_cast_time * 0.2)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tween.tween_property(_shadow_inner, "scale:x", 1.0, atk_cast_time * 0.2)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	
 	_sprite_tween = create_tween()
 	_sprite_tween.tween_property(
 		sprite, "scale",
 		_sprite_base_scale * Vector2(1.45, 0.78),
-		0.07
+		0.1
 	).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	_sprite_tween.tween_property(
 		sprite, "scale",
 		_sprite_base_scale,
-		0.18
+		0.2
 	).set_trans(Tween.TRANS_SPRING).set_ease(Tween.EASE_OUT)
 
 
@@ -195,14 +224,25 @@ func _play_hit_sprite() -> void:
 	_sprite_tween = create_tween()
 	_sprite_tween.tween_property(
 		sprite, "scale",
-		_sprite_base_scale * Vector2(1.35, 0.68),
-		0.06
+		_sprite_base_scale * Vector2(1.35, 0.7),
+		0.08
 	).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 	_sprite_tween.tween_property(
 		sprite, "scale",
 		_sprite_base_scale,
-		0.14
+		0.16
 	).set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_OUT)
+	
+	# Shadow squish
+	var tween: Tween = create_tween().set_parallel(true)
+	tween.tween_property(_shadow_inner, "scale", Vector2(0.6, 0.8), 0.08)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tween.tween_property(_shadow, "scale", Vector2(0.6, 0.8), 0.08)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tween.chain().tween_property(_shadow_inner, "scale", Vector2.ONE, 0.16)\
+		.set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_OUT)
+	tween.chain().tween_property(_shadow, "scale", Vector2.ONE, 0.16)\
+		.set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_OUT)
 
 
 # Kill any running sprite tween and snap back to neutral scale.
@@ -300,6 +340,7 @@ func _tick_hit_anim(delta: float) -> void:
 func _ready() -> void:
 	# Capture before any tween or reset can touch sprite.scale.
 	_sprite_base_scale = sprite.scale
+	_build_shadow()
 	add_to_group("units")
 	_projectile_layer = get_tree().get_first_node_in_group("projectile_layer")
 	detection_area.body_entered.connect(_on_detection_entered)
@@ -308,6 +349,32 @@ func _ready() -> void:
 	attack_range_area.body_exited.connect(_on_attack_range_exited)
 	kite_area.body_entered.connect(_on_kite_area_entered)
 	kite_area.body_exited.connect(_on_kite_area_exited)
+
+
+func _build_shadow() -> void:
+	_shadow = Polygon2D.new()
+	_shadow.z_index = -1
+	_shadow.z_as_relative = true
+	_shadow.color = Color(0.0, 0.0, 0.0, SHADOW_ALPHA)
+	_shadow.polygon = PackedVector2Array([ # corners, clockwise
+		Vector2(-SHADOW_WIDTH, SHADOW_OFFSET),
+		Vector2( SHADOW_WIDTH, SHADOW_OFFSET),
+		Vector2( SHADOW_WIDTH - SHADOW_SKEW_X, SHADOW_OFFSET + SHADOW_HEIGHT),
+		Vector2(-SHADOW_WIDTH - SHADOW_SKEW_X, SHADOW_OFFSET + SHADOW_HEIGHT),
+	])
+	add_child(_shadow)
+	
+	_shadow_inner = Polygon2D.new()
+	_shadow_inner.z_index = -1
+	_shadow_inner.z_as_relative = true
+	_shadow_inner.color = Color(0.0, 0.0, 0.0, SHADOW_ALPHA)
+	_shadow_inner.polygon = PackedVector2Array([
+		Vector2(-SHADOW_INNER_WIDTH + 4.0, SHADOW_OFFSET - 2.0),
+		Vector2( SHADOW_INNER_WIDTH + 4.0, SHADOW_OFFSET - 2.0),
+		Vector2( SHADOW_INNER_WIDTH - SHADOW_SKEW_X * 0.5, SHADOW_OFFSET + SHADOW_HEIGHT * 0.4),
+		Vector2(-SHADOW_INNER_WIDTH - SHADOW_SKEW_X * 0.5, SHADOW_OFFSET + SHADOW_HEIGHT * 0.4),
+	])
+	add_child(_shadow_inner)
 
 
 # --- Area callbacks ---
@@ -620,9 +687,16 @@ func _state_dead(_delta: float) -> void:
 # --- Spawn animation ---
 
 func play_spawn_anim() -> void:
-	scale = Vector2.ZERO
-	var tween := create_tween()
-	tween.tween_property(self, "scale", Vector2.ONE, 1.0).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	_shadow.scale   = Vector2.ZERO
+	_shadow_inner.scale   = Vector2.ZERO
+	sprite.scale    = Vector2.ZERO
+	var tween: Tween = create_tween().set_parallel(true)
+	tween.tween_property(sprite, "scale", _sprite_base_scale, 1.0)\
+		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.tween_property(_shadow_inner, "scale", Vector2.ONE, 1.0)\
+		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.tween_property(_shadow, "scale", Vector2.ONE, 1.0)\
+		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 
 
 # --- Victory animation ---
@@ -646,6 +720,7 @@ func _play_death_anim() -> void:
 	weapon_sprite.play_death()
 	if _sprite_tween:
 		_sprite_tween.kill()
+	
 	_sprite_tween = create_tween()
 	
 	# Skew to simulate falling backward (isometric feel).
@@ -674,6 +749,12 @@ func _play_death_anim() -> void:
 		0.0,
 		0.2
 	).set_trans(Tween.TRANS_SINE)
+	
+	var tween: Tween = create_tween().set_parallel(true)
+	tween.tween_property(_shadow_inner, "modulate:a", 0.0, 0.8).set_trans(Tween.TRANS_SINE)
+	tween.tween_property(_shadow, "modulate:a", 0.0, 0.8).set_trans(Tween.TRANS_SINE)
+	tween.tween_property(_shadow_inner, "scale", Vector2.ZERO, 0.8).set_trans(Tween.TRANS_SINE)
+	tween.tween_property(_shadow, "scale", Vector2.ZERO, 0.8).set_trans(Tween.TRANS_SINE)
 	
 	get_tree().create_timer(0.8).timeout.connect(queue_free)
 

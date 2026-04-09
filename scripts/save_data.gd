@@ -8,6 +8,7 @@ var army_active: Array = []
 var army_barracks: Array = []
 var shop_equipment: Array = []
 var max_stage_reached: Dictionary = {}
+var selected_difficulty: String = "easy"
 
 
 static func new_game(slot: int) -> SaveData:
@@ -25,6 +26,7 @@ static func new_game(slot: int) -> SaveData:
 		{ "unit_type": "ranger",  "level": 1 },
 	]
 	s.max_stage_reached = { "easy": 0, "normal": 0, "hard": 0 }
+	s.selected_difficulty = "easy"
 	return s
 
 
@@ -38,6 +40,7 @@ func to_dict() -> Dictionary:
 		"army_barracks":     army_barracks,
 		"shop_equipment":    shop_equipment,
 		"max_stage_reached": max_stage_reached,
+		"selected_difficulty": selected_difficulty,
 	}
 
 
@@ -53,5 +56,6 @@ static func from_dict(data: Dictionary, slot: int) -> SaveData:
 	s.army_barracks      = data.get("army_barracks", [])
 	s.shop_equipment     = data.get("shop_equipment", [])
 	s.max_stage_reached  = data.get("max_stage_reached", { "easy": 0, "normal": 0, "hard": 0 })
+	s.selected_difficulty = data.get("selected_difficulty", "easy")
 	return s
 

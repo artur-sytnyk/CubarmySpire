@@ -22,8 +22,6 @@ const GRADE_NAMES := {
 	5: "Legendary",
 }
 
-var _selected_difficulty: String = DIFFICULTY_EASY
-
 @onready var _easy_btn: Button       = $NavBarMargin/HBox/LeftPanel/Margin/VBox/EasyBtn
 @onready var _normal_btn: Button     = $NavBarMargin/HBox/LeftPanel/Margin/VBox/NormalBtn
 @onready var _hard_btn: Button       = $NavBarMargin/HBox/LeftPanel/Margin/VBox/HardBtn
@@ -43,7 +41,8 @@ func _ready() -> void:
 
 
 func _on_difficulty_selected(difficulty: String) -> void:
-	_selected_difficulty = difficulty
+	SaveManager.get_current().selected_difficulty = difficulty
+	SaveManager.save_current()
 	_update_difficulty_highlight()
 
 
@@ -55,7 +54,7 @@ func _update_difficulty_highlight() -> void:
 	]:
 		var difficulty: String = pair[0]
 		var btn: Button = pair[1]
-		var is_active: bool = difficulty == _selected_difficulty
+		var is_active: bool = difficulty == SaveManager.get_current().selected_difficulty
 		btn.toggle_mode = true
 		btn.button_pressed = is_active
 		btn.disabled = is_active
@@ -180,7 +179,7 @@ func _on_begin_run() -> void:
 	if save.army_active.is_empty():
 		_show_error("Your warband is empty! Add units in the Garrison first.")
 		return
-	RunState.init_from_save(save, _selected_difficulty)
+	RunState.init_from_save(save, save.selected_difficulty)
 	SceneManager.go_to(SCENE_BATTLE)
 
 

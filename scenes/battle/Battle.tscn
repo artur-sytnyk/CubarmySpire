@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://gj8rxvqy23t2"]
+[gd_scene load_steps=26 format=3 uid="uid://gj8rxvqy23t2"]
 
 [ext_resource type="Script" path="res://scenes/battle/battle_scene.gd" id="1_6aqjr"]
 [ext_resource type="Script" path="res://scripts/army.gd" id="1_x5j8b"]
@@ -61,6 +61,17 @@ vertices = PackedVector2Array(1281, 11, 1629, 319, 1273, 513, 748, 583, 108, 477
 polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3, 4, 5, 6, 7)])
 outlines = Array[PackedVector2Array]([PackedVector2Array(-92, 342, 105, 487, 748, 594, 1277, 523, 1647, 322, 1285, 2, 338, -3, -36, 169)])
 source_geometry_group_name = &"navigation_polygon_source_group"
+
+[sub_resource type="Gradient" id="Gradient_iss5q"]
+colors = PackedColorArray(0.817521, 0.817521, 0.817521, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_nxnl5"]
+gradient = SubResource("Gradient_iss5q")
+width = 6000
+height = 4000
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
 
 [node name="BattleScene" type="Node2D"]
 script = ExtResource("1_6aqjr")
@@ -135,6 +146,7 @@ mouse_filter = 2
 texture = SubResource("GradientTexture2D_3t8uh")
 
 [node name="TextureRect" type="TextureRect" parent="Arena"]
+light_mask = 2
 texture_filter = 2
 offset_right = 7168.0
 offset_bottom = 4096.0
@@ -181,4 +193,14 @@ position = Vector2(1358, 979)
 position = Vector2(2255, 867)
 
 [node name="Camera2D" type="Camera2D" parent="Arena"]
+zoom = Vector2(0.8, 0.8)
 script = ExtResource("4_xqvxf")
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+position = Vector2(3157, 255)
+color = Color(0.627451, 0.878431, 1, 1)
+range_item_cull_mask = 2
+texture = SubResource("GradientTexture2D_nxnl5")
+
+[node name="CanvasModulate" type="CanvasModulate" parent="."]
+color = Color(0.784314, 0.627451, 1, 1)

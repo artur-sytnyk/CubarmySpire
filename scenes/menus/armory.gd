@@ -1,25 +1,14 @@
 extends Control
 
-const GRADE_NAMES := {
-	1: "Common",
-	2: "Uncommon",
-	3: "Rare",
-	4: "Epic",
-	5: "Legendary",
-}
-const GRADE_COLORS := {
-	1: Color(0.70, 0.70, 0.70),
-	2: Color(0.30, 0.75, 0.35),
-	3: Color(0.30, 0.55, 0.90),
-	4: Color(0.65, 0.30, 0.90),
-	5: Color(0.95, 0.55, 0.15),
-}
-
 const SLOT_KEYS   :Array = ["weapon", "armor", "artifact_1", "artifact_2", "artifact_3"]
 const SLOT_LABELS :Array = ["Weapon", "Armor", "Artifact I", "Artifact II", "Artifact III"]
+const SLOT_NODE_NAMES: Array = ["WeaponBox", "ArmorBox", "Artifact1Box", "Artifact2Box", "Artifact3Box"]
+const ITEM_BOX_SCENE: PackedScene = preload("res://objects/item_box/ItemBox.tscn")
+const ITEM_ICON_PATH: String = "res://assets/images/items/%s.png"
 
 @onready var _slots_vbox: VBoxContainer     = $NavBarMargin/HBoxContainer/LeftPanel/MarginContainer/VBoxContainer/SlotsVBox
-@onready var _item_icon: ColorRect          = $NavBarMargin/HBoxContainer/RightPanel/MarginContainer/VBoxContainer/DetailPanel/MarginContainer/HBoxContainer/ItemIcon
+@onready var _weapon_box: ItemBox     = $NavBarMargin/HBoxContainer/LeftPanel/MarginContainer/VBoxContainer/SlotsVBox/WeaponBox
+@onready var _item_icon: ItemBox          = $NavBarMargin/HBoxContainer/RightPanel/MarginContainer/VBoxContainer/DetailPanel/MarginContainer/HBoxContainer/ItemIcon
 @onready var _item_name_label: Label        = $NavBarMargin/HBoxContainer/RightPanel/MarginContainer/VBoxContainer/DetailPanel/MarginContainer/HBoxContainer/InfoVBox/TitleRow/ItemNameLabel
 @onready var _item_grade_label: Label       = $NavBarMargin/HBoxContainer/RightPanel/MarginContainer/VBoxContainer/DetailPanel/MarginContainer/HBoxContainer/InfoVBox/TitleRow/ItemGradeLabel
 @onready var _item_desc_label: Label        = $NavBarMargin/HBoxContainer/RightPanel/MarginContainer/VBoxContainer/DetailPanel/MarginContainer/HBoxContainer/InfoVBox/ItemDescLabel
@@ -30,12 +19,15 @@ const SLOT_LABELS :Array = ["Weapon", "Armor", "Artifact I", "Artifact II", "Art
 
 var _selected: Dictionary = {}
 
+
+
 func _ready() -> void:
 	_equip_btn.pressed.connect(_on_equip_pressed)
 	_sell_btn.pressed.connect(_on_sell_pressed)
 	_dismantle_btn.pressed.connect(_on_dismantle_pressed)
 	_clear_detail()
 	_refresh()
+
 
 # ── Refresh ────────────────────────────────────────────────────────────────
 
@@ -47,80 +39,47 @@ func _refresh() -> void:
 	_refresh_inventory(save)
 	_refresh_detail(save)
 
+
 func _refresh_slots(save: SaveData) -> void:
 	var equipped: Dictionary = {}
-	for item in save.equipment_inv:
+	for item: Dictionary in save.equipment_inv:
 		var s: String = item.get("equipped_slot", "")
 		if s != "":
 			equipped[s] = item
 
-	var slot_panels := _slots_vbox.get_children()
-	for i in range(slot_panels.size()):
-		var panel: PanelContainer = slot_panels[i]
-		for child in panel.get_children():
-			child.queue_free()
-
-		var margin := MarginContainer.new()
-		margin.add_theme_constant_override("margin_left",   6)
-		margin.add_theme_constant_override("margin_right",  6)
-		margin.add_theme_constant_override("margin_top",    6)
-		margin.add_theme_constant_override("margin_bottom", 6)
-		panel.add_child(margin)
-
-		var vbox := VBoxContainer.new()
-		vbox.alignment = BoxContainer.ALIGNMENT_CENTER
-		margin.add_child(vbox)
-
-		var slot_lbl := Label.new()
-		slot_lbl.text = SLOT_LABELS[i]
-		slot_lbl.add_theme_font_size_override("font_size", 11)
-		slot_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		vbox.add_child(slot_lbl)
-
+	for i: int in range(SLOT_KEYS.size()):
+		var box: ItemBox = _slots_vbox.get_node(SLOT_NODE_NAMES[i])
 		var key: String = SLOT_KEYS[i]
+
 		if equipped.has(key):
 			var item: Dictionary = equipped[key]
-			var def: Dictionary = GameData.get_equipment(item.get("id", ""))
+			var item_id: String = item.get("id", "")
 			var grade: int = item.get("grade", 1)
-
-			var name_lbl := Label.new()
-			name_lbl.text = _display_name(def, grade)
-			name_lbl.add_theme_font_size_override("font_size", 11)
-			name_lbl.add_theme_color_override("font_color", GRADE_COLORS.get(grade, Color.WHITE))
-			name_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-			name_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-			vbox.add_child(name_lbl)
-
-			var btn := Button.new()
-			btn.flat = true
-			btn.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-			btn.focus_mode = Control.FOCUS_NONE
-			btn.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
-			btn.set_anchors_and_offsets_preset(PRESET_FULL_RECT)
-			btn.pressed.connect(_on_slot_clicked.bind(item))
-			btn.mouse_entered.connect(func():
-				panel.self_modulate.a = 0.6
-			)
-			btn.mouse_exited.connect(func():
-				panel.self_modulate = Color(1, 1, 1, 1)
-			)
-			panel.add_child(btn)
+			var level: int = item.get("level", 1)
+			var icon_path: String = ITEM_ICON_PATH % item_id
+			var icon: Texture2D = load(icon_path) if ResourceLoader.exists(icon_path) else null
+			box.setup(icon, grade, level, 0, SLOT_LABELS[i])
 		else:
-			var empty_lbl := Label.new()
-			empty_lbl.text = "— empty —"
-			empty_lbl.add_theme_font_size_override("font_size", 10)
-			empty_lbl.add_theme_color_override("font_color", Color(0.5, 0.5, 0.5))
-			empty_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-			vbox.add_child(empty_lbl)
+			box.setup(null, 1, 0, 0, SLOT_LABELS[i])
+
 
 func _refresh_inventory(save: SaveData) -> void:
-	for child in _inventory_flow.get_children():
+	for child: Node in _inventory_flow.get_children():
 		child.queue_free()
-	var stacks := _stack_items(save.equipment_inv)
-	var sorted_keys := stacks.keys()
-	sorted_keys.sort()
-	for key in sorted_keys:
-		_inventory_flow.add_child(_make_item_box(stacks[key]))
+	var stacks: Dictionary = _stack_items(save.equipment_inv)
+	var sorted_keys: Array = stacks.keys()
+	sorted_keys.sort_custom(func(a: String, b: String) -> bool:
+		var sa: Dictionary = stacks[a]
+		var sb: Dictionary = stacks[b]
+		var a_equipped: bool = sa.get("equipped_slot", "") != ""
+		var b_equipped: bool = sb.get("equipped_slot", "") != ""
+		if a_equipped != b_equipped:
+			return a_equipped
+		return sa.get("level", 1) > sb.get("level", 1)
+	)
+	for key: String in sorted_keys:
+		_make_item_box(stacks[key])
+
 
 func _refresh_detail(save: SaveData) -> void:
 	if _selected.is_empty():
@@ -149,90 +108,57 @@ func _stack_items(equipment_inv: Array) -> Dictionary:
 		stacks[key].count += 1
 	return stacks
 
+
 func _stack_key(item: Dictionary) -> String:
 	return "%s_%d_%d" % [item.get("id", ""), item.get("level", 1), item.get("grade", 1)]
+
 
 # ── Helpers ────────────────────────────────────────────────────────────────
 
 func _display_name(def: Dictionary, grade: int) -> String:
-	return "%s %s" % [GRADE_NAMES.get(grade, ""), def.get("name", "?")]
+	return "%s %s" % [GameData.get_grade_name(grade), def.get("name", "?")]
+
 
 func _calc_effect(def: Dictionary, level: int, grade: int) -> float:
 	var base: float     = def.get("base_value", 0.0)
 	var grade_mult: float = 1.0 + (grade - 1) * 0.10
 	return base * level * grade_mult
 
+
 # ── Item box ───────────────────────────────────────────────────────────────
 
-func _make_item_box(stack: Dictionary) -> Control:
-	var def: Dictionary  = GameData.get_equipment(stack.get("id", ""))
-	var grade: int       = stack.get("grade", 1)
-	var level: int       = stack.get("level", 1)
-	var count: int       = stack.get("count", 1)
+func _make_item_box(stack: Dictionary) -> void:
+	var def: Dictionary   = GameData.get_equipment(stack.get("id", ""))
+	var grade: int        = stack.get("grade", 1)
+	var level: int        = stack.get("level", 1)
+	var count: int        = stack.get("count", 1)
 	var is_equipped: bool = stack.get("equipped_slot", "") != ""
+	var item_id: String   = stack.get("id", "")
 
-	var container := Control.new()
-	container.custom_minimum_size = Vector2(72, 72)
-	var effect_pct := _calc_effect(def, level, grade) * 100.0
-	container.tooltip_text = "%s\nLv.%d  •  %s\n+%.1f%% %s%s" % [
+	var box: ItemBox = ITEM_BOX_SCENE.instantiate()
+	_inventory_flow.add_child(box)  # tree first, @onready populates here
+
+	var icon_path: String = ITEM_ICON_PATH % item_id
+	var icon: Texture2D = load(icon_path) if ResourceLoader.exists(icon_path) else null
+	box.setup(icon, grade, level, count)
+
+	var effect_pct: float = _calc_effect(def, level, grade) * 100.0
+	box.tooltip_text = "%s\nLv.%d  •  %s\n+%.1f%% %s%s" % [
 		_display_name(def, grade),
 		level,
-		GRADE_NAMES.get(grade, "?"),
+		GameData.get_grade_name(grade),
 		effect_pct,
 		def.get("stat", ""),
 		"  [Equipped]" if is_equipped else "",
 	]
 
-	var base_color: Color = GRADE_COLORS.get(grade, Color(0.4, 0.4, 0.4))
-
-	var bg := ColorRect.new()
-	bg.set_anchors_and_offsets_preset(PRESET_FULL_RECT)
-	bg.color = base_color.darkened(0.45)
-	container.add_child(bg)
-
 	if is_equipped:
-		var equip_bar := ColorRect.new()
-		equip_bar.color = base_color
-		equip_bar.set_anchors_and_offsets_preset(PRESET_TOP_LEFT)
-		equip_bar.size = Vector2(6, 72)
-		container.add_child(equip_bar)
-
-	var level_lbl := Label.new()
-	level_lbl.text = "Lv.%d" % level
-	level_lbl.add_theme_font_size_override("font_size", 10)
-	level_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	level_lbl.set_anchors_and_offsets_preset(PRESET_BOTTOM_WIDE)
-	level_lbl.offset_top = -18.0
-	container.add_child(level_lbl)
-
-	if count > 1:
-		var badge := PanelContainer.new()
-		badge.custom_minimum_size = Vector2(20, 20)
-		badge.set_anchors_and_offsets_preset(PRESET_TOP_RIGHT)
-		badge.offset_left   = -24.0
-		badge.offset_bottom =  24.0
-		container.add_child(badge)
-
-		var badge_lbl := Label.new()
-		badge_lbl.text = str(count)
-		badge_lbl.add_theme_font_size_override("font_size", 10)
-		badge_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		badge_lbl.vertical_alignment   = VERTICAL_ALIGNMENT_CENTER
-		badge.add_child(badge_lbl)
-
+		box.set_slot("Equipped")
 	if not _selected.is_empty() and _stack_key(_selected) == _stack_key(stack):
-		var highlight := ColorRect.new()
-		highlight.set_anchors_and_offsets_preset(PRESET_FULL_RECT)
-		highlight.color = Color(1.0, 0.85, 0.3, 0.22)
-		container.add_child(highlight)
+		box.show_highlight(true)
 
-	var btn := Button.new()
-	btn.flat = true
-	btn.set_anchors_and_offsets_preset(PRESET_FULL_RECT)
-	btn.pressed.connect(_on_item_box_clicked.bind(stack))
-	container.add_child(btn)
+	box.pressed.connect(_on_item_box_clicked.bind(stack))
 
-	return container
 
 # ── Detail panel ───────────────────────────────────────────────────────────
 
@@ -242,15 +168,17 @@ func _show_detail(stack: Dictionary) -> void:
 	var grade: int       = stack.get("grade", 1)
 	var level: int       = stack.get("level", 1)
 	var is_equipped: bool = stack.get("equipped_slot", "") != ""
-	var grade_color: Color = GRADE_COLORS.get(grade, Color.WHITE)
+	var grade_color: Color = GameData.get_grade_color(grade)
 	var effect_pct        := _calc_effect(def, level, grade) * 100.0
 
-	_item_icon.color = grade_color.darkened(0.3)
+	var icon_path: String = ITEM_ICON_PATH % stack.get("id", "")
+	var icon: Texture2D = load(icon_path) if ResourceLoader.exists(icon_path) else null
+	_item_icon.setup(icon, grade)
 	_item_name_label.text = _display_name(def, grade)
 	_item_name_label.add_theme_color_override("font_color", grade_color)
 
-	_item_grade_label.text = "%s  •  Lv %d  •  %s" % [slot, level, GRADE_NAMES.get(grade, "?")]
-	_item_grade_label.add_theme_color_override("font_color", grade_color.darkened(0.15))
+	_item_grade_label.text = "Lv %d  •   %s  •  %s" % [level, GameData.get_grade_name(grade), slot.capitalize()]
+	#_item_grade_label.add_theme_color_override("font_color", grade_color.darkened(0.15))
 
 	_item_desc_label.text = def.get("description", "No description.")
 	_item_desc_label.text += " +%.1f%% %s" % [effect_pct, def.get("stat", "")]
@@ -261,7 +189,7 @@ func _show_detail(stack: Dictionary) -> void:
 	_dismantle_btn.visible = not is_equipped
 
 func _clear_detail() -> void:
-	_item_icon.color       = Color(0.12, 0.12, 0.16)
+	#_item_icon.color       = Color(0.12, 0.12, 0.16)
 	_item_name_label.text  = "Select an item"
 	_item_grade_label.text = ""
 	_item_desc_label.text  = ""
@@ -289,8 +217,9 @@ func _on_equip_pressed() -> void:
 	var save := SaveManager.current_save
 	var def: Dictionary = GameData.get_equipment(_selected.get("id", ""))
 	var target_slot: String = _selected.get("equipped_slot", "")
-
-	if target_slot != "":
+	var is_unequiping = target_slot != ""
+	
+	if is_unequiping:
 		# Unequip — find the matching item in equipment_inv and clear its slot.
 		for item in save.equipment_inv:
 			if item.get("id") == _selected.get("id") \
@@ -318,6 +247,8 @@ func _on_equip_pressed() -> void:
 				item["equipped_slot"] = slot
 				break
 	
+	var _sound_key = "unequip" if is_unequiping else "equip"
+	SoundManager.play_ui(_sound_key)
 	SaveManager.save_current()
 	_selected = {}
 	_clear_detail()

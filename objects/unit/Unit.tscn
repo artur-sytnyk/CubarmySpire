@@ -1,7 +1,7 @@
 [gd_scene load_steps=9 format=3 uid="uid://kut2k3q85hgk"]
 
 [ext_resource type="Script" path="res://objects/unit/unit_base.gd" id="1_wex1t"]
-[ext_resource type="Texture2D" uid="uid://br76bqfaek68v" path="res://assets/images/unit_sprite.png" id="2_3u2um"]
+[ext_resource type="Texture2D" uid="uid://br76bqfaek68v" path="res://assets/images/sprites/unit_sprite.png" id="2_3u2um"]
 [ext_resource type="PackedScene" uid="uid://b1d024llevahg" path="res://objects/unit/WeaponSprite.tscn" id="3_5qb1o"]
 [ext_resource type="PackedScene" uid="uid://bv8a417r1x7re" path="res://objects/unit/HealthBar.tscn" id="4_qiwmb"]
 

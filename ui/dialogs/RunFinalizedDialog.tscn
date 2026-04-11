@@ -1,8 +1,8 @@
 [gd_scene load_steps=9 format=3 uid="uid://c2lhu5uba1mxn"]
 
 [ext_resource type="Script" path="res://ui/dialogs/run_finalized_dialog.gd" id="1_3n4u5"]
-[ext_resource type="Texture2D" uid="uid://bhb2ni7uhjci6" path="res://assets/images/gold.png" id="2_r2mi3"]
-[ext_resource type="Texture2D" uid="uid://c2urx8j6m6l17" path="res://assets/images/material-1.png" id="3_o4yru"]
+[ext_resource type="Texture2D" uid="uid://bhb2ni7uhjci6" path="res://assets/images/loot/gold.png" id="2_r2mi3"]
+[ext_resource type="Texture2D" uid="uid://c2urx8j6m6l17" path="res://assets/images/loot/material-1.png" id="3_o4yru"]
 [ext_resource type="StyleBox" uid="uid://otorqavmjdsr" path="res://ui/styles/btn_normal.tres" id="5_jpsq8"]
 [ext_resource type="StyleBox" uid="uid://bpgl4yyg6x5dk" path="res://ui/styles/btn_hover.tres" id="6_4g6ud"]
 [ext_resource type="StyleBox" uid="uid://bf4w0kmaihp72" path="res://ui/styles/btn_pressed.tres" id="7_mdea2"]

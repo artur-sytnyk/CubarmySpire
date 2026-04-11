@@ -40,9 +40,6 @@ func _ready() -> void:
 
 
 func build(smoothed_points: PackedVector2Array, center: Vector2, seed: int) -> void:
-	print("TowerBody global_position: ", global_position)
-	print("TowerBody owner: ", owner)
-	print("TowerBody parent: ", get_parent().name)
 	var test_poly := Polygon2D.new()
 	test_poly.polygon = PackedVector2Array([
 		Vector2(0, 600),
@@ -54,9 +51,6 @@ func build(smoothed_points: PackedVector2Array, center: Vector2, seed: int) -> v
 	test_poly.z_index = 100
 	test_poly.z_as_relative = false
 	add_child(test_poly)
-	print("test_poly in tree: ", test_poly.is_inside_tree())
-	print("test_poly visible: ", test_poly.visible)
-	print("test_poly global_position: ", test_poly.global_position)
 	_rng.seed = seed
 
 	for child in get_children():
@@ -122,7 +116,6 @@ func _build_veins(front: Array[Vector2]) -> void:
 	var top_right: Vector2 = front[front.size() - 1]
 	var face_width: float  = top_right.x - top_left.x
 	var vein_top_y: float  = top_left.y + LAYERS_OFFSET
-	print("top_left.y: ", top_left.y, " vein_top_y: ", vein_top_y)
 
 	for _i in VEIN_COUNT:
 		var vx: float     = top_left.x + _rng.randf_range(0.05, 0.95) * face_width

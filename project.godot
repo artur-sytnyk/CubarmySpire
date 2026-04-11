@@ -17,12 +17,13 @@ config/icon="res://assets/images/logo.png"
 
 [autoload]
 
-SceneManager="*res://scripts/scene_manager.gd"
 Faction="*res://scripts/faction.gd"
-GameData="*res://scripts/game_data.gd"
 IconDatabase="*res://scripts/icon_database.gd"
-RollManager="*res://scripts/roll_manager.gd"
+GameData="*res://scripts/game_data.gd"
+SceneManager="*res://scripts/scene_manager.gd"
+SoundManager="*res://scripts/sound_manager.gd"
 SaveManager="*res://scripts/save_manager.gd"
+RollManager="*res://scripts/roll_manager.gd"
 RunState="*res://scripts/run_state.gd"
 
 [display]

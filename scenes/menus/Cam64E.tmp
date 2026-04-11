@@ -1,0 +1,199 @@
+[gd_scene load_steps=9 format=3 uid="uid://byxj6uoigny4d"]
+
+[ext_resource type="Script" path="res://scenes/menus/campaign.gd" id="1_qy2ix"]
+[ext_resource type="StyleBox" uid="uid://otorqavmjdsr" path="res://ui/styles/btn_normal.tres" id="2_7wni7"]
+[ext_resource type="StyleBox" uid="uid://c7yrhugtsp115" path="res://ui/styles/panel_bg.tres" id="2_74lac"]
+[ext_resource type="StyleBox" uid="uid://bpgl4yyg6x5dk" path="res://ui/styles/btn_hover.tres" id="3_p6ijn"]
+[ext_resource type="StyleBox" uid="uid://bf4w0kmaihp72" path="res://ui/styles/btn_pressed.tres" id="4_30ao8"]
+[ext_resource type="StyleBox" uid="uid://dqrbn6psw1s6p" path="res://ui/styles/separator.tres" id="5_pcbew"]
+[ext_resource type="PackedScene" uid="uid://cottoqyrw7ci2" path="res://objects/item_box/ItemBox.tscn" id="7_0nbiq"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_twxuf"]
+
+[node name="Campaign" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_qy2ix")
+
+[node name="NavBarMargin" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 68
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="HBox" type="HBoxContainer" parent="NavBarMargin"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="LeftPanel" type="PanelContainer" parent="NavBarMargin/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = ExtResource("2_74lac")
+
+[node name="Margin" type="MarginContainer" parent="NavBarMargin/HBox/LeftPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 24
+
+[node name="VBox" type="VBoxContainer" parent="NavBarMargin/HBox/LeftPanel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Label" type="Label" parent="NavBarMargin/HBox/LeftPanel/Margin/VBox"]
+visible = false
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Difficulty"
+
+[node name="EasyBtn" type="Button" parent="NavBarMargin/HBox/LeftPanel/Margin/VBox"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_colors/font_pressed_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_colors/font_hover_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_colors/font_focus_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_colors/font_disabled_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = ExtResource("2_7wni7")
+theme_override_styles/hover = ExtResource("3_p6ijn")
+theme_override_styles/pressed = ExtResource("4_30ao8")
+theme_override_styles/disabled = ExtResource("4_30ao8")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_twxuf")
+text = "Easy"
+
+[node name="NormalBtn" type="Button" parent="NavBarMargin/HBox/LeftPanel/Margin/VBox"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_colors/font_pressed_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_colors/font_hover_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_colors/font_focus_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_colors/font_disabled_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = ExtResource("2_7wni7")
+theme_override_styles/hover = ExtResource("3_p6ijn")
+theme_override_styles/pressed = ExtResource("4_30ao8")
+theme_override_styles/disabled = ExtResource("4_30ao8")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_twxuf")
+text = "Normal"
+
+[node name="HardBtn" type="Button" parent="NavBarMargin/HBox/LeftPanel/Margin/VBox"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_colors/font_pressed_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_colors/font_hover_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_colors/font_focus_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_colors/font_disabled_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = ExtResource("2_7wni7")
+theme_override_styles/hover = ExtResource("3_p6ijn")
+theme_override_styles/pressed = ExtResource("4_30ao8")
+theme_override_styles/disabled = ExtResource("4_30ao8")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_twxuf")
+text = "Hard"
+
+[node name="Spacer" type="Control" parent="NavBarMargin/HBox/LeftPanel/Margin/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="HSeparator" type="HSeparator" parent="NavBarMargin/HBox/LeftPanel/Margin/VBox"]
+layout_mode = 2
+theme_override_styles/separator = ExtResource("5_pcbew")
+
+[node name="BeginRunBtn" type="Button" parent="NavBarMargin/HBox/LeftPanel/Margin/VBox"]
+custom_minimum_size = Vector2(0, 56)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_colors/font_pressed_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_colors/font_hover_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_colors/font_focus_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_colors/font_disabled_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = ExtResource("2_7wni7")
+theme_override_styles/hover = ExtResource("3_p6ijn")
+theme_override_styles/pressed = ExtResource("4_30ao8")
+theme_override_styles/disabled = ExtResource("4_30ao8")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_twxuf")
+text = "Begin Campaign"
+
+[node name="RightPanel" type="PanelContainer" parent="NavBarMargin/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+theme_override_styles/panel = ExtResource("2_74lac")
+
+[node name="Margin" type="MarginContainer" parent="NavBarMargin/HBox/RightPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 24
+
+[node name="VBox" type="VBoxContainer" parent="NavBarMargin/HBox/RightPanel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="Loadout" type="Label" parent="NavBarMargin/HBox/RightPanel/Margin/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Current Loadout"
+
+[node name="HSeparator" type="HSeparator" parent="NavBarMargin/HBox/RightPanel/Margin/VBox"]
+layout_mode = 2
+theme_override_styles/separator = ExtResource("5_pcbew")
+
+[node name="Equipment" type="Label" parent="NavBarMargin/HBox/RightPanel/Margin/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Equipment"
+
+[node name="EquipmentRow" type="HBoxContainer" parent="NavBarMargin/HBox/RightPanel/Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="WeaponBox" parent="NavBarMargin/HBox/RightPanel/Margin/VBox/EquipmentRow" instance=ExtResource("7_0nbiq")]
+layout_mode = 2
+
+[node name="ArmorBox" parent="NavBarMargin/HBox/RightPanel/Margin/VBox/EquipmentRow" instance=ExtResource("7_0nbiq")]
+layout_mode = 2
+
+[node name="Artifact1Box" parent="NavBarMargin/HBox/RightPanel/Margin/VBox/EquipmentRow" instance=ExtResource("7_0nbiq")]
+layout_mode = 2
+
+[node name="Artifact2Box" parent="NavBarMargin/HBox/RightPanel/Margin/VBox/EquipmentRow" instance=ExtResource("7_0nbiq")]
+layout_mode = 2
+
+[node name="Artifact3Box" parent="NavBarMargin/HBox/RightPanel/Margin/VBox/EquipmentRow" instance=ExtResource("7_0nbiq")]
+layout_mode = 2
+
+[node name="Spacer" type="Control" parent="NavBarMargin/HBox/RightPanel/Margin/VBox"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="Army" type="Label" parent="NavBarMargin/HBox/RightPanel/Margin/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Active Army"
+
+[node name="ArmyGrid" type="GridContainer" parent="NavBarMargin/HBox/RightPanel/Margin/VBox"]
+layout_mode = 2
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
+columns = 10

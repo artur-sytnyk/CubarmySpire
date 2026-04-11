@@ -18,9 +18,9 @@ signal died(unit: Unit)
 
 # Unit specific constants
 const RETARGET_INTERVAL: float = 0.5     # interval to check for new targets
-const SEPARATION_RADIUS: float = 36.0    # distance within which allies push each other
+const SEPARATION_RADIUS: float = 40.0    # distance within which allies push each other
 const SEPARATION_STRENGTH: float = 1.0   # blend weight of separation vs movement
-const TARGET_OFFSET_RADIUS: float = 40.0 # max radius of random offset around target position
+const TARGET_OFFSET_RADIUS: float = 45.0 # max radius of random offset around target position
 
 # Stats
 var unit_type: String
@@ -92,6 +92,7 @@ var _cast_phase: int = 0
 # Behavior flags cached values
 var _ricochet_count: int = 0
 var _ricochet_damage_ratio: float = 0.0
+var _has_flurry: bool = false
 var _flurry_guaranteed: int = 0
 var _flurry_bonus_chance: float = 0.0
 
@@ -137,6 +138,7 @@ func _update_behavioral_flags(flags: Dictionary) -> void:
 		_ricochet_damage_ratio = flags["ricochet"]
 	if flags.has("flurry"):
 		var flurry_val: float  = flags["flurry"]
+		_has_flurry = true
 		_flurry_guaranteed     = int(flurry_val)
 		_flurry_bonus_chance   = fmod(flurry_val, 1.0)
 
@@ -490,16 +492,20 @@ func _deal_damage() -> void:
 		return
 	
 	if unit_type == "ranger":
+		SoundManager.play_sfx("bow_shoot")
 		_shoot_projectile()
 		return
 	
+	SoundManager.play_sfx("sword_swing")
 	target.take_damage(atk_damage)
 	
 	# Flurry: 
-	for _i: int in _flurry_guaranteed:
-		target.take_damage(atk_damage)
-	if _flurry_bonus_chance > 0.0 and randf() < _flurry_bonus_chance:
-		target.take_damage(atk_damage)
+	if _has_flurry:
+		SoundManager.play_sfx("melee_flurry")
+		if _flurry_guaranteed > 0:
+			target.take_damage(atk_damage * _flurry_guaranteed)
+		if _flurry_bonus_chance > 0.0 and randf() < _flurry_bonus_chance:
+			target.take_damage(atk_damage)
 
 
 func _shoot_projectile() -> void:
@@ -521,6 +527,7 @@ func _shoot_projectile() -> void:
 func take_damage(amount: int) -> void:
 	if current_state == State.DEAD:
 		return
+	SoundManager.play_sfx("unit_hit")
 	hp_current -= amount
 	health_bar.update(hp_current, hp_max)
 	_trigger_hit_anim()
@@ -529,6 +536,9 @@ func take_damage(amount: int) -> void:
 
 
 func _die() -> void:
+	if current_state == State.DEAD:
+		return
+	SoundManager.play_sfx("unit_death")
 	_change_state(State.DEAD)
 	remove_from_group("units")
 	died.emit(self)
@@ -687,6 +697,7 @@ func _state_dead(_delta: float) -> void:
 # --- Spawn animation ---
 
 func play_spawn_anim() -> void:
+	SoundManager.play_sfx("unit_spawn")
 	_shadow.scale   = Vector2.ZERO
 	_shadow_inner.scale   = Vector2.ZERO
 	sprite.scale    = Vector2.ZERO

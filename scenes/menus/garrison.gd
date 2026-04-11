@@ -101,7 +101,7 @@ func _make_unit_box(key: String, unit_type: String, level: int, count: int, sour
 	container.tooltip_text = "%s  lv %d  ×%d" % [unit_type.capitalize(), level, count]
 	
 	var backgroundTexture := AtlasTexture.new()
-	backgroundTexture.atlas = preload("res://assets/images/unit_sprite.png")
+	backgroundTexture.atlas = preload("res://assets/images/sprites/unit_sprite.png")
 	backgroundTexture.region = Rect2(0, 0, 64, 64)
 	var background := TextureRect.new()
 	background.texture = backgroundTexture

@@ -3,7 +3,7 @@ extends PanelContainer
 
 signal card_chosen(powerup: Dictionary, grade: int)
 
-const ICON_PLACEHOLDER = preload("res://assets/images/material-1.png")
+const ICON_PLACEHOLDER = preload("res://assets/images/loot/material-1.png")
 
 @onready var icon_rect:  TextureRect = $MarginContainer/VBox/IconSizeBox/IconRect
 @onready var name_label: Label = $MarginContainer/VBox/BottomMargin/BottomVBox/NameLabel
@@ -55,8 +55,12 @@ func _apply_style(hovered: bool) -> void:
 
 
 func _gui_input(event: InputEvent) -> void:
-	if event is InputEventMouseButton \
-	and event.button_index == MOUSE_BUTTON_LEFT \
-	and event.pressed:
-		card_chosen.emit(_powerup, _grade)
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+			SoundManager.play_ui("pu_select")
+			card_chosen.emit(_powerup, _grade)
+
+
+func _ready() -> void:
+	mouse_entered.connect(func(): SoundManager.play_ui("pu_hover"))
 

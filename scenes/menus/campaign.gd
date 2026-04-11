@@ -13,14 +13,10 @@ const UNIT_EMPTY_COLOR   := Color(0.12, 0.12, 0.16)
 const EQUIP_FILLED_COLOR := Color(0.30, 0.45, 0.60)
 const EQUIP_EMPTY_COLOR  := Color(0.12, 0.12, 0.16)
 
-const SLOT_KEYS := ["weapon", "armor", "artifact_1", "artifact_2", "artifact_3"]
-const GRADE_NAMES := {
-	1: "Common",
-	2: "Uncommon",
-	3: "Rare",
-	4: "Epic",
-	5: "Legendary",
-}
+const SLOT_KEYS   :Array = ["weapon", "armor", "artifact_1", "artifact_2", "artifact_3"]
+const SLOT_LABELS :Array = ["Weapon", "Armor", "Artifact I", "Artifact II", "Artifact III"]
+const SLOT_NODE_NAMES: Array = ["WeaponBox", "ArmorBox", "Artifact1Box", "Artifact2Box", "Artifact3Box"]
+const ITEM_ICON_PATH: String = "res://assets/images/items/%s.png"
 
 @onready var _easy_btn: Button       = $NavBarMargin/HBox/LeftPanel/Margin/VBox/EasyBtn
 @onready var _normal_btn: Button     = $NavBarMargin/HBox/LeftPanel/Margin/VBox/NormalBtn
@@ -36,7 +32,6 @@ func _ready() -> void:
 	_hard_btn.pressed.connect(_on_difficulty_selected.bind(DIFFICULTY_HARD))
 	_begin_btn.pressed.connect(_on_begin_run)
 	_update_difficulty_highlight()
-	_build_equipment_slots()
 	_refresh_loadout()
 
 
@@ -60,23 +55,6 @@ func _update_difficulty_highlight() -> void:
 		btn.disabled = is_active
 
 
-func _build_equipment_slots() -> void:
-	var slot_labels := ["Weapon", "Armor", "Artifact", "Artifact", "Artifact"]
-	for slot_name in slot_labels:
-		var col := VBoxContainer.new()
-		col.add_theme_constant_override("separation", 4)
-		var square := ColorRect.new()
-		square.custom_minimum_size = Vector2(64, 64)
-		square.color = EQUIP_EMPTY_COLOR
-		col.add_child(square)
-		var lbl := Label.new()
-		lbl.text = slot_name
-		lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		lbl.add_theme_font_size_override("font_size", 10)
-		col.add_child(lbl)
-		_equip_row.add_child(col)
-
-
 func _refresh_loadout() -> void:
 	var save := SaveManager.current_save
 	if save == null:
@@ -87,22 +65,30 @@ func _refresh_loadout() -> void:
 
 func _refresh_equipment(save: SaveData) -> void:
 	var equipped: Dictionary = {}
-	for equipment in save.equipment_inv:
+	for equipment: Dictionary in save.equipment_inv:
 		var s: String = equipment.get("equipped_slot", "")
 		if s != "":
 			equipped[s] = equipment
-	var cols := _equip_row.get_children()
-	for i in range(min(cols.size(), SLOT_KEYS.size())):
-		var square: ColorRect = cols[i].get_child(0)
-		if equipped.has(SLOT_KEYS[i]):
-			var item: Dictionary = equipped[SLOT_KEYS[i]]
-			var def: Dictionary  = GameData.get_equipment(item.get("id", ""))
-			var grade: int       = item.get("grade", 1)
-			square.color        = EQUIP_FILLED_COLOR
-			square.tooltip_text = "%s %s" % [GRADE_NAMES.get(grade, ""), def.get("name", item.get("id", ""))]
+
+	var boxes: Array = _equip_row.get_children()
+	for i: int in range(min(boxes.size(), SLOT_KEYS.size())):
+		var box: ItemBox = boxes[i]
+		var key: String = SLOT_KEYS[i]
+
+		if equipped.has(key):
+			var item: Dictionary = equipped[key]
+			var item_id: String = item.get("id", "")
+			var grade: int = item.get("grade", 1)
+			var level: int = item.get("level", 1)
+			var icon_path: String = ITEM_ICON_PATH % item_id
+			var icon: Texture2D = load(icon_path) if ResourceLoader.exists(icon_path) else null
+			var def: Dictionary = GameData.get_equipment(item_id)
+			box.setup(icon, grade)
+			box.set_slot(SLOT_LABELS[i])
+			box.tooltip_text = "%s %s  Lv %d" % [GameData.get_grade_name(grade), def.get("name", item_id), level]
 		else:
-			square.color        = EQUIP_EMPTY_COLOR
-			square.tooltip_text = ""
+			box.setup(null, 0)
+			box.tooltip_text = SLOT_LABELS[i]
 
 
 func _refresh_army(save: SaveData) -> void:
@@ -131,7 +117,7 @@ func _make_unit_box(unitType: String, level: int, count: int) -> Control:
 	container.tooltip_text = "%s  lv %d  ×%d" % [unitType.capitalize(), level, count]
 	
 	var backgroundTexture := AtlasTexture.new()
-	backgroundTexture.atlas = preload("res://assets/images/unit_sprite.png")
+	backgroundTexture.atlas = preload("res://assets/images/sprites/unit_sprite.png")
 	backgroundTexture.region = Rect2(0, 0, 64, 64)
 	
 	var background := TextureRect.new()

@@ -33,15 +33,15 @@
 		"description": "A reliable blade that turns warriors into a cutting edge."
 	},
 	{
-		"id": "shortbow",
-		"name": "Shortbow",
+		"id": "crossbow",
+		"name": "Crossbow",
 		"slot": "weapon",
 		"category": "stat_multiplier",
 		"stat": "atk_damage",
 		"filter": "ranger",
 		"base_value": 0.08,
 		"min_grade": 1,
-		"description": "A light bow that lets rangers loose arrows with greater force."
+		"description": "The crossbow's brutal draw weight drives bolts clean through enemy armor."
 	},
 	{
 		"id": "longbow",

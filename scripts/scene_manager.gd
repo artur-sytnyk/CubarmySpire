@@ -8,13 +8,17 @@ var _history: Array[String] = []
 var _current_scene_path: String = ""
 var _is_transitioning: bool = false
 
+
+
 func _ready() -> void:
 	call_deferred("_init_refs")
+
 
 func _init_refs() -> void:
 	_scene_container = get_tree().root.get_node("Root/SceneContainer")
 	_animation_player = get_tree().root.get_node("Root/TransitionLayer/ColorRect/AnimationPlayer")
 	_current_scene_path = "res://scenes/menus/IntroMenu.tscn"
+
 
 func go_to(scene_path: String, clear_history: bool = false) -> void:
 	if _is_transitioning:
@@ -25,25 +29,30 @@ func go_to(scene_path: String, clear_history: bool = false) -> void:
 		_history.push_back(_current_scene_path)
 	await _do_transition(scene_path)
 
+
 func go_back() -> void:
 	if _is_transitioning or _history.is_empty():
 		return
 	var previous = _history.pop_back()
 	await _do_transition(previous)
 
+
 func replace(scene_path: String) -> void:
 	if _is_transitioning:
 		return
 	await _do_transition(scene_path)
 
+
 func clear_history() -> void:
 	_history.clear()
 
+
 func _do_transition(scene_path: String) -> void:
 	_is_transitioning = true
+	SoundManager.play_ui("transition")
 
 	# Reset load screen position.
-	var w: float = _animation_player.get_parent().get_viewport().get_visible_rect().size.x
+	var w: float = _animation_player.get_parent().get_viewport().get_visible_rect().size.x * 1.4
 	_animation_player.get_parent().position = Vector2(w, 0)
 
 	# Slide in load screen.

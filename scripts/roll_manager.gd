@@ -1,6 +1,16 @@
 extends Node
 
 
+# Randomness calibration by difficulty
+func get_calibrated_progress() -> int:
+	var save :SaveData = SaveManager.get_current()
+	var total := 0
+	for diff in save.max_stage_reached:
+		total += save.max_stage_reached[diff] * GameData.DIFFICULTY_MULTIPLIERS.get(diff, 1)
+	return total
+
+
+# Rolls
 func roll_powerup_offers() -> Array:
 	var result: Array = []
 	var used_ids: Array = []
@@ -51,7 +61,7 @@ func roll_artifact(grade: int) -> Dictionary:
 
 
 func roll_shop_equipment() -> Array:
-	var calibrated: int = GameData.get_calibrated_progress()
+	var calibrated: int = get_calibrated_progress()
 	var item_level: int = maxi(1, calibrated / 5)
 	var result: Array   = []
 	var used_ids: Array = []

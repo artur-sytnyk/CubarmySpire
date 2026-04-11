@@ -13,6 +13,8 @@ const NAV_HEIGHT: float = 60.0
 @onready var animation_player: AnimationPlayer = $TransitionLayer/ColorRect/AnimationPlayer
 @onready var _nav_bar: CanvasLayer = $NavBar
 @onready var _settings_overlay: CanvasLayer = $SettingsOverlay
+@onready var _confirm_dialog: ConfirmDialog = $ConfirmDialog
+
 
 func _ready() -> void:
 	# Viewport resize — rebuild animations with new width.
@@ -20,6 +22,7 @@ func _ready() -> void:
 
 	# Initial color_rect position and animations.
 	var w: float = get_viewport().get_visible_rect().size.x
+	color_rect.size.x = w * 1.4
 	color_rect.position = Vector2(w, 0)
 	_setup_transition_animations()
 
@@ -31,43 +34,51 @@ func _ready() -> void:
 	SceneManager.scene_changed.connect(_on_scene_changed)
 
 	# Load initial scene.
+	SoundManager.play_music("start_menu", false)
 	var menu = load("res://scenes/menus/IntroMenu.tscn").instantiate()
 	scene_container.add_child(menu)
+
 
 # ── Viewport resize ────────────────────────────────────────────────────────
 
 func _on_viewport_size_changed() -> void:
 	var w: float = get_viewport().get_visible_rect().size.x
+	color_rect.size.x = w * 1.4
 	color_rect.position = Vector2(w, 0)
 	var library := animation_player.get_animation_library("")
 	library.remove_animation("slide_in")
 	library.remove_animation("slide_out")
 	_setup_transition_animations()
 
+
 # ── Transition animations ──────────────────────────────────────────────────
 
 func _setup_transition_animations() -> void:
-	var w: float = get_viewport().get_visible_rect().size.x
+	var w: float = get_viewport().get_visible_rect().size.x * 1.4
+
 
 	var slide_in := Animation.new()
 	slide_in.length = 0.2
 	var in_track := slide_in.add_track(Animation.TYPE_VALUE)
 	slide_in.track_set_path(in_track, ":position")
 	slide_in.track_insert_key(in_track, 0.0, Vector2(w, 0))
-	slide_in.track_insert_key(in_track, 0.2, Vector2(0, 0))
+	slide_in.track_insert_key(in_track, 0.2, Vector2(-w * 0.15, 0))
 	slide_in.value_track_set_update_mode(in_track, Animation.UPDATE_CONTINUOUS)
+
 
 	var slide_out := Animation.new()
 	slide_out.length = 0.2
 	var out_track := slide_out.add_track(Animation.TYPE_VALUE)
 	slide_out.track_set_path(out_track, ":position")
-	slide_out.track_insert_key(out_track, 0.0, Vector2(0, 0))
+	slide_out.track_insert_key(out_track, 0.0, Vector2(-w * 0.15, 0))
 	slide_out.track_insert_key(out_track, 0.2, Vector2(-w, 0))
 	slide_out.value_track_set_update_mode(out_track, Animation.UPDATE_CONTINUOUS)
+
 
 	var library := animation_player.get_animation_library("")
 	library.add_animation("slide_in", slide_in)
 	library.add_animation("slide_out", slide_out)
+
 
 # ── Scene changed ──────────────────────────────────────────────────────────
 
@@ -75,8 +86,10 @@ func _on_scene_changed(path: String) -> void:
 	var should_show := path not in NAV_HIDDEN_SCENES
 	_nav_bar.visible = should_show
 	if should_show:
+		SoundManager.play_music("menu")
 		_nav_bar.set_active_tab(path)
 	call_deferred("_apply_scene_offset", should_show)
+
 
 # Push the loaded scene's root Control down so NavBar doesn't overlap content.
 func _apply_scene_offset(nav_visible: bool) -> void:
@@ -88,10 +101,16 @@ func _apply_scene_offset(nav_visible: bool) -> void:
 		var offset := NAV_HEIGHT if nav_visible else 0.0
 		root.set_anchor_and_offset(SIDE_TOP, 0.0, offset)
 
+
 # ── Settings ───────────────────────────────────────────────────────────────
 
 func _on_open_settings() -> void:
 	_settings_overlay.open()
 
+
 func _on_close_settings() -> void:
 	_settings_overlay.close()
+
+
+func get_confirm_dialog() -> ConfirmDialog:
+	return _confirm_dialog

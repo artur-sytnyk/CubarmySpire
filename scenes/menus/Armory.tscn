@@ -1,9 +1,10 @@
-[gd_scene load_steps=9 format=3 uid="uid://cg2fjtwacwrk1"]
+[gd_scene load_steps=10 format=3 uid="uid://cg2fjtwacwrk1"]
 
 [ext_resource type="Script" path="res://scenes/menus/armory.gd" id="1_0xe7l"]
 [ext_resource type="StyleBox" uid="uid://c7yrhugtsp115" path="res://ui/styles/panel_bg.tres" id="2_3grjq"]
 [ext_resource type="StyleBox" uid="uid://dy82hd864qo42" path="res://ui/styles/panel_float.tres" id="3_2vgrd"]
 [ext_resource type="StyleBox" uid="uid://dqrbn6psw1s6p" path="res://ui/styles/separator.tres" id="4_t2klq"]
+[ext_resource type="PackedScene" uid="uid://cottoqyrw7ci2" path="res://objects/item_box/ItemBox.tscn" id="4_vnbo0"]
 [ext_resource type="StyleBox" uid="uid://otorqavmjdsr" path="res://ui/styles/btn_normal.tres" id="5_xe3r2"]
 [ext_resource type="StyleBox" uid="uid://bpgl4yyg6x5dk" path="res://ui/styles/btn_hover.tres" id="6_fiipk"]
 [ext_resource type="StyleBox" uid="uid://bf4w0kmaihp72" path="res://ui/styles/btn_pressed.tres" id="7_s0cwp"]
@@ -65,37 +66,32 @@ theme_override_styles/separator = ExtResource("4_t2klq")
 
 [node name="SlotsVBox" type="VBoxContainer" parent="NavBarMargin/HBoxContainer/LeftPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
-theme_override_constants/separation = 20
+theme_override_constants/separation = 16
 
-[node name="WeaponSlot" type="PanelContainer" parent="NavBarMargin/HBoxContainer/LeftPanel/MarginContainer/VBoxContainer/SlotsVBox"]
-custom_minimum_size = Vector2(120, 80)
+[node name="WeaponBox" parent="NavBarMargin/HBoxContainer/LeftPanel/MarginContainer/VBoxContainer/SlotsVBox" instance=ExtResource("4_vnbo0")]
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_styles/panel = ExtResource("3_2vgrd")
+size_flags_vertical = 4
 
-[node name="ArmorSlot" type="PanelContainer" parent="NavBarMargin/HBoxContainer/LeftPanel/MarginContainer/VBoxContainer/SlotsVBox"]
-custom_minimum_size = Vector2(120, 80)
+[node name="ArmorBox" parent="NavBarMargin/HBoxContainer/LeftPanel/MarginContainer/VBoxContainer/SlotsVBox" instance=ExtResource("4_vnbo0")]
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_styles/panel = ExtResource("3_2vgrd")
+size_flags_vertical = 4
 
-[node name="Artifact1Slot" type="PanelContainer" parent="NavBarMargin/HBoxContainer/LeftPanel/MarginContainer/VBoxContainer/SlotsVBox"]
-custom_minimum_size = Vector2(120, 80)
+[node name="Artifact1Box" parent="NavBarMargin/HBoxContainer/LeftPanel/MarginContainer/VBoxContainer/SlotsVBox" instance=ExtResource("4_vnbo0")]
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_styles/panel = ExtResource("3_2vgrd")
+size_flags_vertical = 4
 
-[node name="Artifact2Slot" type="PanelContainer" parent="NavBarMargin/HBoxContainer/LeftPanel/MarginContainer/VBoxContainer/SlotsVBox"]
-custom_minimum_size = Vector2(120, 80)
+[node name="Artifact2Box" parent="NavBarMargin/HBoxContainer/LeftPanel/MarginContainer/VBoxContainer/SlotsVBox" instance=ExtResource("4_vnbo0")]
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_styles/panel = ExtResource("3_2vgrd")
+size_flags_vertical = 4
 
-[node name="Artifact3Slot" type="PanelContainer" parent="NavBarMargin/HBoxContainer/LeftPanel/MarginContainer/VBoxContainer/SlotsVBox"]
-custom_minimum_size = Vector2(120, 80)
+[node name="Artifact3Box" parent="NavBarMargin/HBoxContainer/LeftPanel/MarginContainer/VBoxContainer/SlotsVBox" instance=ExtResource("4_vnbo0")]
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_styles/panel = ExtResource("3_2vgrd")
+size_flags_vertical = 4
 
 [node name="RightPanel" type="PanelContainer" parent="NavBarMargin/HBoxContainer"]
 layout_mode = 2
@@ -139,11 +135,9 @@ theme_override_constants/margin_bottom = 16
 layout_mode = 2
 theme_override_constants/separation = 32
 
-[node name="ItemIcon" type="ColorRect" parent="NavBarMargin/HBoxContainer/RightPanel/MarginContainer/VBoxContainer/DetailPanel/MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(120, 120)
+[node name="ItemIcon" parent="NavBarMargin/HBoxContainer/RightPanel/MarginContainer/VBoxContainer/DetailPanel/MarginContainer/HBoxContainer" instance=ExtResource("4_vnbo0")]
+custom_minimum_size = Vector2(120, 80)
 layout_mode = 2
-size_flags_vertical = 4
-color = Color(0.113725, 0.188235, 0.2, 1)
 
 [node name="InfoVBox" type="VBoxContainer" parent="NavBarMargin/HBoxContainer/RightPanel/MarginContainer/VBoxContainer/DetailPanel/MarginContainer/HBoxContainer"]
 layout_mode = 2
@@ -228,5 +222,5 @@ size_flags_vertical = 3
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme_override_constants/h_separation = 8
-theme_override_constants/v_separation = 8
+theme_override_constants/h_separation = 12
+theme_override_constants/v_separation = 12

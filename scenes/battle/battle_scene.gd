@@ -9,6 +9,8 @@ extends Node2D
 @onready var pause_button: Button = $UI/PauseButton
 @onready var powerup_dialog = $UI/PowerupDialog
 @onready var run_finalized_dialog = $UI/RunFinalizedDialog
+
+@onready var stage_label = $UI/StageLabel
 # Pause
 @onready var _pause_overlay: CanvasLayer = $UI/PauseOverlay
 @onready var _resume_btn: Button = $UI/PauseOverlay/DimRect/VBox/ResumeBtn
@@ -20,9 +22,11 @@ var loot_scene: PackedScene = preload("res://objects/loot_drop/LootDrop.tscn")
 var _loot_objects: Array[Node] = []
 
 func _ready() -> void:
+	SoundManager.play_music("battle")
 	_connect_signals()
 	army_manager.setup(player_spawn, enemy_spawn, unit_scene)
 	army_manager.start_battle()
+	stage_label.text = "Floor: %d" % RunState.stage
 
 
 func _connect_signals() -> void:
@@ -39,6 +43,8 @@ func _connect_signals() -> void:
 # --- Battle outcomes ---
 
 func _on_battle_won() -> void:
+	SoundManager.duck_music()
+	SoundManager.play_ui("stage_win")
 	pause_button.disabled = true
 	_abandon_btn.disabled = true
 	_collect_loot()
@@ -46,7 +52,7 @@ func _on_battle_won() -> void:
 
 
 func _collect_loot() -> void:
-	# TODO possible to accumulate from more enemy/neutral armies as game expands
+	# TODO neutral armies looting as game expands
 	RunState.collect_gold(army_manager.enemy_army.pending_gold)
 	RunState.collect_materials(army_manager.enemy_army.pending_loot)
 
@@ -67,6 +73,7 @@ func _on_powerup_chosen(pu: Dictionary, grade: int) -> void:
 
 
 func _on_battle_lost() -> void:
+	SoundManager.play_music("run_end")
 	RunState.finalize_run()
 
 
@@ -89,6 +96,7 @@ func _on_resume_pressed() -> void:
 
 
 func _on_abandon_pressed() -> void:
+	SoundManager.play_ui("run_abandon")
 	get_tree().paused = false
 	SceneManager.go_to("res://scenes/menus/Campaign.tscn", true)
 

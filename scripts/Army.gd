@@ -19,6 +19,8 @@ var active_count: int = 0
 var pending_loot: Dictionary = {}
 var pending_gold: int = 0
 
+var all_dead_triggered: bool = false
+
 # Spawn config
 var spawn_point: Marker2D
 var unit_scene: PackedScene
@@ -59,6 +61,7 @@ func _clear() -> void:
 	active_count = 0
 	pending_loot.clear()
 	pending_gold = 0
+	all_dead_triggered = false
 
 
 # --- Spawn ---
@@ -92,6 +95,8 @@ func _get_spawn_position() -> Vector2:
 # --- Unit death ---
 
 func _on_unit_died(unit: Unit) -> void:
+	if not alive_units.has(unit):
+		return
 	alive_units.erase(unit)
 	active_count -= 1
 	
@@ -106,7 +111,9 @@ func _on_unit_died(unit: Unit) -> void:
 		loot_dropped.emit(material_drop, gold_drop, unit.global_position)
 	
 	if alive_units.is_empty() and reserve_queue.is_empty():
-		all_dead.emit()
+		if not all_dead_triggered:
+			all_dead_triggered = true
+			all_dead.emit()
 	elif not reserve_queue.is_empty() and active_count < active_limit:
 		_spawn_unit(reserve_queue.pop_front())
 

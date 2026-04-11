@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://byxj6uoigny4d"]
+[gd_scene load_steps=9 format=3 uid="uid://byxj6uoigny4d"]
 
 [ext_resource type="Script" path="res://scenes/menus/campaign.gd" id="1_qy2ix"]
 [ext_resource type="StyleBox" uid="uid://otorqavmjdsr" path="res://ui/styles/btn_normal.tres" id="2_7wni7"]
@@ -6,6 +6,7 @@
 [ext_resource type="StyleBox" uid="uid://bpgl4yyg6x5dk" path="res://ui/styles/btn_hover.tres" id="3_p6ijn"]
 [ext_resource type="StyleBox" uid="uid://bf4w0kmaihp72" path="res://ui/styles/btn_pressed.tres" id="4_30ao8"]
 [ext_resource type="StyleBox" uid="uid://dqrbn6psw1s6p" path="res://ui/styles/separator.tres" id="5_pcbew"]
+[ext_resource type="PackedScene" uid="uid://cottoqyrw7ci2" path="res://objects/item_box/ItemBox.tscn" id="7_0nbiq"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_twxuf"]
 
@@ -167,8 +168,23 @@ text = "Equipment"
 layout_mode = 2
 theme_override_constants/separation = 24
 
+[node name="WeaponBox" parent="NavBarMargin/HBox/RightPanel/Margin/VBox/EquipmentRow" instance=ExtResource("7_0nbiq")]
+layout_mode = 2
+
+[node name="ArmorBox" parent="NavBarMargin/HBox/RightPanel/Margin/VBox/EquipmentRow" instance=ExtResource("7_0nbiq")]
+layout_mode = 2
+
+[node name="Artifact1Box" parent="NavBarMargin/HBox/RightPanel/Margin/VBox/EquipmentRow" instance=ExtResource("7_0nbiq")]
+layout_mode = 2
+
+[node name="Artifact2Box" parent="NavBarMargin/HBox/RightPanel/Margin/VBox/EquipmentRow" instance=ExtResource("7_0nbiq")]
+layout_mode = 2
+
+[node name="Artifact3Box" parent="NavBarMargin/HBox/RightPanel/Margin/VBox/EquipmentRow" instance=ExtResource("7_0nbiq")]
+layout_mode = 2
+
 [node name="Spacer" type="Control" parent="NavBarMargin/HBox/RightPanel/Margin/VBox"]
-custom_minimum_size = Vector2(0, 24)
+custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 
 [node name="Army" type="Label" parent="NavBarMargin/HBox/RightPanel/Margin/VBox"]

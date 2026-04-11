@@ -54,7 +54,7 @@ func collect_materials(drops: Dictionary) -> void:
 
 
 func finalize_run() -> void:
-	print("On run finalized: %d gold " % gold_collected, loot_collected)
+	print("Run finalized: %d gold " % gold_collected, loot_collected)
 	gold_collected = gold_collected * gold_multiplier
 	var materials_collected: Dictionary = {}
 	for grade in loot_collected:

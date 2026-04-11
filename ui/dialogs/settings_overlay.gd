@@ -3,11 +3,13 @@ extends CanvasLayer
 signal close_requested
 
 const CONFIG_PATH := "user://settings.cfg"
-const BUS_SFX     := "SFX"
 const BUS_MUSIC   := "Music"
+const BUS_SFX     := "SFX"
+const BUS_UI      := "UI"
 
-@onready var _sfx_slider: HSlider       = $DimRect/Panel/VBoxContainer/SfxRow/SfxSlider
 @onready var _music_slider: HSlider     = $DimRect/Panel/VBoxContainer/MusicRow/MusicSlider
+@onready var _sfx_slider: HSlider       = $DimRect/Panel/VBoxContainer/SfxRow/SfxSlider
+@onready var _ui_slider: HSlider     	= $DimRect/Panel/VBoxContainer/UiRow/UiSlider
 @onready var _reset_btn: Button         = $DimRect/Panel/VBoxContainer/ResetBtn
 @onready var _quit_btn: Button          = $DimRect/Panel/VBoxContainer/QuitBtn
 @onready var _close_btn: Button         = $DimRect/Panel/VBoxContainer/CloseBtn
@@ -18,6 +20,7 @@ func _ready() -> void:
 	
 	_sfx_slider.value_changed.connect(_on_sfx_changed)
 	_music_slider.value_changed.connect(_on_music_changed)
+	_ui_slider.value_changed.connect(_on_ui_changed)
 	_reset_btn.pressed.connect(_on_reset_pressed)
 	_quit_btn.pressed.connect(_on_quit_pressed)
 	_close_btn.pressed.connect(func(): close_requested.emit())
@@ -34,13 +37,20 @@ func close() -> void:
 
 # ── Volume ─────────────────────────────────────────────────────────────────
 
+func _on_music_changed(value: float) -> void:
+	_set_bus_volume(BUS_MUSIC, value)
+	_save_settings()
+
+
 func _on_sfx_changed(value: float) -> void:
 	_set_bus_volume(BUS_SFX, value)
 	_save_settings()
 
-func _on_music_changed(value: float) -> void:
-	_set_bus_volume(BUS_MUSIC, value)
+
+func _on_ui_changed(value: float) -> void:
+	_set_bus_volume(BUS_UI, value)
 	_save_settings()
+
 
 func _set_bus_volume(bus_name: String, linear: float) -> void:
 	var idx := AudioServer.get_bus_index(bus_name)
@@ -79,22 +89,28 @@ func _on_dim_input(event: InputEvent) -> void:
 
 func _save_settings() -> void:
 	var cfg := ConfigFile.new()
-	cfg.set_value("audio", "sfx",   _sfx_slider.value)
 	cfg.set_value("audio", "music", _music_slider.value)
+	cfg.set_value("audio", "sfx",   _sfx_slider.value)
+	cfg.set_value("audio", "ui",   _ui_slider.value)
 	cfg.save(CONFIG_PATH)
+
 
 func _load_settings() -> void:
 	var cfg := ConfigFile.new()
 	if cfg.load(CONFIG_PATH) != OK:
 		# First launch defaults.
-		_sfx_slider.value   = 0.5
 		_music_slider.value = 0.5
+		_sfx_slider.value   = 0.5
+		_ui_slider.value = 0.5
 		_apply_all_volumes()
 		return
-	_sfx_slider.value   = cfg.get_value("audio", "sfx",   0.5)
 	_music_slider.value = cfg.get_value("audio", "music", 0.5)
+	_sfx_slider.value   = cfg.get_value("audio", "sfx",   0.5)
+	_ui_slider.value = cfg.get_value("audio", "ui", 0.5)
 	_apply_all_volumes()
 
+
 func _apply_all_volumes() -> void:
-	_set_bus_volume(BUS_SFX,   _sfx_slider.value)
 	_set_bus_volume(BUS_MUSIC, _music_slider.value)
+	_set_bus_volume(BUS_SFX,   _sfx_slider.value)
+	_set_bus_volume(BUS_UI, _ui_slider.value)

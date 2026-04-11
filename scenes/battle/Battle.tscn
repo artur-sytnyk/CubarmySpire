@@ -31,8 +31,8 @@ corner_radius_bottom_left = 16
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cfv5k"]
 
 [sub_resource type="Gradient" id="Gradient_4pmrw"]
-offsets = PackedFloat32Array(0.469965, 0.614841)
-colors = PackedColorArray(0.0788561, 0.124373, 0.399513, 1, 0.742463, 1, 0.999844, 1)
+offsets = PackedFloat32Array(0.5053, 0.699647)
+colors = PackedColorArray(0.00392157, 0.121569, 0.427451, 1, 1, 1, 1, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_3t8uh"]
 gradient = SubResource("Gradient_4pmrw")
@@ -127,6 +127,22 @@ visible = false
 [node name="PauseOverlay" parent="UI" instance=ExtResource("6_bwpjh")]
 visible = false
 
+[node name="StageLabel" type="Label" parent="UI"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -114.0
+offset_top = 5.0
+offset_right = -10.0
+offset_bottom = 39.0
+grow_horizontal = 0
+theme_override_colors/font_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_colors/font_outline_color = Color(0.537255, 0.941176, 0.890196, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 20
+text = "Stage: 12"
+horizontal_alignment = 2
+
 [node name="Arena" type="Node2D" parent="."]
 
 [node name="BackgroundRect" type="TextureRect" parent="Arena"]
@@ -203,4 +219,4 @@ range_item_cull_mask = 2
 texture = SubResource("GradientTexture2D_nxnl5")
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
-color = Color(0.784314, 0.627451, 1, 1)
+color = Color(0.878431, 0.784314, 1, 1)

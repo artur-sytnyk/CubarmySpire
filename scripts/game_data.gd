@@ -33,6 +33,16 @@ const LOOT_COLLECT_DURATION: float = 0.6
 const LOOT_SCATTER_RADIUS: float = 50.0
 const LOOT_CAP: int = 120
 
+# Sound effects
+const BUS_MUSIC: String = "Music"
+const BUS_SFX: String = "SFX"
+const BUS_UI: String = "UI"
+const MUSIC_FADE_IN_DURATION:  float = 0.8
+const MUSIC_FADE_OUT_DURATION: float = 0.6
+const BATTLE_SILENCE_DURATION: float = 5.0 
+
+
+
 func _ready() -> void:
 	_load_units()
 	_load_powerups()
@@ -77,15 +87,7 @@ func get_powerup(id: String) -> Dictionary:
 
 
 func get_equipment(id: String) -> Dictionary:
-	return equipment.get(id, { "name": id, "slot": "", "category": "", "description": "" })
-
-
-func get_calibrated_progress() -> int:
-	var save :SaveData = SaveManager.get_current()
-	var total := 0
-	for diff in save.max_stage_reached:
-		total += save.max_stage_reached[diff] * DIFFICULTY_MULTIPLIERS.get(diff, 1)
-	return total
+	return equipment.get(id, {})
 
 
 func get_grade_name(grade: int) -> String:

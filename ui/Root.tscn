@@ -1,9 +1,15 @@
-[gd_scene load_steps=12 format=3 uid="uid://byb0ktv2dvebp"]
+[gd_scene load_steps=15 format=3 uid="uid://byb0ktv2dvebp"]
 
 [ext_resource type="Script" path="res://ui/root_scene.gd" id="1_cuvcg"]
+[ext_resource type="Shader" path="res://assets/materials/transition.gdshader" id="2_2sfok"]
 [ext_resource type="PackedScene" uid="uid://b8630mgnw2aon" path="res://ui/dialogs/SettingsOverlay.tscn" id="2_m7heq"]
 [ext_resource type="Script" path="res://ui/navbar.gd" id="2_os5tf"]
 [ext_resource type="Texture2D" uid="uid://ybmqmxp7fio6" path="res://assets/images/cog.png" id="3_cnt6h"]
+[ext_resource type="PackedScene" uid="uid://bgdr3vboeoech" path="res://ui/dialogs/ConfirmDialog.tscn" id="6_2x2cy"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pibsg"]
+shader = ExtResource("2_2sfok")
+shader_parameter/main_color = Color(0.3725, 0.7529, 0.7059, 1)
 
 [sub_resource type="Animation" id="Animation_nt51e"]
 length = 0.001
@@ -70,11 +76,14 @@ color = Color(0.137255, 0.254902, 0.27451, 1)
 layer = 5
 
 [node name="ColorRect" type="ColorRect" parent="TransitionLayer"]
+material = SubResource("ShaderMaterial_pibsg")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 color = Color(0.372549, 0.752941, 0.705882, 1)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="TransitionLayer/ColorRect"]
@@ -194,3 +203,6 @@ expand_icon = true
 
 [node name="SettingsOverlay" parent="." instance=ExtResource("2_m7heq")]
 layer = 10
+
+[node name="ConfirmDialog" parent="." instance=ExtResource("6_2x2cy")]
+layer = 12

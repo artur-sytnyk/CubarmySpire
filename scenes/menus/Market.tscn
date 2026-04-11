@@ -6,7 +6,7 @@
 [ext_resource type="StyleBox" uid="uid://otorqavmjdsr" path="res://ui/styles/btn_normal.tres" id="4_3ho8h"]
 [ext_resource type="StyleBox" uid="uid://bpgl4yyg6x5dk" path="res://ui/styles/btn_hover.tres" id="5_o2afq"]
 [ext_resource type="StyleBox" uid="uid://bf4w0kmaihp72" path="res://ui/styles/btn_pressed.tres" id="6_nwrfw"]
-[ext_resource type="Texture2D" uid="uid://bhb2ni7uhjci6" path="res://assets/images/gold.png" id="7_ladsr"]
+[ext_resource type="Texture2D" uid="uid://bhb2ni7uhjci6" path="res://assets/images/loot/gold.png" id="7_ladsr"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qtgsl"]
 

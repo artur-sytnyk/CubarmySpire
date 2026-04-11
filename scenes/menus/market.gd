@@ -84,7 +84,7 @@ func _make_unit_row(unit_type: String, level: int) -> Control:
 	margin.add_child(hbox)
 
 	var unitTexture := AtlasTexture.new()
-	unitTexture.atlas = preload("res://assets/images/unit_sprite.png")
+	unitTexture.atlas = preload("res://assets/images/sprites/unit_sprite.png")
 	unitTexture.region = Rect2(0, 0, 64, 64)
 	var unitIcon := TextureRect.new()
 	unitIcon.texture = unitTexture
@@ -161,6 +161,7 @@ func _on_buy_unit(unit_type: String, level: int, cost: int) -> void:
 	if save.gold < cost:
 		_show_error("Not enough gold.")
 		return
+	SoundManager.play_ui("purchase")
 	save.gold -= cost
 	var target: Array = save.army_active if save.army_active.size() < 20 else save.army_barracks
 	target.append({ "unit_type": unit_type, "level": level })
@@ -361,6 +362,7 @@ func _on_buy_equipment(item: Dictionary, cost: int) -> void:
 	if not SaveManager.has_equipment_space():
 		_show_error("Inventory is full!")
 		return
+	SoundManager.play_ui("purchase")
 	save.gold -= cost
 	SaveManager.try_add_equipment(item.duplicate())
 	if _selected_equip_idx >= 0 and _selected_equip_idx < save.shop_equipment.size():
@@ -375,7 +377,7 @@ func _on_buy_equipment(item: Dictionary, cost: int) -> void:
 func _get_alchemy_cost(grade: int) -> Dictionary:
 	var same_tier: int  = mini(grade, 5)
 	var prev_tier: int  = same_tier - 1
-	var scale: float    = 1.0 + GameData.get_calibrated_progress() * 0.20
+	var scale: float    = 1.0 + RollManager.get_calibrated_progress() * 0.20
 	return {
 		"same_tier":  same_tier,
 		"same_count": ceili(5.0 * scale),
@@ -385,7 +387,7 @@ func _get_alchemy_cost(grade: int) -> Dictionary:
 
 
 func _get_alchemy_level_range() -> Array:
-	var base: int = GameData.get_calibrated_progress() / 5
+	var base: int = RollManager.get_calibrated_progress() / 5
 	if base <= 1:
 		return [1, 1]
 	return [maxi(1, base - 2), base + 2]
@@ -570,6 +572,7 @@ func _on_request_crafting(grade_idx: int) -> void:
 		_show_error("Not enough materials.")
 		return
 
+	SoundManager.play_ui("equip")
 	# Deduct materials.
 	save.materials_inv[cost.same_tier] = save.materials_inv.get(cost.same_tier, 0) - cost.same_count
 	if cost.prev_count > 0:
@@ -632,7 +635,6 @@ func _refresh_bottom_bar() -> void:
 
 
 func _rebuild_materials_row(save: SaveData) -> void:
-	print("in market save materials", save.materials_inv)
 	for child in _materials_row.get_children():
 		child.queue_free()
 	for grade: int in [1, 2, 3, 4, 5]:
@@ -646,7 +648,7 @@ func _make_material_item(grade: int, count: int) -> Control:
 	
 	# Left — icon only
 	var icon := TextureRect.new()
-	icon.texture = load("res://assets/images/material-1.png")
+	icon.texture = load("res://assets/images/loot/material-1.png")
 	icon.custom_minimum_size = Vector2(48, 48)
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
@@ -705,6 +707,7 @@ func _on_sell_materials(grade: int) -> void:
 	var to_sell: int     = mini(count, amount)
 	if to_sell <= 0:
 		return
+	SoundManager.play_ui("purchase")
 	save.materials_inv[grade] = count - to_sell
 	save.gold += to_sell * GameData.get_mat_price(grade)
 	SaveManager.save_current()

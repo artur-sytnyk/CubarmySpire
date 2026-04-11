@@ -84,6 +84,7 @@ func load_or_create(slot: int) -> SaveData:
 		save = load_slot(slot)
 	else:
 		save = create_new_save(slot)
+	_sanitize_equipment(save)
 	set_current(save)
 	return save
 
@@ -100,6 +101,8 @@ func update_max_stage(difficulty: String, stage: int) -> bool:
 	return false
 
 
+# Equipment
+
 func has_equipment_space() -> bool:
 	return current_save.equipment_inv.size() < GameData.MAX_ITEM_STACK
 
@@ -110,3 +113,17 @@ func try_add_equipment(item: Dictionary) -> bool:
 	current_save.equipment_inv.append(item)
 	return true
 
+
+func _sanitize_equipment(save: SaveData) -> void:
+	var removed: Array[String] = []
+	save.equipment_inv = save.equipment_inv.filter(func(item: Dictionary) -> bool:
+		var def: Dictionary = GameData.get_equipment(item.get("id", ""))
+		if def.is_empty():
+			removed.append(item.get("id", "unknown"))
+			return false
+		return true
+	)
+	if removed.is_empty():
+		return
+	print("SANITIZED EQUIPMENT ", removed)
+	save_current()

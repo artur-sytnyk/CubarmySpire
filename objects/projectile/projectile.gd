@@ -125,6 +125,7 @@ func _on_body_entered(body: Node) -> void:
 		return
 
 	already_hit.append(body)
+	#SoundManager.play_sfx("arrow_impact")
 	if is_ricochet:
 		body.take_damage(ricochet_damage)
 	else:

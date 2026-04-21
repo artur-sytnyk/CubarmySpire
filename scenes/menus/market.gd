@@ -295,7 +295,7 @@ func _show_equip_detail(item: Dictionary) -> void:
 	var level: int         = item.get("level", 1)
 	var grade_color: Color = GameData.get_grade_color(grade)
 	var effect_pct: float  = float(def.get("base_value", 0.0)) * level * (1.0 + (grade - 1) * 0.10) * 100.0
-	var cost: int          = _equip_buy_price(grade, level)
+	var cost: int          = GameData.item_buy_price(level, grade)
 
 	var hbox := HBoxContainer.new()
 	hbox.add_theme_constant_override("separation", 12)
@@ -350,10 +350,6 @@ func _show_equip_detail(item: Dictionary) -> void:
 	buy_col.add_child(buy_btn)
 
 
-func _equip_buy_price(grade: int, level: int) -> int:
-	return grade * level * 40
-
-
 func _on_buy_equipment(item: Dictionary, cost: int) -> void:
 	var save: SaveData = SaveManager.get_current()
 	if save.gold < cost:
@@ -375,14 +371,12 @@ func _on_buy_equipment(item: Dictionary, cost: int) -> void:
 # ── Alchemy pane ───────────────────────────────────────────────────────────
 
 func _get_alchemy_cost(grade: int) -> Dictionary:
-	var same_tier: int  = mini(grade, 5)
-	var prev_tier: int  = same_tier - 1
-	var scale: float    = 1.0 + RollManager.get_calibrated_progress() * 0.20
+	var prev_tier: int = grade - 1
 	return {
-		"same_tier":  same_tier,
-		"same_count": ceili(5.0 * scale),
+		"same_tier":  grade,
+		"same_count": 30,
 		"prev_tier":  prev_tier,
-		"prev_count": ceili(3.0 * scale) if prev_tier > 0 else 0,
+		"prev_count": 20 if prev_tier >= 1 else 0,
 	}
 
 

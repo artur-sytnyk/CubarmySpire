@@ -41,7 +41,7 @@ func _pick_random_powerup(exclude_ids: Array, grade: int) -> Dictionary:
 	return pool[0]
 
 
-# TODO - not used, mark to remove later
+# TODO - not used, marked to remove later
 func roll_single_stat_powerup(exclude_ids: Array) -> Dictionary:
 	var pool := GameData.powerups.values().filter(func(p):
 		return p.get("category") == "stat_multiplier" and not exclude_ids.has(p["id"]))

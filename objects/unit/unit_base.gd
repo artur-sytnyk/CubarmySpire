@@ -597,7 +597,7 @@ func _move_toward_target() -> void:
 
 func _physics_process(delta: float) -> void:
 	var target_pos: Vector2 = target.global_position if target != null and is_instance_valid(target) else Vector2.ZERO
-	weapon_sprite.update_weapon(velocity.x, target_pos)
+	weapon_sprite.update_weapon(target_pos)
 	
 	if _cooldown_timer > 0.0:
 		_cooldown_timer -= delta

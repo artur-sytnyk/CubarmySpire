@@ -11,6 +11,7 @@ const LEVEL_SCALE_ATK: float = 1.2
 const LEVEL_SCALE_HP: float = 1.2
 const LEVEL_SCALE_SPEED: int = 1
 const LEVEL_SCALE_RANGE: int = 1
+const ITEM_BASE_PRICE: int = 100
 
 # Constant Arrays and Dictionaries
 const DIFFICULTY_MULTIPLIERS := { "easy": 1, "normal": 2, "hard": 3 }
@@ -102,7 +103,7 @@ func get_mat_price(grade: int) -> int:
 	return MAT_SELL_PRICE.get(grade, 0)
 
 
-
+# --- Static functions ---
 static func format_number(n: int) -> String:
 	if n >= 1_000_000_000_000:
 		return "%.1fT" % (n / 1_000_000_000_000.0)
@@ -113,4 +114,22 @@ static func format_number(n: int) -> String:
 	if n >= 1_000:
 		return "%.1fK" % (n / 1_000.0)
 	return str(n)
+
+
+static func item_buy_price(level: int, grade: int) -> int:
+	return level * (grade * 0.3) * ITEM_BASE_PRICE
+
+
+#static func item_sell_price(level: int, grade: int) -> int:
+	#return grade * ITEM_BASE_PRICE / 2 # Brutal but doesnt allow craft>sell gold generating
+
+
+static func item_dismantle_yield(grade: int) -> Dictionary:
+	var result: Dictionary = {}
+	result[grade] = 5
+	if grade - 1 >= 1:
+		result[grade - 1] = 5
+	if grade - 2 >= 1:
+		result[grade - 2] = 5
+	return result
 

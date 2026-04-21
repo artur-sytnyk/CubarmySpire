@@ -23,7 +23,7 @@ var _selected: Dictionary = {}
 
 func _ready() -> void:
 	_equip_btn.pressed.connect(_on_equip_pressed)
-	_sell_btn.pressed.connect(_on_sell_pressed)
+	#_sell_btn.pressed.connect(_on_sell_pressed)
 	_dismantle_btn.pressed.connect(_on_dismantle_pressed)
 	_clear_detail()
 	_refresh()
@@ -185,7 +185,7 @@ func _show_detail(stack: Dictionary) -> void:
 
 	_equip_btn.text    = "Unequip" if is_equipped else "Equip"
 	_equip_btn.visible = true
-	_sell_btn.visible  = not is_equipped
+	#_sell_btn.visible  = not is_equipped
 	_dismantle_btn.visible = not is_equipped
 
 func _clear_detail() -> void:
@@ -194,7 +194,7 @@ func _clear_detail() -> void:
 	_item_grade_label.text = ""
 	_item_desc_label.text  = ""
 	_equip_btn.visible     = false
-	_sell_btn.visible      = false
+	#_sell_btn.visible      = false
 	_dismantle_btn.visible     = false
 
 # ── Click handlers ─────────────────────────────────────────────────────────
@@ -271,14 +271,64 @@ func _find_free_slot(slot_type: String, save: SaveData) -> String:
 	return ""
 
 
+func _remove_one_from_inv(save: SaveData, id: String, level: int, grade: int) -> bool:
+	for i: int in range(save.equipment_inv.size()):
+		var item: Dictionary = save.equipment_inv[i]
+		if item.get("id") == id \
+				and item.get("level") == level \
+				and item.get("grade") == grade \
+				and item.get("equipped_slot", "") == "":
+			save.equipment_inv.remove_at(i)
+			return true
+	return false
+
+
+# Removed - could allow gold x materials unbalanced manipulation
 func _on_sell_pressed() -> void:
-	# TODO: sell — add gold, remove one from stack
-	pass
+	if _selected.is_empty():
+		return
+	
+	var save: SaveData = SaveManager.current_save
+	var id: String     = _selected.get("id", "")
+	var level: int     = _selected.get("level", 1)
+	var grade: int     = _selected.get("grade", 1)
+	
+	if not _remove_one_from_inv(save, id, level, grade):
+		_show_error("Could not find an unequipped copy to sell.")
+		return
+	
+	var gold_gained: int = GameData.item_sell_price(level, grade)
+	save.gold += gold_gained
+	
+	SaveManager.save_current()
+	SoundManager.play_ui("purchase")
+	_selected = {}
+	_clear_detail()
+	call_deferred("_refresh")
 
 
 func _on_dismantle_pressed() -> void:
-	# TODO: scrap — add materials, remove one from stack
-	pass
+	if _selected.is_empty():
+		return
+	
+	var save: SaveData = SaveManager.current_save
+	var id: String     = _selected.get("id", "")
+	var level: int     = _selected.get("level", 1)
+	var grade: int     = _selected.get("grade", 1)
+	
+	if not _remove_one_from_inv(save, id, level, grade):
+		_show_error("Could not find an unequipped copy to dismantle.")
+		return
+	
+	var yield_materials: Dictionary = GameData.item_dismantle_yield(grade)
+	for tier: int in yield_materials:
+		save.materials_inv[tier] = save.materials_inv.get(tier, 0) + yield_materials[tier]
+	
+	SaveManager.save_current()
+	SoundManager.play_ui("purchase")
+	_selected = {}
+	_clear_detail()
+	call_deferred("_refresh")
 
 
 func _show_error(msg: String) -> void:

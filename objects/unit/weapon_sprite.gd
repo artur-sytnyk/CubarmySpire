@@ -23,11 +23,7 @@ const WEAPON_BASE_OFFSET: Dictionary = {
 	# "mage":  Vector2(10.0, -8.0),  # TODO
 }
 
-
 const BOW_AIM_OFFSET_DEG: float = 45.0
-
-# Velocity X below this threshold keeps the last known facing side.
-const SIDE_DEAD_ZONE: float = 30.0
 
 # Sword diagonal angles in degrees.
 # Moving right: sword points bottom-right (+45 from horizontal).
@@ -74,10 +70,10 @@ func setup(p_unit_type: String) -> void:
 			_icon.offset = Vector2.ZERO
 
 
-func update_weapon(velocity_x: float, target_position: Vector2) -> void:
+func update_weapon(target_position: Vector2) -> void:
 	match _unit_type:
 		"warrior":
-			_update_sword(velocity_x)
+			_update_sword(target_position)
 		"ranger":
 			_update_bow(target_position)
 		# "mage":
@@ -135,9 +131,9 @@ func play_death() -> void:
 
 # --- Private: per-frame updates ---
 
-func _update_sword(velocity_x: float) -> void:
-	if abs(velocity_x) > SIDE_DEAD_ZONE:
-		_facing_right = velocity_x > 0.0
+func _update_sword(target_position: Vector2) -> void:
+	if target_position != Vector2.ZERO:
+		_facing_right = target_position.x > global_position.x
 	
 	position.x = _base_offset.x if _facing_right else -_base_offset.x
 	position.y = _base_offset.y

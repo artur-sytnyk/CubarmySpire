@@ -2,6 +2,8 @@
 # Scene tree: see previous version comments — node structure unchanged.
 extends Control
 
+const ITEM_BOX_SCENE: PackedScene = preload("res://objects/item_box/ItemBox.tscn")
+const ITEM_ICON_PATH: String = "res://assets/images/items/%s.png"
 
 # ── Refs ───────────────────────────────────────────────────────────────────
 
@@ -210,71 +212,43 @@ func _refresh_equip_slots() -> void:
 	for child in flow.get_children():
 		child.queue_free()
 	var save: SaveData = SaveManager.get_current()
-	for i: int in range(5):
-		if i < save.shop_equipment.size():
-			flow.add_child(_make_equip_slot_box(save.shop_equipment[i], i))
-		else:
-			flow.add_child(_make_empty_slot_box())
+	for i: int in save.shop_equipment.size():
+		_make_equip_slot_box(save.shop_equipment[i], i, flow)
 
 
-func _make_equip_slot_box(item: Dictionary, idx: int) -> Control:
-	var def: Dictionary    = GameData.get_equipment(item.get("id", ""))
-	var grade: int         = item.get("grade", 1)
-	var level: int         = item.get("level", 1)
+func _make_equip_slot_box(item: Dictionary, idx: int, flow: HBoxContainer) -> void:
+	var def: Dictionary   = GameData.get_equipment(item.get("id", ""))
+	var grade: int        = item.get("grade", 1)
 	var grade_color: Color = GameData.get_grade_color(grade)
-	var effect_pct: float  = float(def.get("base_value", 0.0)) * level * (1.0 + (grade - 1) * 0.10) * 100.0
+	var level: int        = item.get("level", 1)
+	var count: int        = item.get("count", 1)
+	var is_equipped: bool = item.get("equipped_slot", "") != ""
+	var item_id: String   = item.get("id", "")
 
-	var panel := PanelContainer.new()
-	panel.custom_minimum_size = Vector2(120, 80)
-	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	var box: ItemBox = ITEM_BOX_SCENE.instantiate()
+	flow.add_child(box)
+	
+	var icon_path: String = ITEM_ICON_PATH % item_id
+	var icon: Texture2D = load(icon_path) if ResourceLoader.exists(icon_path) else null
 
-	var vbox := VBoxContainer.new()
-	vbox.add_theme_constant_override("separation", 4)
-	panel.add_child(vbox)
-
-	var grade_lbl := Label.new()
-	grade_lbl.text = GameData.get_grade_name(grade)
-	grade_lbl.add_theme_font_size_override("font_size", 10)
-	grade_lbl.add_theme_color_override("font_color", grade_color)
-	grade_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	vbox.add_child(grade_lbl)
-
-	var name_lbl := Label.new()
-	name_lbl.text = def.get("name", item.get("id", "?"))
-	name_lbl.add_theme_font_size_override("font_size", 12)
-	name_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	name_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	vbox.add_child(name_lbl)
-
-	var stat_lbl := Label.new()
-	stat_lbl.text = "+%.0f%% %s" % [effect_pct, def.get("stat", "")]
-	stat_lbl.add_theme_font_size_override("font_size", 10)
-	stat_lbl.add_theme_color_override("font_color", Color(0.55, 0.55, 0.55))
-	stat_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	vbox.add_child(stat_lbl)
-
-	var btn := Button.new()
-	btn.flat = true
-	btn.set_anchors_and_offsets_preset(PRESET_FULL_RECT)
-	btn.pressed.connect(_on_equip_slot_clicked.bind(item, idx))
-	panel.add_child(btn)
-
-	return panel
+	box.setup(icon, grade, level, count)
+	box.pressed.connect(_on_equip_slot_clicked.bind(item, idx))
 
 
-func _make_empty_slot_box() -> Control:
-	var panel := PanelContainer.new()
-	panel.custom_minimum_size = Vector2(120, 80)
-	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 
-	var lbl := Label.new()
-	lbl.text = "— empty —"
-	lbl.add_theme_color_override("font_color", Color(0.4, 0.4, 0.4))
-	lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	lbl.vertical_alignment   = VERTICAL_ALIGNMENT_CENTER
-	panel.add_child(lbl)
-
-	return panel
+#func _make_empty_slot_box() -> Control:
+	#var panel := PanelContainer.new()
+	#panel.custom_minimum_size = Vector2(120, 80)
+	#panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+#
+	#var lbl := Label.new()
+	#lbl.text = "— empty —"
+	#lbl.add_theme_color_override("font_color", Color(0.4, 0.4, 0.4))
+	#lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	#lbl.vertical_alignment   = VERTICAL_ALIGNMENT_CENTER
+	#panel.add_child(lbl)
+#
+	#return panel
 
 
 func _on_equip_slot_clicked(item: Dictionary, idx: int) -> void:
@@ -301,10 +275,12 @@ func _show_equip_detail(item: Dictionary) -> void:
 	hbox.add_theme_constant_override("separation", 12)
 	margin.add_child(hbox)
 
-	var icon := ColorRect.new()
-	icon.custom_minimum_size = Vector2(72, 72)
-	icon.color = grade_color.darkened(0.4)
-	hbox.add_child(icon)
+	var item_icon: ItemBox = ITEM_BOX_SCENE.instantiate()
+	hbox.add_child(item_icon)
+	
+	var icon_path: String = ITEM_ICON_PATH % item.get("id", "")
+	var icon: Texture2D = load(icon_path) if ResourceLoader.exists(icon_path) else null
+	item_icon.setup(icon, grade)
 
 	var info := VBoxContainer.new()
 	info.size_flags_horizontal = Control.SIZE_EXPAND_FILL

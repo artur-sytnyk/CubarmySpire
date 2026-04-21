@@ -104,6 +104,10 @@ func _apply_scene_offset(nav_visible: bool) -> void:
 
 # ── Settings ───────────────────────────────────────────────────────────────
 
+func open_settings() -> void:
+	_on_open_settings()
+
+
 func _on_open_settings() -> void:
 	_settings_overlay.open()
 

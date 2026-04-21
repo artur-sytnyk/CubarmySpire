@@ -73,3 +73,9 @@ func _do_transition(scene_path: String) -> void:
 	await _animation_player.animation_finished
 
 	_is_transitioning = false
+
+
+# Special 
+
+func open_settings() -> void:
+	get_tree().root.get_node("Root").open_settings()

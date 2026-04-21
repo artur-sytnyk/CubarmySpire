@@ -9,6 +9,7 @@
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_y3mri"]
 
 [node name="ConfirmDialog" type="CanvasLayer"]
+process_mode = 3
 script = ExtResource("1_21gj8")
 
 [node name="ColorRect" type="ColorRect" parent="."]

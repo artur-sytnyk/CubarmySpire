@@ -42,6 +42,7 @@ border_color = Color(0.537255, 0.941176, 0.890196, 1)
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ojo7d"]
 
 [node name="SettingsOverlay" type="CanvasLayer"]
+process_mode = 3
 script = ExtResource("1_c1kgh")
 
 [node name="DimRect" type="ColorRect" parent="."]

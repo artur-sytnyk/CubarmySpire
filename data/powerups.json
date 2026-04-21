@@ -10,8 +10,8 @@
 	"tradeoff": ""
   },
   {
-	"id": "supply_chain",
-	"name": "Supply Chain",
+	"id": "provisions",
+	"name": "Provisions",
 	"min_grade": 2,
 	"category": "one_time_event",
 	"event": "increase_max_limit",

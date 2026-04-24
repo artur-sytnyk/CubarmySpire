@@ -715,16 +715,53 @@ func play_spawn_anim() -> void:
 func play_victory_anim() -> void:
 	collision_body.set_deferred("disabled", true)
 	var base_pos := position
+	var shadow_base_scale := Vector2.ONE
+	# Light comes from upper-left, so shadow shifts right and down on jump.
+	var shadow_jump_offset := Vector2(-SHADOW_SKEW_X * 0.8, 32.0)
 	var delay := randf_range(1.0, 3.0)
 	var tween := create_tween().set_loops()
+
 	tween.tween_interval(delay)
-	tween.tween_property(self, "scale", Vector2(1.15, 0.85), 0.1).set_trans(Tween.TRANS_SINE)
+
+	# Squash on takeoff
+	tween.tween_property(self, "scale", Vector2(1.15, 0.85), 0.1)\
+		.set_trans(Tween.TRANS_SINE)
+	tween.parallel().tween_property(_shadow, "scale", Vector2(1.15, 0.85), 0.1)\
+		.set_trans(Tween.TRANS_SINE)
+	tween.parallel().tween_property(_shadow_inner, "scale", Vector2(1.15, 0.85), 0.1)\
+		.set_trans(Tween.TRANS_SINE)
+
 	tween.tween_interval(0.1)
-	tween.tween_property(self, "position", base_pos + Vector2(0, -30), 0.2).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-	tween.tween_property(self, "scale", Vector2(0.85, 1.2), 0.12).set_trans(Tween.TRANS_SINE)
+
+	# Rise — unit goes up, shadow shrinks and drifts toward light direction
+	tween.tween_property(self, "position", base_pos + Vector2(0, -30), 0.2)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tween.parallel().tween_property(self, "scale", Vector2(0.85, 1.2), 0.12)\
+		.set_trans(Tween.TRANS_SINE)
+	tween.parallel().tween_property(_shadow, "scale", Vector2(0.8, 0.8), 0.2)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tween.parallel().tween_property(_shadow, "position", shadow_jump_offset, 0.2)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tween.parallel().tween_property(_shadow_inner, "scale", Vector2(0.8, 0.8), 0.2)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tween.parallel().tween_property(_shadow_inner, "position", shadow_jump_offset, 0.2)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+
 	tween.tween_interval(0.1)
-	tween.tween_property(self, "position", base_pos, 0.2).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
-	tween.tween_property(self, "scale", Vector2.ONE, 0.1).set_trans(Tween.TRANS_BOUNCE)
+	
+	# Land — unit returns, shadow snaps back
+	tween.tween_property(self, "position", base_pos, 0.2)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+	tween.parallel().tween_property(self, "scale", Vector2.ONE, 0.1)\
+		.set_trans(Tween.TRANS_BOUNCE)
+	tween.parallel().tween_property(_shadow, "scale", shadow_base_scale, 0.2)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+	tween.parallel().tween_property(_shadow, "position", Vector2.ZERO, 0.2)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+	tween.parallel().tween_property(_shadow_inner, "scale", shadow_base_scale, 0.2)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+	tween.parallel().tween_property(_shadow_inner, "position", Vector2.ZERO, 0.2)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
 
 
 func _play_death_anim() -> void:

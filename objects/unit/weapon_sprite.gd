@@ -1,12 +1,9 @@
 class_name WeaponSprite
 extends Node2D
 
-# TODO: consider moving WEAPON_BASE_OFFSET values to GameData alongside
-# other spatial constants like LOOT_SCATTER_RADIUS.
+const SIDE_DEAD_ZONE: float = 10.0
 
 # Per-weapon rest rotation in degrees — used as fallback and for death anim base.
-# Sword: icon faces up by default, -45 puts it in the natural diagonal hold.
-# Bow: rotation is fully dynamic (tracks target), this value unused during combat.
 # Staff — TODO when sprite is added.
 const WEAPON_ROT_OFFSET: Dictionary = {
 	"warrior": 0.0,
@@ -15,8 +12,6 @@ const WEAPON_ROT_OFFSET: Dictionary = {
 }
 
 # Per-weapon base position offset relative to unit centre.
-# Sword X is mirrored based on movement direction.
-# Bow stays fixed at centre — rotation covers direction.
 const WEAPON_BASE_OFFSET: Dictionary = {
 	"warrior": Vector2(10.0, 12.0),
 	"ranger":  Vector2(8.0, 0.0),
@@ -26,8 +21,6 @@ const WEAPON_BASE_OFFSET: Dictionary = {
 const BOW_AIM_OFFSET_DEG: float = 45.0
 
 # Sword diagonal angles in degrees.
-# Moving right: sword points bottom-right (+45 from horizontal).
-# Moving left:  sword points bottom-left  (-45 from horizontal).
 const SWORD_ANGLE_RIGHT: float = -110.0
 const SWORD_ANGLE_LEFT: float = -70.0
 
@@ -132,14 +125,26 @@ func play_death() -> void:
 # --- Private: per-frame updates ---
 
 func _update_sword(target_position: Vector2) -> void:
-	if target_position != Vector2.ZERO:
-		_facing_right = target_position.x > global_position.x
+	if _attack_tween != null and _attack_tween.is_valid():
+		# Never update facing during an attack swing — let it finish on the side it started.
+		_apply_sword_facing()
+		return
 	
+	if target_position != Vector2.ZERO:
+		var dx: float = target_position.x - global_position.x
+		if dx > SIDE_DEAD_ZONE:
+			_facing_right = true
+		elif dx < -SIDE_DEAD_ZONE:
+			_facing_right = false
+	
+	_apply_sword_facing()
+
+
+func _apply_sword_facing() -> void:
 	position.x = _base_offset.x if _facing_right else -_base_offset.x
 	position.y = _base_offset.y
 	_icon.flip_v = not _facing_right
 	_icon.offset = Vector2(12.0, 12.0) if _facing_right else Vector2(12.0, -12.0)
-	
 	if _attack_tween == null or not _attack_tween.is_valid():
 		_icon.rotation_degrees = SWORD_ANGLE_RIGHT if _facing_right else SWORD_ANGLE_LEFT
 

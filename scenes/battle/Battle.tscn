@@ -1,8 +1,9 @@
-[gd_scene load_steps=26 format=3 uid="uid://gj8rxvqy23t2"]
+[gd_scene load_steps=27 format=3 uid="uid://gj8rxvqy23t2"]
 
 [ext_resource type="Script" path="res://scenes/battle/battle_scene.gd" id="1_6aqjr"]
 [ext_resource type="Script" path="res://scripts/army.gd" id="1_x5j8b"]
 [ext_resource type="Script" path="res://scripts/army_manager.gd" id="2_mqbul"]
+[ext_resource type="Script" path="res://scenes/battle/hud.gd" id="4_32vn7"]
 [ext_resource type="Script" path="res://scenes/battle/arena_region.gd" id="4_40q6c"]
 [ext_resource type="PackedScene" uid="uid://bl3qbxsors345" path="res://ui/dialogs/PowerupDialog.tscn" id="4_x0bhq"]
 [ext_resource type="Script" path="res://scenes/battle/camera_controller.gd" id="4_xqvxf"]
@@ -96,6 +97,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
+script = ExtResource("4_32vn7")
 
 [node name="PauseButton" type="Button" parent="UI"]
 custom_minimum_size = Vector2(80, 40)

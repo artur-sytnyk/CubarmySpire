@@ -61,7 +61,7 @@ shape = SubResource("CircleShape2D_hy77q")
 debug_color = Color(0, 0.65098, 0.129412, 0.0784314)
 
 [node name="HealthBar" parent="." instance=ExtResource("4_qiwmb")]
-position = Vector2(-14, -18)
+position = Vector2(-15, -18)
 
 [node name="LevelLabel" type="Label" parent="."]
 anchors_preset = 7

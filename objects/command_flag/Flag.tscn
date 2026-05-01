@@ -1,0 +1,40 @@
+[gd_scene load_steps=5 format=3 uid="uid://oeppoc2p41l"]
+
+[ext_resource type="Script" path="res://objects/command_flag/flag.gd" id="1_e7g48"]
+[ext_resource type="Texture2D" uid="uid://cumq71ptnn6w0" path="res://assets/images/flag.png" id="2_3vm3r"]
+
+[sub_resource type="Gradient" id="Gradient_8xcbe"]
+colors = PackedColorArray(0, 0, 0, 0.752941, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_33nay"]
+gradient = SubResource("Gradient_8xcbe")
+width = 16
+height = 16
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[node name="Flag" type="Node2D"]
+script = ExtResource("1_e7g48")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -5.0
+offset_top = -5.0
+offset_right = 5.0
+offset_bottom = 5.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = SubResource("GradientTexture2D_33nay")
+stretch_mode = 3
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(20, -54)
+scale = Vector2(0.6, 0.84)
+texture = ExtResource("2_3vm3r")

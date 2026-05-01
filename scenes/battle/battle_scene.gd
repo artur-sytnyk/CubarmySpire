@@ -2,14 +2,18 @@ class_name BattleScene
 extends Node2D
 
 @onready var army_manager: ArmyManager = $ArmyManager
+# Arena
 @onready var arena: Node2D = $Arena
 @onready var navigation_region: NavigationRegion2D = $Arena/NavigationRegion2D
 @onready var player_spawn: Marker2D = $Arena/PlayerSpawnPoint
 @onready var enemy_spawn: Marker2D = $Arena/EnemySpawnPoint
+@onready var _flag_layer: Node2D = $Arena/LootLayer
+# UI
 @onready var pause_button: Button = $UI/PauseButton
 @onready var powerup_dialog = $UI/PowerupDialog
 @onready var run_finalized_dialog = $UI/RunFinalizedDialog
-
+@onready var _hud: HUD = $UI/HUD
+@onready var _camera: Camera2D = $Arena/Camera2D
 @onready var stage_label = $UI/StageLabel
 # Pause
 @onready var _pause_overlay: CanvasLayer = $UI/PauseOverlay
@@ -18,8 +22,20 @@ extends Node2D
 
 var unit_scene: PackedScene = preload("res://objects/unit/Unit.tscn")
 var loot_scene: PackedScene = preload("res://objects/loot_drop/LootDrop.tscn")
+var _flag_scene: PackedScene = preload("res://objects/command_flag/Flag.tscn")
+
+var _active_flags:                Array[Flag] = []
+var _prev_command_selection_ids:  Array[int]  = []
+
+var _selected_units:    Array[Unit]  = []
+var _drag_start_world:  Vector2      = Vector2.ZERO
+var _drag_end_world:    Vector2      = Vector2.ZERO
+var _is_dragging:       bool         = false
+const DRAG_MIN_PIXELS:  float        = 6.0   # below this = click, not drag
+
 
 var _loot_objects: Array[Node] = []
+
 
 func _ready() -> void:
 	SoundManager.play_music("battle")
@@ -27,6 +43,7 @@ func _ready() -> void:
 	army_manager.setup(player_spawn, enemy_spawn, unit_scene)
 	army_manager.start_battle()
 	stage_label.text = "Floor: %d" % RunState.stage
+	set_process_unhandled_input(true)
 
 
 func _connect_signals() -> void:
@@ -82,6 +99,186 @@ func _on_run_finalized(results: Dictionary) -> void:
 	pass
 
 
+# --- RTS Selection ---
+
+func _input(event: InputEvent) -> void:
+	if event is InputEventMouseButton:
+		var mb: InputEventMouseButton = event as InputEventMouseButton
+		
+		if mb.button_index == MOUSE_BUTTON_LEFT:
+			if mb.pressed:
+				if mb.double_click:
+					_handle_double_click_select(get_global_mouse_position())
+					_update_hud_selection()
+					_is_dragging = false
+				else:
+					_drag_start_world = get_global_mouse_position()
+					_drag_end_world   = _drag_start_world
+					_is_dragging      = true
+			else:
+				if not _is_dragging:
+					return
+				_is_dragging = false
+				_hud.clear_drag_rect()
+				
+				var drag_screen_dist: float = (
+					_world_to_screen(_drag_end_world) - _world_to_screen(_drag_start_world)
+				).length()
+				
+				if drag_screen_dist < DRAG_MIN_PIXELS:
+					_handle_click_select(_drag_start_world)
+				else:
+					_handle_rect_select(_drag_start_world, _drag_end_world)
+				
+				_update_hud_selection()
+		
+		elif mb.button_index == MOUSE_BUTTON_RIGHT and mb.pressed:
+			if not _selected_units.is_empty():
+				var world_pos: Vector2 = get_global_mouse_position()
+				_issue_formation_move(world_pos)
+				_spawn_flag(world_pos)
+	
+	elif event is InputEventMouseMotion and _is_dragging:
+		_drag_end_world = _camera.get_global_mouse_position()
+		
+		var screen_a: Vector2 = _world_to_screen(_drag_start_world)
+		var screen_b: Vector2 = _world_to_screen(_drag_end_world)
+		_hud.set_drag_rect(Rect2(screen_a, screen_b - screen_a).abs())
+		
+		_update_hud_selection()
+
+
+func _handle_double_click_select(world_pos: Vector2) -> void:
+	# First find which unit was clicked
+	var clicked: Unit = null
+	var best_dist: float = 24.0
+	for unit: Unit in army_manager.player_army.alive_units:
+		var d: float = unit.global_position.distance_to(world_pos)
+		if d < best_dist:
+			best_dist = d
+			clicked   = unit
+	
+	if clicked == null:
+		return
+	
+	# Then select all alive units of the same type
+	_selected_units.clear()
+	for unit: Unit in army_manager.player_army.alive_units:
+		if unit.unit_type == clicked.unit_type:
+			_selected_units.append(unit)
+
+
+func _handle_click_select(world_pos: Vector2) -> void:
+	_selected_units.clear()
+	var units: Array[Unit] = army_manager.player_army.alive_units
+	var best:      Unit  = null
+	var best_dist: float = 24.0
+	for unit: Unit in units:
+		var d: float = unit.global_position.distance_to(world_pos)
+		if d < best_dist:
+			best_dist = d
+			best      = unit
+	if best != null:
+		_selected_units.append(best)
+
+
+func _handle_rect_select(world_a: Vector2, world_b: Vector2) -> void:
+	_selected_units.clear()
+	var rect: Rect2 = Rect2(world_a, world_b - world_a).abs()
+	for unit: Unit in army_manager.player_army.alive_units:
+		if rect.has_point(unit.global_position):
+			_selected_units.append(unit)
+
+
+func _update_hud_selection() -> void:
+	var positions: Array[Vector2] = []
+	for unit: Unit in _selected_units:
+		if is_instance_valid(unit):
+			positions.append(_world_to_screen(unit.global_position))
+	_hud.set_selected_positions(positions)
+
+
+func _issue_formation_move(centre: Vector2) -> void:
+	var count: int = _selected_units.size()
+	var grid_side: int = ceili(sqrt(float(count)))
+	var half: float = (grid_side - 1) * 0.5
+	var index: int = 0
+	
+	for x: int in range(grid_side):
+		for y: int in range(grid_side):
+			if index >= count:
+				break
+			var offset: Vector2 = Vector2(
+				(x - half) * GameData.FORMATION_SPACING,
+				(y - half) * GameData.FORMATION_SPACING
+			)
+			_selected_units[index].issue_move_command(centre + offset)
+			index += 1
+
+
+func _spawn_flag(world_pos: Vector2) -> void:
+	if not _command_selection_changed():
+		for flag: Flag in _active_flags:
+			if is_instance_valid(flag):
+				flag.queue_free()
+		_active_flags.clear()
+	
+	_snapshot_command_selection()
+	
+	var lifetime: float = 5.0
+	var best_time: float = INF
+	for unit: Unit in _selected_units:
+		if not is_instance_valid(unit):
+			continue
+		var dist: float = unit.global_position.distance_to(world_pos)
+		if unit.speed > 0.0:
+			var t: float = (dist / unit.speed) * GameData.FLAG_TRAVEL_EXTRA
+			best_time = minf(best_time, t)
+	if best_time < INF:
+		lifetime = best_time
+	
+	var flag: Flag = _flag_scene.instantiate()
+	$Arena.add_child(flag)
+	_active_flags.append(flag)
+	flag.spawn_at(world_pos, lifetime)
+	
+	_active_flags.assign(_active_flags.filter(
+		func(f: Flag) -> bool: return is_instance_valid(f)
+	))
+
+
+func _command_selection_changed() -> bool:
+	if _selected_units.size() != _prev_command_selection_ids.size():
+		return true
+	for i: int in _selected_units.size():
+		if _selected_units[i].get_instance_id() != _prev_command_selection_ids[i]:
+			return true
+	return false
+
+
+func _snapshot_command_selection() -> void:
+	_prev_command_selection_ids.clear()
+	for unit: Unit in _selected_units:
+		_prev_command_selection_ids.append(unit.get_instance_id())
+
+
+# Converts a world-space point to screen-space for HUD drawing.
+# Uses the canvas transform which accounts for camera position and zoom.
+func _world_to_screen(world_pos: Vector2) -> Vector2:
+	return get_viewport().get_canvas_transform() * world_pos
+
+
+func _process(delta: float) -> void:
+	# Keep selection circles tracking units that are moving
+	if not _selected_units.is_empty():
+		_update_hud_selection()
+	
+	# Prune dead units from selection
+	_selected_units = _selected_units.filter(
+		func(u: Unit) -> bool: return is_instance_valid(u) and u._visual_state != Unit.VisualState.DEAD
+	)
+
+
 # --- Pause ---
 
 func _on_pause_pressed() -> void:
@@ -102,6 +299,7 @@ func _on_abandon_pressed() -> void:
 
 
 # --- Loot drop from enemies
+
 func _spawn_loot_drops(materials: Dictionary, gold: int, world_position: Vector2) -> void:
 	var items: Array = []
 	for grade: int in materials:

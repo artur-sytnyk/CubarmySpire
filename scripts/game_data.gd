@@ -26,6 +26,17 @@ const GRADE_COLORS: Dictionary = {
 const COLOR_GOLD: Color = Color("#FFD94D")
 const MAT_SELL_PRICE: Dictionary = { 1: 1, 2: 5, 3: 10, 4: 44, 5: 99}
 
+# RTS Selection and Commands
+const COLOR_SELECTION_RECT_FILL:   Color = Color(1.0, 0.85, 0.2, 0.20)     # gold, very subtle fill
+const COLOR_SELECTION_RECT_BORDER: Color = Color(1.0, 0.85, 0.2, 0.80)     # gold, strong border
+const COLOR_UNIT_SELECTED:         Color = Color(0.25, 0.95, 0.35, 0.90)   # same green, kept
+const SELECTION_INDICATOR_SIZE:    float = 12.0                            # half-size of rect
+const SELECTION_RECT_BORDER_WIDTH: float = 2.0
+const SELECTION_INDICATOR_WIDTH:   float = 1.5
+
+const FORMATION_SPACING: float = 8.0   # world px between unit slots in formation
+const FLAG_TRAVEL_EXTRA: float = 0.8   # multiplier on estimated travel time before flag despawns
+
 # Animation constants
 const LOOT_BOB_HEIGHT: float = 4.0
 const LOOT_BOB_DURATION: float = 1.2

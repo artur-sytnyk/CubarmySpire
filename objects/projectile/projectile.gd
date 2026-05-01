@@ -55,6 +55,9 @@ func setup(
 	shooter = unit_source
 	shooter_faction = unit_source.faction
 	global_position = unit_source.global_position
+	if !is_instance_valid(p_target):
+		queue_free()
+		return
 	target = p_target
 	target_position = p_target.global_position
 	ricochet_count = p_ricochet_count

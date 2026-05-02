@@ -186,7 +186,7 @@ func _play_sword_attack(swing_count: int = 1, hit_target: Unit = null, damage: i
 		_attack_tween.tween_callback(func() -> void:
 			SoundManager.play_sfx("sword_swing")
 			if hit_target != null and is_instance_valid(hit_target):
-				hit_target.take_damage(damage)
+				hit_target.take_damage(damage, global_position)
 		)
 		
 		_attack_tween.tween_interval(0.1 if i < swing_count - 1 else 0.2)

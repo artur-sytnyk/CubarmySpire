@@ -112,18 +112,18 @@ func _make_unit_box(key: String, unit_type: String, level: int, count: int, sour
 	
 	var badge_lbl := Label.new()
 	badge_lbl.text = "[%d]" % count
-	badge_lbl.add_theme_font_size_override("font_size", 16)
+	badge_lbl.add_theme_font_size_override("font_size", 14)
 	badge_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	badge_lbl.set_anchors_and_offsets_preset(PRESET_TOP_WIDE)
-	badge_lbl.offset_top = -18.0
+	badge_lbl.offset_top = -12.0
 	container.add_child(badge_lbl)
 	
 	var level_lbl := Label.new()
 	level_lbl.text = "lv %d" % level
-	level_lbl.add_theme_font_size_override("font_size", 16)
+	level_lbl.add_theme_font_size_override("font_size", 14)
 	level_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	level_lbl.set_anchors_and_offsets_preset(PRESET_BOTTOM_WIDE)
-	level_lbl.offset_top = -8.0
+	level_lbl.offset_top = -10.0
 	container.add_child(level_lbl)
 	
 	var weaponIcon := TextureRect.new()

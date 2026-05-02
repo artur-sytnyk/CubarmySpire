@@ -136,7 +136,6 @@ layout_mode = 2
 theme_override_constants/separation = 32
 
 [node name="ItemIcon" parent="NavBarMargin/HBoxContainer/RightPanel/MarginContainer/VBoxContainer/DetailPanel/MarginContainer/HBoxContainer" instance=ExtResource("4_vnbo0")]
-custom_minimum_size = Vector2(120, 80)
 layout_mode = 2
 
 [node name="InfoVBox" type="VBoxContainer" parent="NavBarMargin/HBoxContainer/RightPanel/MarginContainer/VBoxContainer/DetailPanel/MarginContainer/HBoxContainer"]
@@ -172,6 +171,7 @@ theme_override_constants/separation = 16
 [node name="EquipBtn" type="Button" parent="NavBarMargin/HBoxContainer/RightPanel/MarginContainer/VBoxContainer/DetailPanel/MarginContainer/HBoxContainer/InfoVBox/ActionsRow"]
 custom_minimum_size = Vector2(100, 24)
 layout_mode = 2
+mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(0.113725, 0.188235, 0.2, 1)
 theme_override_colors/font_pressed_color = Color(0.113725, 0.188235, 0.2, 1)
 theme_override_colors/font_hover_color = Color(0.113725, 0.188235, 0.2, 1)
@@ -203,6 +203,7 @@ text = "Sell"
 [node name="DismantleBtn" type="Button" parent="NavBarMargin/HBoxContainer/RightPanel/MarginContainer/VBoxContainer/DetailPanel/MarginContainer/HBoxContainer/InfoVBox/ActionsRow"]
 custom_minimum_size = Vector2(100, 24)
 layout_mode = 2
+mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(0.113725, 0.188235, 0.2, 1)
 theme_override_colors/font_pressed_color = Color(0.113725, 0.188235, 0.2, 1)
 theme_override_colors/font_hover_color = Color(0.113725, 0.188235, 0.2, 1)
@@ -225,3 +226,21 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/h_separation = 12
 theme_override_constants/v_separation = 12
+
+[node name="DismantleParticles" type="CPUParticles2D" parent="."]
+z_index = 10
+position = Vector2(606, 280)
+emitting = false
+amount = 45
+lifetime = 1.5
+one_shot = true
+explosiveness = 0.8
+emission_shape = 3
+emission_rect_extents = Vector2(32, 12)
+direction = Vector2(0, -1)
+spread = 90.0
+gravity = Vector2(0, 220)
+initial_velocity_min = 60.0
+initial_velocity_max = 180.0
+scale_amount_min = 4.0
+scale_amount_max = 8.0

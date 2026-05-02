@@ -16,6 +16,7 @@ const ITEM_ICON_PATH: String = "res://assets/images/items/%s.png"
 @onready var _gold_label: Label            = $NavBarMargin/VBoxContainer/BottomBar/MarginContainer/HBoxContainer/GoldVBox/GoldLabel
 @onready var _materials_row: HBoxContainer = $NavBarMargin/VBoxContainer/BottomBar/MarginContainer/HBoxContainer/MaterialsRow
 @onready var _unit_level_input: SpinBox    = $NavBarMargin/VBoxContainer/HBoxContainer/RightPanel/MarginContainer/VBoxContainer/RecruitPane/LevelRow/UnitLevelInput
+@onready var _gold_burst: CPUParticles2D   = $GoldBurstParticles
 
 # ── State ──────────────────────────────────────────────────────────────────
 
@@ -51,6 +52,13 @@ func _update_nav_highlight() -> void:
 		btn.toggle_mode = true
 		btn.button_pressed = is_active
 		btn.disabled = is_active
+
+
+# ── Any buy / sell action ──────────────────────────────────────────────────
+func _play_gold_burst(btn: Button) -> void:
+	_gold_burst.global_position = btn.global_position + btn.size * 0.5
+	_gold_burst.restart()
+
 
 # ── Recruit pane ───────────────────────────────────────────────────────────
 
@@ -148,7 +156,7 @@ func _make_unit_row(unit_type: String, level: int) -> Control:
 
 	var buy_btn := Button.new()
 	buy_btn.text = "Buy"
-	buy_btn.pressed.connect(_on_buy_unit.bind(unit_type, level, cost))
+	buy_btn.pressed.connect(_on_buy_unit.bind(unit_type, level, cost, buy_btn))
 	buy_col.add_child(buy_btn)
 
 	return panel
@@ -158,11 +166,12 @@ func _on_unit_level_changed(_val: float) -> void:
 	_refresh_unit_rows()
 
 
-func _on_buy_unit(unit_type: String, level: int, cost: int) -> void:
+func _on_buy_unit(unit_type: String, level: int, cost: int, btn: Button) -> void:
 	var save: SaveData = SaveManager.get_current()
 	if save.gold < cost:
 		_show_error("Not enough gold.")
 		return
+	_play_gold_burst(btn)
 	SoundManager.play_ui("purchase")
 	save.gold -= cost
 	var target: Array = save.army_active if save.army_active.size() < 20 else save.army_barracks
@@ -322,11 +331,11 @@ func _show_equip_detail(item: Dictionary) -> void:
 
 	var buy_btn := Button.new()
 	buy_btn.text = "Buy"
-	buy_btn.pressed.connect(_on_buy_equipment.bind(item, cost))
+	buy_btn.pressed.connect(_on_buy_equipment.bind(item, cost, buy_btn))
 	buy_col.add_child(buy_btn)
 
 
-func _on_buy_equipment(item: Dictionary, cost: int) -> void:
+func _on_buy_equipment(item: Dictionary, cost: int, btn: Button) -> void:
 	var save: SaveData = SaveManager.get_current()
 	if save.gold < cost:
 		_show_error("Not enough gold.")
@@ -334,6 +343,7 @@ func _on_buy_equipment(item: Dictionary, cost: int) -> void:
 	if not SaveManager.has_equipment_space():
 		_show_error("Inventory is full!")
 		return
+	_play_gold_burst(btn)
 	SoundManager.play_ui("purchase")
 	save.gold -= cost
 	SaveManager.try_add_equipment(item.duplicate())
@@ -526,11 +536,11 @@ func _show_alchemy_detail(grade_idx: int) -> void:
 
 	var craft_btn := Button.new()
 	craft_btn.text = "Request Crafting"
-	craft_btn.pressed.connect(_on_request_crafting.bind(grade_idx))
+	craft_btn.pressed.connect(_on_request_crafting.bind(grade_idx, craft_btn))
 	vbox.add_child(craft_btn)
 
 
-func _on_request_crafting(grade_idx: int) -> void:
+func _on_request_crafting(grade_idx: int, btn: Button) -> void:
 	var save: SaveData   = SaveManager.get_current()
 	var grade: int       = grade_idx + 1
 	var cost: Dictionary = _get_alchemy_cost(grade)
@@ -541,7 +551,8 @@ func _on_request_crafting(grade_idx: int) -> void:
 	if not has_same or not has_prev:
 		_show_error("Not enough materials.")
 		return
-
+	
+	_play_gold_burst(btn)
 	SoundManager.play_ui("equip")
 	# Deduct materials.
 	save.materials_inv[cost.same_tier] = save.materials_inv.get(cost.same_tier, 0) - cost.same_count
@@ -662,13 +673,13 @@ func _make_material_item(grade: int, count: int) -> Control:
 	sell_btn.add_theme_stylebox_override("hover", load("res://ui/styles/btn_hover.tres"))
 	sell_btn.add_theme_stylebox_override("pressed", load("res://ui/styles/btn_pressed.tres"))
 	sell_btn.add_theme_stylebox_override("focus", empty_style)
-	sell_btn.pressed.connect(_on_sell_materials.bind(grade))
+	sell_btn.pressed.connect(_on_sell_materials.bind(grade, sell_btn))
 	bottom_row.add_child(sell_btn)
 	
 	return hbox
 
 
-func _on_sell_materials(grade: int) -> void:
+func _on_sell_materials(grade: int, btn: Button) -> void:
 	var save: SaveData = SaveManager.get_current()
 	var shift_held: bool = Input.is_key_pressed(KEY_SHIFT)
 	var ctrl_held: bool = Input.is_key_pressed(KEY_CTRL)
@@ -677,6 +688,7 @@ func _on_sell_materials(grade: int) -> void:
 	var to_sell: int     = mini(count, amount)
 	if to_sell <= 0:
 		return
+	_play_gold_burst(btn)
 	SoundManager.play_ui("purchase")
 	save.materials_inv[grade] = count - to_sell
 	save.gold += to_sell * GameData.get_mat_price(grade)

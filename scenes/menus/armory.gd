@@ -5,17 +5,19 @@ const SLOT_LABELS :Array = ["Weapon", "Armor", "Artifact I", "Artifact II", "Art
 const SLOT_NODE_NAMES: Array = ["WeaponBox", "ArmorBox", "Artifact1Box", "Artifact2Box", "Artifact3Box"]
 const ITEM_BOX_SCENE: PackedScene = preload("res://objects/item_box/ItemBox.tscn")
 const ITEM_ICON_PATH: String = "res://assets/images/items/%s.png"
+const ITEM_ICON_PLACEHOLDER: String = "res://assets/images/items/placeholder.png"
 
-@onready var _slots_vbox: VBoxContainer     = $NavBarMargin/HBoxContainer/LeftPanel/MarginContainer/VBoxContainer/SlotsVBox
-@onready var _weapon_box: ItemBox     = $NavBarMargin/HBoxContainer/LeftPanel/MarginContainer/VBoxContainer/SlotsVBox/WeaponBox
-@onready var _item_icon: ItemBox          = $NavBarMargin/HBoxContainer/RightPanel/MarginContainer/VBoxContainer/DetailPanel/MarginContainer/HBoxContainer/ItemIcon
-@onready var _item_name_label: Label        = $NavBarMargin/HBoxContainer/RightPanel/MarginContainer/VBoxContainer/DetailPanel/MarginContainer/HBoxContainer/InfoVBox/TitleRow/ItemNameLabel
-@onready var _item_grade_label: Label       = $NavBarMargin/HBoxContainer/RightPanel/MarginContainer/VBoxContainer/DetailPanel/MarginContainer/HBoxContainer/InfoVBox/TitleRow/ItemGradeLabel
-@onready var _item_desc_label: Label        = $NavBarMargin/HBoxContainer/RightPanel/MarginContainer/VBoxContainer/DetailPanel/MarginContainer/HBoxContainer/InfoVBox/ItemDescLabel
-@onready var _equip_btn: Button             = $NavBarMargin/HBoxContainer/RightPanel/MarginContainer/VBoxContainer/DetailPanel/MarginContainer/HBoxContainer/InfoVBox/ActionsRow/EquipBtn
-@onready var _sell_btn: Button              = $NavBarMargin/HBoxContainer/RightPanel/MarginContainer/VBoxContainer/DetailPanel/MarginContainer/HBoxContainer/InfoVBox/ActionsRow/SellBtn
-@onready var _dismantle_btn: Button             = $NavBarMargin/HBoxContainer/RightPanel/MarginContainer/VBoxContainer/DetailPanel/MarginContainer/HBoxContainer/InfoVBox/ActionsRow/DismantleBtn
-@onready var _inventory_flow: FlowContainer = $NavBarMargin/HBoxContainer/RightPanel/MarginContainer/VBoxContainer/InventoryScroll/InventoryFlow
+@onready var _slots_vbox: VBoxContainer           = $NavBarMargin/HBoxContainer/LeftPanel/MarginContainer/VBoxContainer/SlotsVBox
+@onready var _weapon_box: ItemBox                 = $NavBarMargin/HBoxContainer/LeftPanel/MarginContainer/VBoxContainer/SlotsVBox/WeaponBox
+@onready var _item_icon: ItemBox                  = $NavBarMargin/HBoxContainer/RightPanel/MarginContainer/VBoxContainer/DetailPanel/MarginContainer/HBoxContainer/ItemIcon
+@onready var _item_name_label: Label              = $NavBarMargin/HBoxContainer/RightPanel/MarginContainer/VBoxContainer/DetailPanel/MarginContainer/HBoxContainer/InfoVBox/TitleRow/ItemNameLabel
+@onready var _item_grade_label: Label             = $NavBarMargin/HBoxContainer/RightPanel/MarginContainer/VBoxContainer/DetailPanel/MarginContainer/HBoxContainer/InfoVBox/TitleRow/ItemGradeLabel
+@onready var _item_desc_label: Label              = $NavBarMargin/HBoxContainer/RightPanel/MarginContainer/VBoxContainer/DetailPanel/MarginContainer/HBoxContainer/InfoVBox/ItemDescLabel
+@onready var _equip_btn: Button                   = $NavBarMargin/HBoxContainer/RightPanel/MarginContainer/VBoxContainer/DetailPanel/MarginContainer/HBoxContainer/InfoVBox/ActionsRow/EquipBtn
+@onready var _sell_btn: Button                    = $NavBarMargin/HBoxContainer/RightPanel/MarginContainer/VBoxContainer/DetailPanel/MarginContainer/HBoxContainer/InfoVBox/ActionsRow/SellBtn
+@onready var _dismantle_btn: Button               = $NavBarMargin/HBoxContainer/RightPanel/MarginContainer/VBoxContainer/DetailPanel/MarginContainer/HBoxContainer/InfoVBox/ActionsRow/DismantleBtn
+@onready var _inventory_flow: FlowContainer       = $NavBarMargin/HBoxContainer/RightPanel/MarginContainer/VBoxContainer/InventoryScroll/InventoryFlow
+@onready var _dismantle_particles: CPUParticles2D = $DismantleParticles
 
 var _selected: Dictionary = {}
 
@@ -28,6 +30,12 @@ func _ready() -> void:
 	_clear_detail()
 	_refresh()
 
+
+func _load_icon(item_id: String) -> Texture2D:
+	var path: String = ITEM_ICON_PATH % item_id
+	if ResourceLoader.exists(path):
+		return load(path)
+	return load(ITEM_ICON_PLACEHOLDER)
 
 # ── Refresh ────────────────────────────────────────────────────────────────
 
@@ -51,21 +59,23 @@ func _refresh_slots(save: SaveData) -> void:
 		var box: ItemBox = _slots_vbox.get_node(SLOT_NODE_NAMES[i])
 		var key: String = SLOT_KEYS[i]
 
+		if box.pressed.is_connected(_on_slot_box_clicked):
+			box.pressed.disconnect(_on_slot_box_clicked)
+
 		if equipped.has(key):
 			var item: Dictionary = equipped[key]
 			var item_id: String = item.get("id", "")
 			var grade: int = item.get("grade", 1)
 			var level: int = item.get("level", 1)
-			var icon_path: String = ITEM_ICON_PATH % item_id
-			var icon: Texture2D = load(icon_path) if ResourceLoader.exists(icon_path) else null
-			box.setup(icon, grade, level, 0, SLOT_LABELS[i])
+			box.setup(_load_icon(item_id), grade, level, 0, SLOT_LABELS[i])
+			box.pressed.connect(_on_slot_box_clicked.bind(item))
 		else:
 			box.setup(null, 1, 0, 0, SLOT_LABELS[i])
 
 
 func _refresh_inventory(save: SaveData) -> void:
 	for child: Node in _inventory_flow.get_children():
-		child.queue_free()
+		child.free()
 	var stacks: Dictionary = _stack_items(save.equipment_inv)
 	var sorted_keys: Array = stacks.keys()
 	sorted_keys.sort_custom(func(a: String, b: String) -> bool:
@@ -140,7 +150,7 @@ func _make_item_box(stack: Dictionary) -> void:
 
 	var icon_path: String = ITEM_ICON_PATH % item_id
 	var icon: Texture2D = load(icon_path) if ResourceLoader.exists(icon_path) else null
-	box.setup(icon, grade, level, count)
+	box.setup(_load_icon(item_id), grade, level, count)
 
 	var effect_pct: float = _calc_effect(def, level, grade) * 100.0
 	box.tooltip_text = "%s\nLv.%d  •  %s\n+%.1f%% %s%s" % [
@@ -173,7 +183,7 @@ func _show_detail(stack: Dictionary) -> void:
 
 	var icon_path: String = ITEM_ICON_PATH % stack.get("id", "")
 	var icon: Texture2D = load(icon_path) if ResourceLoader.exists(icon_path) else null
-	_item_icon.setup(icon, grade)
+	_item_icon.setup(_load_icon(stack.get("id", "")), grade)
 	_item_name_label.text = _display_name(def, grade)
 	_item_name_label.add_theme_color_override("font_color", grade_color)
 
@@ -189,15 +199,20 @@ func _show_detail(stack: Dictionary) -> void:
 	_dismantle_btn.visible = not is_equipped
 
 func _clear_detail() -> void:
-	#_item_icon.color       = Color(0.12, 0.12, 0.16)
+	_item_icon.setup(load(ITEM_ICON_PLACEHOLDER), 1)
 	_item_name_label.text  = "Select an item"
 	_item_grade_label.text = ""
 	_item_desc_label.text  = ""
 	_equip_btn.visible     = false
-	#_sell_btn.visible      = false
-	_dismantle_btn.visible     = false
+	_dismantle_btn.visible = false
 
 # ── Click handlers ─────────────────────────────────────────────────────────
+
+func _on_slot_box_clicked(item: Dictionary) -> void:
+	_selected = item
+	_show_detail(item)
+	call_deferred("_refresh_inventory", SaveManager.current_save)
+
 
 func _on_item_box_clicked(stack: Dictionary) -> void:
 	if not _selected.is_empty() and _stack_key(_selected) == _stack_key(stack):
@@ -208,10 +223,12 @@ func _on_item_box_clicked(stack: Dictionary) -> void:
 		_show_detail(stack)
 	call_deferred("_refresh_inventory", SaveManager.current_save)
 
+
 func _on_slot_clicked(item: Dictionary) -> void:
 	_selected = item
 	_show_detail(item)
 	call_deferred("_refresh_inventory", SaveManager.current_save)
+
 
 func _on_equip_pressed() -> void:
 	var save := SaveManager.current_save
@@ -283,7 +300,7 @@ func _remove_one_from_inv(save: SaveData, id: String, level: int, grade: int) ->
 	return false
 
 
-# Removed - could allow gold x materials unbalanced manipulation
+# DISABLED - could allow gold x materials unbalanced manipulation
 func _on_sell_pressed() -> void:
 	if _selected.is_empty():
 		return
@@ -310,25 +327,40 @@ func _on_sell_pressed() -> void:
 func _on_dismantle_pressed() -> void:
 	if _selected.is_empty():
 		return
-	
+
 	var save: SaveData = SaveManager.current_save
 	var id: String     = _selected.get("id", "")
 	var level: int     = _selected.get("level", 1)
 	var grade: int     = _selected.get("grade", 1)
-	
+
 	if not _remove_one_from_inv(save, id, level, grade):
 		_show_error("Could not find an unequipped copy to dismantle.")
 		return
-	
+
 	var yield_materials: Dictionary = GameData.item_dismantle_yield(grade)
 	for tier: int in yield_materials:
 		save.materials_inv[tier] = save.materials_inv.get(tier, 0) + yield_materials[tier]
-	
+
 	SaveManager.save_current()
-	SoundManager.play_ui("purchase")
+	SoundManager.play_ui("equip")
+
+	_play_dismantle_particles(grade)
+
 	_selected = {}
 	_clear_detail()
-	call_deferred("_refresh")
+	get_tree().create_timer(1.5).timeout.connect(func() -> void: _refresh())
+
+
+func _play_dismantle_particles(grade: int) -> void:
+	var grade_color: Color = GameData.get_grade_color(grade)
+	_dismantle_particles.color = grade_color
+
+	var ramp := Gradient.new()
+	ramp.set_color(0, grade_color.lightened(0.4))
+	ramp.set_color(1, Color(grade_color.r, grade_color.g, grade_color.b, 0.0))
+	_dismantle_particles.color_ramp = ramp
+
+	_dismantle_particles.restart()
 
 
 func _show_error(msg: String) -> void:

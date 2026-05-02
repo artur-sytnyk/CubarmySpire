@@ -9,9 +9,6 @@ const UNIT_COLORS := {
 	"warrior": Color(0.55, 0.35, 0.20),
 	"ranger":  Color(0.25, 0.55, 0.35),
 }
-const UNIT_EMPTY_COLOR   := Color(0.12, 0.12, 0.16)
-const EQUIP_FILLED_COLOR := Color(0.30, 0.45, 0.60)
-const EQUIP_EMPTY_COLOR  := Color(0.12, 0.12, 0.16)
 
 const SLOT_KEYS   :Array = ["weapon", "armor", "artifact_1", "artifact_2", "artifact_3"]
 const SLOT_LABELS :Array = ["Weapon", "Armor", "Artifact I", "Artifact II", "Artifact III"]
@@ -87,7 +84,7 @@ func _refresh_equipment(save: SaveData) -> void:
 			box.set_slot(SLOT_LABELS[i])
 			box.tooltip_text = "%s %s  Lv %d" % [GameData.get_grade_name(grade), def.get("name", item_id), level]
 		else:
-			box.setup(null, 0)
+			box.setup(null, 1)
 			box.tooltip_text = SLOT_LABELS[i]
 
 

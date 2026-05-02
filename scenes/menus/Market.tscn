@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://bgk1mfpfjko5u"]
+[gd_scene load_steps=11 format=3 uid="uid://bgk1mfpfjko5u"]
 
 [ext_resource type="Script" path="res://scenes/menus/market.gd" id="1_vfddh"]
 [ext_resource type="StyleBox" uid="uid://c7yrhugtsp115" path="res://ui/styles/panel_bg.tres" id="2_s7shr"]
@@ -14,6 +14,10 @@
 color = Color(0.137255, 0.254902, 0.27451, 1)
 thickness = 4
 vertical = true
+
+[sub_resource type="Gradient" id="Gradient_s5vc2"]
+offsets = PackedFloat32Array(0.0266667, 0.54, 1)
+colors = PackedColorArray(1, 0.85, 0.2, 1, 1, 0.65, 0.1, 0.8, 1, 0.85098, 0.2, 0)
 
 [node name="Market" type="Control"]
 layout_mode = 3
@@ -230,3 +234,21 @@ vertical_alignment = 1
 [node name="MaterialsRow" type="HBoxContainer" parent="NavBarMargin/VBoxContainer/BottomBar/MarginContainer/HBoxContainer"]
 layout_mode = 2
 theme_override_constants/separation = 32
+
+[node name="GoldBurstParticles" type="CPUParticles2D" parent="."]
+z_index = 5
+emitting = false
+amount = 16
+lifetime = 0.3
+one_shot = true
+explosiveness = 1.0
+emission_shape = 3
+emission_rect_extents = Vector2(10, 4)
+direction = Vector2(0, 0)
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 100.0
+initial_velocity_max = 180.0
+scale_amount_min = 3.0
+scale_amount_max = 6.0
+color_ramp = SubResource("Gradient_s5vc2")

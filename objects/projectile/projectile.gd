@@ -130,9 +130,9 @@ func _on_body_entered(body: Node) -> void:
 	already_hit.append(body)
 	#SoundManager.play_sfx("arrow_impact")
 	if is_ricochet:
-		body.take_damage(ricochet_damage)
+		body.take_damage(ricochet_damage, global_position)
 	else:
-		body.take_damage(damage)
+		body.take_damage(damage, global_position)
 	hit_target.emit(self, global_position)
 
 	if explodes:
@@ -171,7 +171,7 @@ func _do_explosion() -> void:
 			continue
 		if global_position.distance_to(unit.global_position) <= explosion_radius:
 			already_hit.append(unit)
-			unit.take_damage(exposion_damage)
+			unit.take_damage(exposion_damage, global_position)
 
 
 # Ricochet

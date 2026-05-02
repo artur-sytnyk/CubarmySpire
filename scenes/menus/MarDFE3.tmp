@@ -1,0 +1,252 @@
+[gd_scene load_steps=11 format=3 uid="uid://bgk1mfpfjko5u"]
+
+[ext_resource type="Script" path="res://scenes/menus/market.gd" id="1_vfddh"]
+[ext_resource type="StyleBox" uid="uid://c7yrhugtsp115" path="res://ui/styles/panel_bg.tres" id="2_s7shr"]
+[ext_resource type="StyleBox" uid="uid://dqrbn6psw1s6p" path="res://ui/styles/separator.tres" id="3_uwgta"]
+[ext_resource type="StyleBox" uid="uid://otorqavmjdsr" path="res://ui/styles/btn_normal.tres" id="4_3ho8h"]
+[ext_resource type="StyleBox" uid="uid://bpgl4yyg6x5dk" path="res://ui/styles/btn_hover.tres" id="5_o2afq"]
+[ext_resource type="StyleBox" uid="uid://bf4w0kmaihp72" path="res://ui/styles/btn_pressed.tres" id="6_nwrfw"]
+[ext_resource type="Texture2D" uid="uid://bhb2ni7uhjci6" path="res://assets/images/loot/gold.png" id="7_ladsr"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qtgsl"]
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_ok6tn"]
+color = Color(0.137255, 0.254902, 0.27451, 1)
+thickness = 4
+vertical = true
+
+[sub_resource type="Gradient" id="Gradient_s5vc2"]
+offsets = PackedFloat32Array(0.0266667, 0.54, 1)
+colors = PackedColorArray(1, 0.85, 0.2, 1, 1, 0.65, 0.1, 0.8, 1, 0.85098, 0.2, 0)
+
+[node name="Market" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_vfddh")
+
+[node name="NavBarMargin" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 68
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="NavBarMargin"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="HBoxContainer" type="HBoxContainer" parent="NavBarMargin/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 8
+
+[node name="LeftPanel" type="PanelContainer" parent="NavBarMargin/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = ExtResource("2_s7shr")
+
+[node name="MarginContainer" type="MarginContainer" parent="NavBarMargin/VBoxContainer/HBoxContainer/LeftPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="NavBarMargin/VBoxContainer/HBoxContainer/LeftPanel/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Label" type="Label" parent="NavBarMargin/VBoxContainer/HBoxContainer/LeftPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Market"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="NavBarMargin/VBoxContainer/HBoxContainer/LeftPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_styles/separator = ExtResource("3_uwgta")
+
+[node name="RecruitBtn" type="Button" parent="NavBarMargin/VBoxContainer/HBoxContainer/LeftPanel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_colors/font_pressed_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_colors/font_hover_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_colors/font_focus_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_colors/font_disabled_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_styles/normal = ExtResource("4_3ho8h")
+theme_override_styles/hover = ExtResource("5_o2afq")
+theme_override_styles/pressed = ExtResource("6_nwrfw")
+theme_override_styles/disabled = ExtResource("6_nwrfw")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_qtgsl")
+text = "Recruit units"
+
+[node name="EquipBtn" type="Button" parent="NavBarMargin/VBoxContainer/HBoxContainer/LeftPanel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_colors/font_pressed_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_colors/font_hover_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_colors/font_focus_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_colors/font_disabled_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_styles/normal = ExtResource("4_3ho8h")
+theme_override_styles/hover = ExtResource("5_o2afq")
+theme_override_styles/pressed = ExtResource("6_nwrfw")
+theme_override_styles/disabled = ExtResource("6_nwrfw")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_qtgsl")
+text = "Equipment shop"
+
+[node name="AlchemyBtn" type="Button" parent="NavBarMargin/VBoxContainer/HBoxContainer/LeftPanel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_colors/font_pressed_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_colors/font_hover_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_colors/font_focus_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_colors/font_disabled_color = Color(0.113725, 0.188235, 0.2, 1)
+theme_override_styles/normal = ExtResource("4_3ho8h")
+theme_override_styles/hover = ExtResource("5_o2afq")
+theme_override_styles/pressed = ExtResource("6_nwrfw")
+theme_override_styles/disabled = ExtResource("6_nwrfw")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_qtgsl")
+text = "Alchemy crafting"
+
+[node name="RightPanel" type="PanelContainer" parent="NavBarMargin/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 4.0
+theme_override_styles/panel = ExtResource("2_s7shr")
+
+[node name="MarginContainer" type="MarginContainer" parent="NavBarMargin/VBoxContainer/HBoxContainer/RightPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="NavBarMargin/VBoxContainer/HBoxContainer/RightPanel/MarginContainer"]
+layout_mode = 2
+
+[node name="RecruitPane" type="VBoxContainer" parent="NavBarMargin/VBoxContainer/HBoxContainer/RightPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="LevelRow" type="HBoxContainer" parent="NavBarMargin/VBoxContainer/HBoxContainer/RightPanel/MarginContainer/VBoxContainer/RecruitPane"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Label" type="Label" parent="NavBarMargin/VBoxContainer/HBoxContainer/RightPanel/MarginContainer/VBoxContainer/RecruitPane/LevelRow"]
+layout_mode = 2
+text = "Buy at level"
+
+[node name="UnitLevelInput" type="SpinBox" parent="NavBarMargin/VBoxContainer/HBoxContainer/RightPanel/MarginContainer/VBoxContainer/RecruitPane/LevelRow"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+min_value = 1.0
+max_value = 99.0
+value = 1.0
+alignment = 1
+update_on_text_changed = true
+prefix = "lv"
+
+[node name="EquipPane" type="VBoxContainer" parent="NavBarMargin/VBoxContainer/HBoxContainer/RightPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="AlchemyPane" type="VBoxContainer" parent="NavBarMargin/VBoxContainer/HBoxContainer/RightPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="BottomBar" type="PanelContainer" parent="NavBarMargin/VBoxContainer"]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+theme_override_styles/panel = ExtResource("2_s7shr")
+
+[node name="MarginContainer" type="MarginContainer" parent="NavBarMargin/VBoxContainer/BottomBar"]
+layout_mode = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 8
+
+[node name="HBoxContainer" type="HBoxContainer" parent="NavBarMargin/VBoxContainer/BottomBar/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 32
+alignment = 1
+
+[node name="GoldVBox" type="HBoxContainer" parent="NavBarMargin/VBoxContainer/BottomBar/MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="IconSizeBox" type="Control" parent="NavBarMargin/VBoxContainer/BottomBar/MarginContainer/HBoxContainer/GoldVBox"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+
+[node name="GoldRect" type="TextureRect" parent="NavBarMargin/VBoxContainer/BottomBar/MarginContainer/HBoxContainer/GoldVBox/IconSizeBox"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("7_ladsr")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="NavBarMargin/VBoxContainer/BottomBar/MarginContainer/HBoxContainer/GoldVBox"]
+visible = false
+layout_mode = 2
+text = "Gold:"
+horizontal_alignment = 1
+
+[node name="GoldLabel" type="Label" parent="NavBarMargin/VBoxContainer/BottomBar/MarginContainer/HBoxContainer/GoldVBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85098, 0.301961, 1)
+theme_override_font_sizes/font_size = 24
+text = "623"
+horizontal_alignment = 1
+
+[node name="VSeparator" type="VSeparator" parent="NavBarMargin/VBoxContainer/BottomBar/MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxLine_ok6tn")
+
+[node name="Label" type="Label" parent="NavBarMargin/VBoxContainer/BottomBar/MarginContainer/HBoxContainer"]
+visible = false
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+size_flags_vertical = 1
+text = "Materials: "
+vertical_alignment = 1
+
+[node name="MaterialsRow" type="HBoxContainer" parent="NavBarMargin/VBoxContainer/BottomBar/MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 32
+
+[node name="GoldBurstParticles" type="CPUParticles2D" parent="."]
+z_index = 5
+amount = 22
+lifetime = 0.5
+explosiveness = 1.0
+emission_shape = 3
+emission_rect_extents = Vector2(24, 4)
+direction = Vector2(0, 0)
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 60.0
+initial_velocity_max = 180.0
+scale_amount_min = 3.0
+scale_amount_max = 6.0
+color_ramp = SubResource("Gradient_s5vc2")

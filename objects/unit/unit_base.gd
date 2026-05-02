@@ -13,6 +13,8 @@ extends CharacterBody2D
 @onready var health_bar:        Node              = $HealthBar
 @onready var collision_body:    CollisionShape2D  = $CollisionShape2D
 @onready var level_lbl:         Label             = $LevelLabel
+@onready var _spawn_particles:  CPUParticles2D    = $SpawnParticles
+@onready var _hit_particles:    CPUParticles2D    = $HitParticles
 
 
 # ── Signals ──────────────────────────────────────────────────────────────────
@@ -318,7 +320,7 @@ func _on_cast_complete() -> void:
 		var hit_target: Unit = target
 		if hit_target != null and is_instance_valid(hit_target):
 			SoundManager.play_sfx("sword_swing")
-			hit_target.take_damage(atk_damage)
+			hit_target.take_damage(atk_damage, global_position)
 
 
 func _shoot_projectile() -> void:
@@ -330,13 +332,14 @@ func _shoot_projectile() -> void:
 	proj.setup(self, target, atk_damage, _ricochet_count, _ricochet_damage_ratio)
 
 
-func take_damage(amount: int) -> void:
+func take_damage(amount: int, attacker_position: Vector2 = global_position) -> void:
 	if _visual_state == VisualState.DEAD:
 		return
 	SoundManager.play_sfx("unit_hit")
 	hp_current -= amount
 	health_bar.update(hp_current, hp_max)
 	_trigger_hit_anim()
+	_play_hit_particles(attacker_position)
 	if hp_current <= 0:
 		_die()
 
@@ -570,6 +573,14 @@ func _tick_hit_anim(delta: float) -> void:
 		_set_frame(FRAME_BASE)
 
 
+func _play_hit_particles(attacker_position: Vector2) -> void:
+	var away_dir: Vector2 = (global_position - attacker_position).normalized()
+	if away_dir == Vector2.ZERO:
+		away_dir = Vector2.RIGHT
+	_hit_particles.direction = away_dir
+	_hit_particles.restart()
+
+
 func _reset_sprite_scale() -> void:
 	if _sprite_tween:
 		_sprite_tween.kill()
@@ -629,6 +640,7 @@ func play_spawn_anim() -> void:
 	t.tween_property(sprite,        "scale", _sprite_base_scale, 1.0).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	t.tween_property(_shadow_inner, "scale", Vector2.ONE,        1.0).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	t.tween_property(_shadow,       "scale", Vector2.ONE,        1.0).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	_spawn_particles.restart()
 
 
 func play_victory_anim() -> void:

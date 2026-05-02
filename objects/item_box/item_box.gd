@@ -5,7 +5,7 @@ extends PanelContainer
 signal pressed
 
 
-@onready var _bg_rect: ColorRect = $BgRect
+@onready var _grade_rect: ColorRect = $GradeRect
 @onready var _icon: TextureRect = $IconMargin/Icon
 @onready var _level_label: Label = $LabelsMargin/LevelLabel
 @onready var _count_label: Label = $LabelsMargin/CountLabel
@@ -23,8 +23,9 @@ func setup(
 		p_slot: String = ""
 ) -> void:
 	_grade = p_grade
-	_icon.texture = p_icon
-	_bg_rect.color = GameData.get_grade_color(p_grade)
+	if p_icon != null:
+		_icon.texture = p_icon
+	_grade_rect.color = GameData.get_grade_color(p_grade)
 
 	_level_label.visible = p_level > 0
 	if p_level > 0:
@@ -41,7 +42,7 @@ func setup(
 
 func set_grade(p_grade: int) -> void:
 	_grade = p_grade
-	_bg_rect.color = GameData.get_grade_color(p_grade)
+	_grade_rect.color = GameData.get_grade_color(p_grade)
 
 
 func set_level(p_level: int) -> void:

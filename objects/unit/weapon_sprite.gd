@@ -73,12 +73,11 @@ func update_weapon(target_position: Vector2) -> void:
 		#     _update_staff(target_position)  # TODO
 
 
-func play_attack() -> void:
+func play_attack(swing_count: int = 1, hit_target: Unit = null, damage: int = 0) -> void:
 	_kill_attack_tween()
-
 	match _unit_type:
 		"warrior":
-			_play_sword_attack()
+			_play_sword_attack(swing_count, hit_target, damage)
 		"ranger":
 			_play_bow_attack()
 		# "mage":
@@ -160,28 +159,44 @@ func _update_bow(target_position: Vector2) -> void:
 
 # --- Private: attack animations ---
 
-func _play_sword_attack() -> void:
+func _play_sword_attack(swing_count: int = 1, hit_target: Unit = null, damage: int = 0) -> void:
 	var base_angle: float = SWORD_ANGLE_RIGHT if _facing_right else SWORD_ANGLE_LEFT
 	var side: float = 1.0 if _facing_right else -1.0
 	_attack_tween = create_tween()
 	
 	_attack_tween.tween_property(_icon, "rotation_degrees", base_angle, 0.0)
-	_attack_tween.tween_property(
-		_icon, "rotation_degrees",
-		base_angle - 45.0 * side,
-		0.25
-	).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-	_attack_tween.tween_property(
-		_icon, "rotation_degrees",
-		base_angle + 80.0 * side,
-		0.1
-	).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
-	_attack_tween.tween_interval(0.2)
-	_attack_tween.tween_property(
-		_icon, "rotation_degrees",
-		base_angle,
-		0.3
-	).set_trans(Tween.TRANS_SPRING).set_ease(Tween.EASE_OUT)
+	
+	for i: int in swing_count:
+		var windup: float     = maxf(45.0 - float(i) * 5.0, 10.0)
+		var windup_time: float = maxf(0.25 - float(i) * 0.02, 0.04)
+		
+		_attack_tween.tween_property(
+			_icon, "rotation_degrees",
+			base_angle - windup * side,
+			windup_time
+		).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		
+		_attack_tween.tween_property(
+			_icon, "rotation_degrees",
+			base_angle + 80.0 * side,
+			0.1
+		).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+		
+		# Deal damage on each swing land
+		_attack_tween.tween_callback(func() -> void:
+			SoundManager.play_sfx("sword_swing")
+			if hit_target != null and is_instance_valid(hit_target):
+				hit_target.take_damage(damage)
+		)
+		
+		_attack_tween.tween_interval(0.1 if i < swing_count - 1 else 0.2)
+		
+		if i == swing_count - 1:
+			_attack_tween.tween_property(
+				_icon, "rotation_degrees",
+				base_angle,
+				0.3
+			).set_trans(Tween.TRANS_SPRING).set_ease(Tween.EASE_OUT)
 
 
 func _play_bow_attack() -> void:

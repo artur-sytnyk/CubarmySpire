@@ -7,7 +7,6 @@ extends Node2D
 @onready var navigation_region: NavigationRegion2D = $Arena/NavigationRegion2D
 @onready var player_spawn: Marker2D = $Arena/PlayerSpawnPoint
 @onready var enemy_spawn: Marker2D = $Arena/EnemySpawnPoint
-@onready var _flag_layer: Node2D = $Arena/LootLayer
 # UI
 @onready var pause_button: Button = $UI/PauseButton
 @onready var powerup_dialog = $UI/PowerupDialog
@@ -90,13 +89,15 @@ func _on_powerup_chosen(pu: Dictionary, grade: int) -> void:
 
 
 func _on_battle_lost() -> void:
+	get_tree().paused = false
+	_pause_overlay.visible = false
 	SoundManager.play_music("run_end")
 	RunState.finalize_run()
 
 
 func _on_run_finalized(results: Dictionary) -> void:
+	get_tree().paused = false
 	run_finalized_dialog.show_results(results)
-	pass
 
 
 # --- RTS Selection ---
@@ -134,6 +135,7 @@ func _input(event: InputEvent) -> void:
 		
 		elif mb.button_index == MOUSE_BUTTON_RIGHT and mb.pressed:
 			if not _selected_units.is_empty():
+				SoundManager.play_ui("button_click")
 				var world_pos: Vector2 = get_global_mouse_position()
 				_issue_formation_move(world_pos)
 				_spawn_flag(world_pos)
@@ -243,7 +245,7 @@ func _spawn_flag(world_pos: Vector2) -> void:
 	flag.spawn_at(world_pos, lifetime)
 	
 	_active_flags.assign(_active_flags.filter(
-		func(f: Flag) -> bool: return is_instance_valid(f)
+		func(f: Variant) -> bool: return is_instance_valid(f)
 	))
 
 

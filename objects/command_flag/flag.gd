@@ -14,6 +14,10 @@ func spawn_at(world_pos: Vector2, lifetime: float) -> void:
 	var hue: float = randf()
 	modulate = Color.from_hsv(hue, 0.7, 1.0)
 	
+	get_tree().create_timer(DROP_DURATION).timeout.connect(
+		func() -> void: SoundManager.play_ui("flag_drop")
+	)
+	
 	var tween: Tween = create_tween()
 	tween.tween_property(self, "global_position", world_pos, DROP_DURATION)\
 		.set_trans(Tween.TRANS_QUART).set_ease(Tween.EASE_IN)

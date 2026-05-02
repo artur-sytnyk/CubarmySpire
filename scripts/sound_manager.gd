@@ -1,83 +1,84 @@
 extends Node
 
 const MUSIC: Dictionary = {
-	"start_menu": { "path": "res://assets/sounds/music/start_menu.ogg", "volume_db": 0.0 },
-	"menu":       { "path": "res://assets/sounds/music/menu.mp3",       "volume_db": 0.0 },
-	"run_end":    { "path": "res://assets/sounds/music/run_end.mp3",    "volume_db": 0.0 },
+	"start_menu": { "path": "res://assets/sounds/music/start_menu.ogg", "volume_db": -16.0 },
+	"menu":       { "path": "res://assets/sounds/music/menu.mp3",       "volume_db": -10.0 },
+	"run_end":    { "path": "res://assets/sounds/ui/run_end.mp3",    "volume_db": -12.0 },
 }
 
 const BATTLE_TRACKS: Array[Dictionary] = [
-	{ "path": "res://assets/sounds/music/battle_1.mp3", "volume_db": 0.0 },
-	{ "path": "res://assets/sounds/music/battle_2.mp3", "volume_db": 0.0 },
-	{ "path": "res://assets/sounds/music/battle_3.mp3", "volume_db": 0.0 },
-	{ "path": "res://assets/sounds/music/battle_4.mp3", "volume_db": 0.0 },
-	{ "path": "res://assets/sounds/music/battle_5.mp3", "volume_db": 0.0 },
+	{ "path": "res://assets/sounds/music/battle_1.mp3", "volume_db": -30.0 },
+	{ "path": "res://assets/sounds/music/battle_2.mp3", "volume_db": -30.0 },
+	{ "path": "res://assets/sounds/music/battle_3.mp3", "volume_db": -30.0 },
+	{ "path": "res://assets/sounds/music/battle_4.mp3", "volume_db": -30.0 },
+	{ "path": "res://assets/sounds/music/battle_5.mp3", "volume_db": -30.0 },
 ]
 
 const SOUNDS: Dictionary = {
 	"transition":   { "path": "res://assets/sounds/ui/transition.ogg",   "volume_db": -8.0, "pitch_randomized": false  },
-	"button_click": { "path": "res://assets/sounds/ui/button_click.ogg", "volume_db": -12.0, "pitch_randomized": false },
-	"purchase":     { "path": "res://assets/sounds/ui/purchase.ogg",     "volume_db": -6.0, "pitch_randomized": true  },
-	"equip":        { "path": "res://assets/sounds/ui/equip.wav",        "volume_db": -6.0, "pitch_randomized": false },
-	"unequip":      { "path": "res://assets/sounds/ui/unequip.wav",      "volume_db": -6.0, "pitch_randomized": false },
-	"pu_hover":     { "path": "res://assets/sounds/ui/pu_hover.ogg",     "volume_db": 0.0, "pitch_randomized": false },
-	"pu_select":    { "path": "res://assets/sounds/ui/pu_select.ogg",    "volume_db": 0.0, "pitch_randomized": false },
-	"stage_win":    { "path": "res://assets/sounds/ui/victory.mp3",      "volume_db": 0.0, "pitch_randomized": false },
-	"run_abandon":  { "path": "res://assets/sounds/ui/fail.mp3",         "volume_db": 0.0, "pitch_randomized": false },
+	"button_click": { "path": "res://assets/sounds/ui/button_click.ogg", "volume_db": -18.0, "pitch_randomized": false },
+	"purchase":     { "path": "res://assets/sounds/ui/purchase.ogg",     "volume_db": -12.0, "pitch_randomized": true  },
+	"equip":        { "path": "res://assets/sounds/ui/equip.wav",        "volume_db": -18.0, "pitch_randomized": true },
+	"unequip":      { "path": "res://assets/sounds/ui/unequip.wav",      "volume_db": -20.0, "pitch_randomized": true },
+	"pu_hover":     { "path": "res://assets/sounds/ui/pu_hover.ogg",     "volume_db": -14.0, "pitch_randomized": false },
+	"pu_select":    { "path": "res://assets/sounds/ui/pu_select.ogg",    "volume_db": -10.0, "pitch_randomized": true },
+	"stage_win":    { "path": "res://assets/sounds/ui/victory.mp3",      "volume_db": -12.0, "pitch_randomized": true },
+	"run_abandon":  { "path": "res://assets/sounds/ui/fail.mp3",         "volume_db": -16.0, "pitch_randomized": false },
+	"flag_drop":  { "path": "res://assets/sounds/sfx/flag_drop.wav",     "volume_db": -16.0, "pitch_randomized": true },
 }
 
 
 const SOUND_VARIANTS: Dictionary = {
 	"unit_spawn": {
-		"volume_db": 0.0,
+		"volume_db": -24.0,
 		"pitch_randomized": true,
 		"tracks": [
-			{ "path": "res://assets/sounds/sfx/unit_spawn_1.mp3", "volume_db": 0.0 },
-			{ "path": "res://assets/sounds/sfx/unit_spawn_2.mp3", "volume_db": 0.0 },
+			{ "path": "res://assets/sounds/sfx/unit_spawn_1.mp3", "volume_db": -12.0 },
+			{ "path": "res://assets/sounds/sfx/unit_spawn_2.mp3", "volume_db": -12.0 },
 		]
 	},
 	"unit_hit": {
-		"volume_db": 0.0,
+		"volume_db": -10.0,
 		"pitch_randomized": true,
 		"tracks": [
-			{ "path": "res://assets/sounds/sfx/unit_hit_1.ogg", "volume_db": 0.0 },
-			{ "path": "res://assets/sounds/sfx/unit_hit_2.ogg", "volume_db": 0.0 },
-			{ "path": "res://assets/sounds/sfx/unit_hit_3.ogg", "volume_db": 0.0 },
+			{ "path": "res://assets/sounds/sfx/unit_hit_1.ogg", "volume_db": -12.0 },
+			{ "path": "res://assets/sounds/sfx/unit_hit_2.ogg", "volume_db": -12.0 },
+			{ "path": "res://assets/sounds/sfx/unit_hit_3.ogg", "volume_db": -12.0 },
 		]
 	},
 	"unit_death": {
-		"volume_db": 0.0,
+		"volume_db": -12.0,
 		"pitch_randomized": true,
 		"tracks": [
-			{ "path": "res://assets/sounds/sfx/unit_death_1.ogg", "volume_db": 0.0 },
-			{ "path": "res://assets/sounds/sfx/unit_death_2.ogg", "volume_db": 0.0 },
-			{ "path": "res://assets/sounds/sfx/unit_death_3.ogg", "volume_db": 0.0 },
+			{ "path": "res://assets/sounds/sfx/unit_death_1.ogg", "volume_db": -12.0 },
+			{ "path": "res://assets/sounds/sfx/unit_death_2.ogg", "volume_db": -12.0 },
+			{ "path": "res://assets/sounds/sfx/unit_death_3.ogg", "volume_db": -12.0 },
 		]
 	},
 	"sword_swing": {
-		"volume_db": 0.0,
+		"volume_db": -18.0,
 		"pitch_randomized": true,
 		"tracks": [
-			{ "path": "res://assets/sounds/sfx/melee_1.wav",  "volume_db": 0.0 },
-			{ "path": "res://assets/sounds/sfx/melee_2.ogg",  "volume_db":  0.0 },
-			{ "path": "res://assets/sounds/sfx/melee_3.ogg",  "volume_db": 0.0 },
+			{ "path": "res://assets/sounds/sfx/melee_1.wav",  "volume_db": -12.0 },
+			{ "path": "res://assets/sounds/sfx/melee_2.ogg",  "volume_db": -12.0 },
+			{ "path": "res://assets/sounds/sfx/melee_3.ogg",  "volume_db": -12.0 },
 		]
 	},
 	"melee_flurry": {
-		"volume_db": 0.0,
+		"volume_db": -12.0,
 		"pitch_randomized": true,
 		"tracks": [
-			{ "path": "res://assets/sounds/sfx/melee_flurry_1.ogg",  "volume_db": 0.0 },
-			{ "path": "res://assets/sounds/sfx/melee_flurry_2.ogg",  "volume_db": 0.0 },
-			{ "path": "res://assets/sounds/sfx/melee_flurry_3.ogg",  "volume_db": 0.0 },
+			{ "path": "res://assets/sounds/sfx/melee_flurry_1.ogg",  "volume_db": -12.0 },
+			{ "path": "res://assets/sounds/sfx/melee_flurry_2.ogg",  "volume_db": -12.0 },
+			{ "path": "res://assets/sounds/sfx/melee_flurry_3.ogg",  "volume_db": -12.0 },
 		]
 	},
 	"bow_shoot": {
-		"volume_db": 0.0,
+		"volume_db": -18.0,
 		"pitch_randomized": true,
 		"tracks": [
-			{ "path": "res://assets/sounds/sfx/bow_1.wav",  "volume_db":  0.0 },
-			{ "path": "res://assets/sounds/sfx/bow_2.ogg",  "volume_db": 0.0 },
+			{ "path": "res://assets/sounds/sfx/bow_1.wav",  "volume_db": -12.0 },
+			{ "path": "res://assets/sounds/sfx/bow_2.ogg",  "volume_db": -12.0 },
 		]
 	},
 }
@@ -259,13 +260,13 @@ func duck_music(target_db: float = -18.0) -> void:
 func unduck_music() -> void:
 	if not _music_player.playing:
 		return
-	var target_db: float = 0.0
+	var target_db: float = -24.0
 	# recover the correct target volume for the current track
 	if _current_mode == "battle":
 		var track: Dictionary = BATTLE_TRACKS.filter(
 				func(t: Dictionary): return t["path"] == _last_battle_track
 		).front()
-		target_db = track.get("volume_db", 0.0) if track else 0.0
+		target_db = track.get("volume_db", -24.0) if track else -24.0
 	else:
 		target_db = MUSIC.get(_current_mode, {}).get("volume_db", 0.0)
 	var tween: Tween = create_tween()

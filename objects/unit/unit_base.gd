@@ -235,7 +235,10 @@ func _physics_process(delta: float) -> void:
 	if is_ranged and not _enemies_in_kite_range.is_empty():
 		_tick_retarget(delta)
 		_try_start_attack()
-		var away: Vector2 = (global_position - target.global_position).normalized()
+		var kite_target: Unit = target
+		if kite_target == null or not is_instance_valid(kite_target):
+			return
+		var away: Vector2 = (global_position - kite_target.global_position).normalized()
 		_move_toward_position(global_position + away * 100.0)
 		_set_visual(VisualState.WALK)
 		return
@@ -311,18 +314,11 @@ func _on_cast_complete() -> void:
 		_shoot_projectile()
 		return
 	
-	if target == null or not is_instance_valid(target):
-		return
-	
-	SoundManager.play_sfx("sword_swing")
-	target.take_damage(atk_damage)
-	
-	if _has_flurry:
-		SoundManager.play_sfx("melee_flurry")
-		for _i: int in _flurry_guaranteed:
-			target.take_damage(atk_damage)
-		if _flurry_bonus_chance > 0.0 and randf() < _flurry_bonus_chance:
-			target.take_damage(atk_damage)
+	if _has_flurry and _flurry_bonus_chance > 0.0 and randf() < _flurry_bonus_chance:
+		var hit_target: Unit = target
+		if hit_target != null and is_instance_valid(hit_target):
+			SoundManager.play_sfx("sword_swing")
+			hit_target.take_damage(atk_damage)
 
 
 func _shoot_projectile() -> void:
@@ -543,7 +539,7 @@ func _anim_attack(delta: float) -> void:
 	if _cast_timer < atk_cast_time * 0.5:
 		_set_frame(FRAME_CAST_A)
 		if _cast_phase != 1:
-			weapon_sprite.play_attack()
+			weapon_sprite.play_attack(_flurry_guaranteed + 1, target, atk_damage)
 			_cast_phase = 1
 			_play_attack_windup_sprite()
 	else:
@@ -637,6 +633,7 @@ func play_spawn_anim() -> void:
 
 func play_victory_anim() -> void:
 	collision_body.set_deferred("disabled", true)
+	_has_move_command = false
 	var base_pos:          Vector2 = position
 	var shadow_base_scale: Vector2 = Vector2.ONE
 	var shadow_jump_offset:Vector2 = Vector2(-SHADOW_SKEW_X * 0.8, 32.0)

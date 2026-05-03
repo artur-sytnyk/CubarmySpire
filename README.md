@@ -1,24 +1,146 @@
 # CubarmySpire
-Cubarmy Spire game
 
-Simple “rogue like” game where player starts a dungeon and runs through levels/depth where he has a small army of warriors which automatically fights enemy army. After each level he can choose one of few boosts which will empower or increase user’s army for this exact “run”. Enemies are generated automatically on each level and have randomized power increase too (faster than user). After losing on any level the user gets some resources.
-In the menu user can not only just start game (“run”) but go to inventory or shop. In the shop user can buy new units, items or upgrades for gold. In inventory he can equip items (user is considered a general and his equipped items will empower his units), manage units and open craft menu. In the craft menu there will be recipes for items which are crafted from resources. Units should be managed because they will have different levels and there will be a limit for an army.
-It is planned that users will have to register and login in order to track and save progress. “Guest” option will also exist but will not save progress.
+**CubarmySpire** is a roguelike auto-battler developed in **Godot 4** as part of a bachelor thesis focused on technical challenges in independent game development.
+The project emphasizes maintainable architecture, scoped feature design, and efficient development practices within a solo development context.
 
-### Entities
+---
 
-- Game – manage GUI, manage “runs”, works with User
-- User – has items, resources, gold, army, current powerups
-- Army – units collection and management
-- Unit – stats and type, powerup amplification, fight logic
-- Powerup – collection of all, collection of current, logic of each type
-- Item – type (equipment slot), boost/stat increase, recipe
+## Overview
 
+CubarmySpire combines:
 
-### Screens/windows
+* **Army management**
+* **Automated real-time combat**
+* **Run-based progression (roguelike loop)**
 
-- Main menu – start “run”, inventory, shop, logout
-- Inventory – user equipment, units collection, items in inventory, crafting
-- Crafting – recipes to craft
-- Shop – unit row, equipment row, resources row
-- Battle (started “run”) – units on arena, retreat, boost select (after no enemy remains), “run” statistics (if user lost)
+The player builds and upgrades an army, progresses through increasingly difficult stages, and improves long-term strength through persistent rewards.
+
+---
+
+## Key Features
+
+* **Auto-Battler Combat**
+
+  * Units fight automatically in real time
+  * Player provides light RTS-style input (selection & movement)
+
+* **Roguelike Progression**
+
+  * Each run is temporary
+  * Powerups are gained during runs
+  * Rewards persist between runs
+
+* **Army Management**
+
+  * Active army and reserve (barracks)
+  * Unit leveling and composition strategy
+
+* **Equipment System**
+
+  * Weapons, armor, artifacts
+  * Stat modifiers and special effects
+
+* **Economy & Crafting**
+
+  * Gold and material resources
+  * Shop and alchemy systems
+
+* **Difficulty Scaling**
+
+  * Multiple difficulty levels
+  * Enemy scaling based on stage progression
+
+---
+
+## Project Context (Bachelor Thesis)
+
+This project was developed as a **practical implementation** accompanying a thesis on:
+
+> *Technical analysis of the most common obstacles in independent game development*
+
+The implementation focuses on:
+
+* Maintainable **node-based architecture (Godot)**
+* **Event-driven design** using signals
+* Clear separation between:
+
+  * Persistent data (Save)
+  * Run-based state (RunState)
+  * Gameplay systems (Army, Battle, Managers)
+
+---
+
+## Tech Stack
+
+* **Engine:** Godot 4
+* **Language:** GDScript
+* **Architecture Style:** Node-based + event-driven
+* **Data Storage:** JSON (custom save system)
+
+---
+
+## Getting Started
+
+### Requirements
+
+* Godot Engine 4.x
+
+### Running the Project
+
+1. Clone the repository
+2. Open the project in Godot
+3. Run the main scene
+
+---
+
+## Documentation
+
+* **User Guide:** `UserGuide.md`
+  → Explains gameplay, controls, and features
+
+* **Technical Documentation:** `TechnicalDocumentation.md`
+  → Describes architecture, systems, and implementation details
+
+---
+
+## Project Structure (Simplified)
+
+```
+assets/        # Images, sounds, materials
+scenes/        # Game scenes (UI, battle, menus)
+scripts/       # Core logic and systems
+data/          # Game definitions and balance data
+```
+
+---
+
+## Current Limitations
+
+* Single save slot (hardcoded)
+* Minimal UI/stat tracking in some areas
+* Focus on core gameplay loop over content volume
+
+---
+
+## Purpose & Scope
+
+This project is not intended as a commercial product but as:
+
+* A **technical prototype**
+* A **research-backed implementation**
+* A demonstration of **indie-friendly architecture and scope management**
+
+---
+
+## Author
+
+**Artur Sytnyk**
+Bachelor Thesis — Czech Technical University in Prague
+Faculty of Electrical Engineering
+Department of Computer Science
+
+---
+
+## License
+
+This project is provided for educational and demonstration purposes.

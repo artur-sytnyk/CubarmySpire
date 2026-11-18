@@ -1,146 +1,49 @@
-# CubarmySpire
+# Cubarmy Spire
 
-**CubarmySpire** is a roguelike auto-battler developed in **Godot 4** as part of a bachelor thesis focused on technical challenges in independent game development.
-The project emphasizes maintainable architecture, scoped feature design, and efficient development practices within a solo development context.
+Cubarmy Spire is a solo roguelike auto-battler built in Godot 4 as the practical part of my bachelor thesis at the Czech Technical University in Prague, Faculty of Electrical Engineering. The thesis explores recurring technical obstacles in independent game development; this project applies those ideas in a complete game loop with deliberately controlled scope.
 
----
+This is the Godot bachelor-project implementation. It is distinct from my earlier Java/JavaFX semester project, which served as an initial exploration of the concept.
 
-## Overview
+## What is implemented
 
-CubarmySpire combines:
+- Persistent army and barracks management
+- Real-time automated battles with light RTS controls
+- Unit selection, group selection, formation movement, projectiles, and combat effects
+- Run-based stages, temporary stackable power-ups, and difficulty scaling
+- Persistent gold, materials, equipment, crafting, and unit progression
+- JSON-based save data and data-driven unit, equipment, and power-up definitions
+- Campaign, garrison, armory, market, battle, settings, and results interfaces
 
-* **Army management**
-* **Automated real-time combat**
-* **Run-based progression (roguelike loop)**
+The player prepares an army, starts a run, progresses through increasingly difficult battles, chooses power-ups between victories, and returns with persistent rewards after the run ends.
 
-The player builds and upgrades an army, progresses through increasingly difficult stages, and improves long-term strength through persistent rewards.
+## Technical overview
 
----
+- **Engine:** Godot 4.2
+- **Language:** GDScript
+- **Architecture:** scene- and node-based, with signals for event-driven communication
+- **Persistence:** custom JSON save system
+- **Data:** JSON definitions for units, equipment, and power-ups
 
-## Key Features
+Global services such as `SaveManager`, `RunState`, `SceneManager`, and `SoundManager` are implemented as autoloads. Runtime responsibilities are separated between persistent save data, run-scoped state, battle orchestration, army lifecycle, and individual unit behavior.
 
-* **Auto-Battler Combat**
+## Run locally
 
-  * Units fight automatically in real time
-  * Player provides light RTS-style input (selection & movement)
-
-* **Roguelike Progression**
-
-  * Each run is temporary
-  * Powerups are gained during runs
-  * Rewards persist between runs
-
-* **Army Management**
-
-  * Active army and reserve (barracks)
-  * Unit leveling and composition strategy
-
-* **Equipment System**
-
-  * Weapons, armor, artifacts
-  * Stat modifiers and special effects
-
-* **Economy & Crafting**
-
-  * Gold and material resources
-  * Shop and alchemy systems
-
-* **Difficulty Scaling**
-
-  * Multiple difficulty levels
-  * Enemy scaling based on stage progression
-
----
-
-## Project Context (Bachelor Thesis)
-
-This project was developed as a **practical implementation** accompanying a thesis on:
-
-> *Technical analysis of the most common obstacles in independent game development*
-
-The implementation focuses on:
-
-* Maintainable **node-based architecture (Godot)**
-* **Event-driven design** using signals
-* Clear separation between:
-
-  * Persistent data (Save)
-  * Run-based state (RunState)
-  * Gameplay systems (Army, Battle, Managers)
-
----
-
-## Tech Stack
-
-* **Engine:** Godot 4
-* **Language:** GDScript
-* **Architecture Style:** Node-based + event-driven
-* **Data Storage:** JSON (custom save system)
-
----
-
-## Getting Started
-
-### Requirements
-
-* Godot Engine 4.x
-
-### Running the Project
-
-1. Clone the repository
-2. Open the project in Godot
-3. Run the main scene
-
----
+1. Install Godot 4.2 or a compatible Godot 4 release.
+2. Clone this repository.
+3. Import `project.godot` in the Godot Project Manager.
+4. Run the project; the main scene is `ui/Root.tscn`.
 
 ## Documentation
 
-* **User Guide:** `UserGuide.md`
-  → Explains gameplay, controls, and features
+- [User guide](UserGuide.md)
+- [Technical documentation](TechnicalDocumentation.md)
 
-* **Technical Documentation:** `TechnicalDocumentation.md`
-  → Describes architecture, systems, and implementation details
+## Project status
 
----
+Cubarmy Spire is preserved as a bachelor-thesis project and technical case study. It demonstrates the implemented architecture and development decisions rather than representing an actively supported commercial release. Known limitations include a single save slot, limited automated test coverage, and several deliberately unfinished content extensions.
 
-## Project Structure (Simplified)
+## Author and use
 
-```
-assets/        # Images, sounds, materials
-scenes/        # Game scenes (UI, battle, menus)
-scripts/       # Core logic and systems
-data/          # Game definitions and balance data
-```
+Created by **Artur Sytnyk** as a bachelor project at CTU FEL.
 
----
-
-## Current Limitations
-
-* Single save slot (hardcoded)
-* Minimal UI/stat tracking in some areas
-* Focus on core gameplay loop over content volume
-
----
-
-## Purpose & Scope
-
-This project is not intended as a commercial product but as:
-
-* A **technical prototype**
-* A **research-backed implementation**
-* A demonstration of **indie-friendly architecture and scope management**
-
----
-
-## Author
-
-**Artur Sytnyk**
-Bachelor Thesis — Czech Technical University in Prague
-Faculty of Electrical Engineering
-Department of Computer Science
-
----
-
-## License
-
-This project is provided for educational and demonstration purposes.
+No open-source license is currently granted. The repository is public for portfolio, educational, and evaluation purposes; third-party assets may have their own terms.

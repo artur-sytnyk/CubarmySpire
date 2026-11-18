@@ -26,6 +26,12 @@ The player prepares an army, starts a run, progresses through increasingly diffi
 
 Global services such as `SaveManager`, `RunState`, `SceneManager`, and `SoundManager` are implemented as autoloads. Runtime responsibilities are separated between persistent save data, run-scoped state, battle orchestration, army lifecycle, and individual unit behavior.
 
+## Play the Windows build
+
+A packaged public version is available on itch.io:
+
+**[Download Cubarmy Spire from itch.io](https://nightalefox.itch.io/cubarmy-spire)** — no repository clone or Godot installation is required.
+
 ## Run locally
 
 1. Install Godot 4.2 or a compatible Godot 4 release.
